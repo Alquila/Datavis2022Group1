@@ -6,7 +6,7 @@ from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent="geoapiExercises")
 
-data = pd.read_csv("data/trydata2.csv", low_memory=False, sep=";")
+data = pd.read_csv("data/scrubbed.csv", low_memory=False, sep=",")
 # data = pd.read_csv("data/complete.csv", low_memory=False, sep=",", error_bad_lines=False)
 data = data.astype({'city': 'string'})
 print(data.head(5))
@@ -65,9 +65,9 @@ def split_datetime(data):
     # data_explode = data.explode("datetime")
     data[["date", "time"]] = data_split
     data.drop("datetime", axis=1, inplace=True)
-    # print(data.head(5))
+    print(data.head(5))
     # print(data.info)
-    return 42
+    return data
 
 
 def missing_zero_values_table(df):
@@ -139,14 +139,17 @@ def findMissingCitiesFromLatLong(data):
         lon = data.loc[x, "longitude"]
         lat = data.loc[x, "latitude"]
         print(lon)
+        print("type of lon: " + str(type(lon)))
         print(lat)
-        location = geolocator.reverse(lat+","+lon)
+        print("type of lat: " + str(type(lat)))
+
+        location = geolocator.reverse(str(lat)+","+str(lon))
         address = location.raw['address']
         city = address.get('city', '')
         data.loc[x,'city'] = city
 
 # to find indexes of rows with too much missing data
-def countBadRows(data,lower):
+def countBadRows(data, lower):
     index = []
     for x in data.index:
         count_nan = data.loc[[x]].isna().sum().sum()
@@ -154,17 +157,23 @@ def countBadRows(data,lower):
             index.append(x)
     return index
 
+def writeToNewFile(data):
+    print(data.head)
+    data.to_csv("data/cleanData.csv", sep=",")
+
 if __name__ == "__main__":
     #    display(data.head(10))
     # print("iii")
-    update_country_state(data)
-    dropLatLong(data)
-    findMissingCitiesFromLatLong(data)
+    # update_country_state(data)
+    # dropLatLong(data)
+    # findMissingCitiesFromLatLong(data)
     # print(missing_zero_values_table(data))
     # print(countBadRows(data, 2))
-    print(data)
+    data = split_datetime(data)
+    # print(data)
+    writeToNewFile(data)
+    print("new file should exist")
 
-    # split_datetime(data)
     # missing(data)
     # print("")
     # print(missing_zero_values_table(data)) #now countries where fixed but we still have lot of empty states
