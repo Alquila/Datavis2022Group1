@@ -164,7 +164,7 @@ def writeToNewFile(data):
 if __name__ == "__main__":
     #    display(data.head(10))
     # print("iii")
-    # update_country_state(data)
+    update_country_state(data)
     # dropLatLong(data)
     # findMissingCitiesFromLatLong(data)
     # print(missing_zero_values_table(data))
