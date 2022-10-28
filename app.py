@@ -6,7 +6,7 @@ from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent="geoapiExercises")
 
-data = pd.read_csv("data/scrubbed.csv", low_memory=False, sep=",")
+data = pd.read_csv("data/cleanData.csv", low_memory=False, sep=",")
 # data = pd.read_csv("data/complete.csv", low_memory=False, sep=",", error_bad_lines=False)
 data = data.astype({'city': 'string'})
 print(data.head(5))
@@ -38,8 +38,8 @@ pandasCountries = countryList.str.lower()
 # print(data[["Country"]])
 
 
-# states = data["state"]
-# print(states.head())
+states = data["state"]
+print(states.head())
 
 # print(data.count())
 
@@ -121,6 +121,18 @@ def update_country_state(data):
                     data.loc[x,"country"] = country
                     break
 
+def update_ca_and_uk(data):
+    for x in data.index:
+        name = data.loc[x,"country"]
+        if name == "ca":
+            data.loc[x, "country"] = "canada"
+        elif name == "uk":
+            data.loc[x, "country"] = "gb"
+        elif (name == "us") | (name == "united states"):
+            data.loc[x, "country"] = "usa"
+        elif name == "au":
+            data.loc[x,"country"] = "australia"
+
 # to remove rows with no longitude or latitude or city
 def dropLatLong(data):
     todrop = data[((data['longitude']== 0) & (data['latitude'] ==0) & (data['city'] == "fuck"))].index
@@ -157,22 +169,39 @@ def countBadRows(data, lower):
             index.append(x)
     return index
 
+def more_info(data):
+    cities = data['city'].unique()
+    countries = data['country'].unique()
+    states = data['state'].unique()
+    print(cities)
+    print()
+    print(countries)
+    print()
+    print(states)
+
+def onlyUsa(data):
+    goodRows = data[(data['country'] == "usa")]
+    return goodRows
+
 def writeToNewFile(data):
     print(data.head)
-    data.to_csv("data/cleanData.csv", sep=",")
+    data.to_csv("data/cleanData.csv", sep=",",index=False)
 
 if __name__ == "__main__":
     #    display(data.head(10))
     # print("iii")
-    update_country_state(data)
+    # update_ca_and_uk(data)
     # dropLatLong(data)
     # findMissingCitiesFromLatLong(data)
     # print(missing_zero_values_table(data))
     # print(countBadRows(data, 2))
-    data = split_datetime(data)
+    # data = split_datetime(data)
     # print(data)
+    # data = data.drop(columns=['stupid1', 'stupid2'])
+    # print(data.head)
+    # newData = onlyUsa(data)
     writeToNewFile(data)
-    print("new file should exist")
+    # print("new file should exist")
 
     # missing(data)
     # print("")
