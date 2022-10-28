@@ -185,7 +185,7 @@ def onlyUsa(data):
 
 def writeToNewFile(data):
     print(data.head)
-    data.to_csv("data/usa.csv", sep=",",index=False)
+    data.to_csv("data/cleanData.csv", sep=",",index=False)
 
 if __name__ == "__main__":
     #    display(data.head(10))
@@ -197,10 +197,10 @@ if __name__ == "__main__":
     # print(countBadRows(data, 2))
     # data = split_datetime(data)
     # print(data)
-    # data.drop("stupid", axis=1, inplace=True)
+    # data = data.drop(columns=['stupid1', 'stupid2'])
     # print(data.head)
-    newData = onlyUsa(data)
-    writeToNewFile(newData)
+    # newData = onlyUsa(data)
+    writeToNewFile(data)
     # print("new file should exist")
 
     # missing(data)
