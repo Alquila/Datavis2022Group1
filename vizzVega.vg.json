@@ -1,6 +1,6 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "width": 400,
+  "width": 500,
   "height": 200,
   "padding": 5,
 
@@ -12,7 +12,17 @@
       "transform": [
         { "type": "aggregate", "groupby": ["country"], "as": ["country_count"] }
       ]
+    },
+      {
+      "name": "table2",
+      "source": "table",
+      "transform": [
+        {"type" : "filter", "expr": "datum.country_count > 200"},
+        {"type": "filter", "expr": "datum.country != 'fuck'"}
+      ]
     }
+  
+
   ],
 
   "signals": [
@@ -30,14 +40,14 @@
     {
       "name": "xscale",
       "type": "band",
-      "domain": {"data": "table", "field": "country"},
+      "domain": {"data": "table2", "field": "country"},
       "range": "width",
       "padding": 0.05,
       "round": true
     },
     {
       "name": "yscale",
-      "domain": {"data": "table", "field": "country_count"},
+      "domain": {"data": "table2", "field": "country_count"},
       "nice": true,
       "range": "height"
     }
@@ -51,7 +61,7 @@
   "marks": [
     {
       "type": "rect",
-      "from": {"data":"table"},
+      "from": {"data":"table2"},
       "encode": {
         "enter": {
           "x": {"scale": "xscale", "field": "country"},
@@ -71,8 +81,8 @@
       "type": "text",
       "encode": {
         "enter": {
-          "align": {"value": "center"},
-          "baseline": {"value": "bottom"},
+          "align": {"value": "left"},
+          "baseline": {"value": "top"},
           "fill": {"value": "#333"}
         },
         "update": {
