@@ -17,9 +17,9 @@
             ]
         },
         {
-            "name": "usaData",
-            "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/trydata2.csv",
-            "format": {"type": "csv", "parse": "auto", "delimiter": ";"},
+            "name": "usa",
+            "url": "data/usa.csv",
+            "format": {"type": "csv", "parse": "auto"},
             "transform": [
               {
                 "type": "geopoint",
@@ -58,7 +58,7 @@
         },
         {
             "type": "symbol",
-            "from": {"data": "usaData"},
+            "from": {"data": "usa"},
             "encode": {
               "enter": {
                 "size": {"value": 16},
