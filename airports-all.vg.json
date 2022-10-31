@@ -18,9 +18,25 @@
       ]
     },
     {
-      "name": "airports",
+      "name": "usa",
       "url": "data/usa.csv",
       "format": {"type": "csv", "parse": "auto", "delimiter": ","},
+      "transform": [
+        {
+          "type": "geopoint",
+          "projection": "projection",
+          "fields": ["longitude", "latitude"]
+        },
+        {
+          "type": "filter",
+          "expr": "datum.x != null && datum.y != null"
+        }
+      ]
+    },
+    {
+      "name": "airports",
+      "url": "data/airports.csv",
+      "format": {"type": "csv", "parse": "auto"},
       "transform": [
         {
           "type": "geopoint",
@@ -55,6 +71,23 @@
         },
         "update": {
           "path": {"field": "path"}
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "airports"},
+      "encode": {
+        "enter": {
+          "size": {"value": 16},
+          "fill": {"value": "steelblue"},
+          "fillOpacity": {"value": 0.8},
+          "stroke": {"value": "white"},
+          "strokeWidth": {"value": 1.5}
+        },
+        "update": {
+          "x": {"field": "x"},
+          "y": {"field": "y"}
         }
       }
     },
