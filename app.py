@@ -179,6 +179,14 @@ def more_info(data):
     print()
     print(states)
 
+def dropComments(data):
+    data = data.drop(columns=['comments'])
+    return data
+
+def dropRows(data):
+    data = data[(data.index < 10000)]
+    data.to_csv("data/smallDataset.csv", sep=",",index=False)
+
 def onlyUsa(data):
     goodRows = data[(data['country'] == "usa")]
     return goodRows
@@ -200,8 +208,10 @@ if __name__ == "__main__":
     # data = data.drop(columns=['stupid1', 'stupid2'])
     # print(data.head)
     # newData = onlyUsa(data)
-    writeToNewFile(data)
+    #data = dropComments(data)
+    #writeToNewFile(data)
     # print("new file should exist")
+    dropRows(data)
 
     # missing(data)
     # print("")
