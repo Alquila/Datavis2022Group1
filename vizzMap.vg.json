@@ -98,7 +98,7 @@
       },
       {
         "name": "airports",
-        "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/cleanData.csv",
+        "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
         "format": {"type": "csv", "parse": "auto", "delimiter": ","},
         "transform": [
           {
