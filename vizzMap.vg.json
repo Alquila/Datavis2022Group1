@@ -1,172 +1,188 @@
 {
-    "$schema": "https://vega.github.io/schema/vega/v5.json",
-    "description": "An interactive world map supporting pan and zoom.",
-    "width": 900,
-    "height": 500,
-    "autosize": "none",
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "An interactive world map supporting pan and zoom.",
+  "width": 900,
+  "height": 500,
+  "autosize": "none",
   
-    "signals": [
-      { "name": "tx", "update": "width / 2" },
-      { "name": "ty", "update": "height / 2" },
-      {
-        "name": "scale",
-        "value": 150,
-        "on": [{
-          "events": {"type": "wheel", "consume": true},
-          "update": "clamp(scale * pow(1.0005, -event.deltaY * pow(16, event.deltaMode)), 150, 3000)"
-        }]
+  "data": [
+    {
+      "name": "country-names",
+      "url": "data/world-110m-country-codes.csv",
+      "format": {"type": "csv", "parse": "auto", "delimiter": ","}
+    },
+    {
+      "name": "world",
+      "url": "data/world-110m.json",
+      "format": {
+        "type": "topojson",
+        "feature": "countries"
       },
-      {
-        "name": "angles",
-        "value": [0, 0],
-        "on": [{
-          "events": "mousedown",
-          "update": "[rotateX, centerY]"
-        }]
-      },
-      {
-        "name": "cloned",
-        "value": null,
-        "on": [{
-          "events": "mousedown",
-          "update": "copy('projection')"
-        }]
-      },
-      {
-        "name": "start",
-        "value": null,
-        "on": [{
-          "events": "mousedown",
-          "update": "invert(cloned, xy())"
-        }]
-      },
-      {
-        "name": "drag", "value": null,
-        "on": [{
-          "events": "[mousedown, window:mouseup] > window:mousemove",
-          "update": "invert(cloned, xy())"
-        }]
-      },
-      {
-        "name": "delta", "value": null,
-        "on": [{
-          "events": {"signal": "drag"},
-          "update": "[drag[0] - start[0], start[1] - drag[1]]"
-        }]
-      },
-      {
-        "name": "rotateX", "value": 0,
-        "on": [{
-          "events": {"signal": "delta"},
-          "update": "angles[0] + delta[0]"
-        }]
-      },
-      {
-        "name": "centerY", "value": 0,
-        "on": [{
-          "events": {"signal": "delta"},
-          "update": "clamp(angles[1] + delta[1], -60, 60)"
-        }]
-      }
-    ],
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "country-names",
+          "key": "id",
+          "fields": ["id"],
+          "values": ["name"],
+          "as": ["name"],
+          "default": "some country"
+        }
+      ]
+    },
+    {
+      "name": "graticule",
+      "transform": [
+        { "type": "graticule", "step": [15, 15] }
+      ]
+    },
+    {
+      "name": "ufo-sightings",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
+      "format": {"type": "csv", "parse": "auto", "delimiter": ","},
+      "transform": [
+        {
+          "type": "geopoint",
+          "projection": "projection",
+          "fields": ["longitude", "latitude"]
+        },
+        {
+          "type": "filter",
+          "expr": "datum.x != null && datum.y != null"
+        }
+      ]
+    }
+  ],
+
+  "signals": [
+    { "name": "tx", "update": "width / 2" },
+    { "name": "ty", "update": "height / 2" },
+    {
+      "name": "scale",
+      "value": 150,
+      "on": [{
+        "events": {"type": "wheel", "consume": true},
+        "update": "clamp(scale * pow(1.0005, -event.deltaY * pow(16, event.deltaMode)), 150, 3000)"
+      }]
+    },
+    {
+      "name": "angles",
+      "value": [0, 0],
+      "on": [{
+        "events": "mousedown",
+        "update": "[rotateX, centerY]"
+      }]
+    },
+    {
+      "name": "cloned",
+      "value": null,
+      "on": [{
+        "events": "mousedown",
+        "update": "copy('projection')"
+      }]
+    },
+    {
+      "name": "start",
+      "value": null,
+      "on": [{
+        "events": "mousedown",
+        "update": "invert(cloned, xy())"
+      }]
+    },
+    {
+      "name": "drag", "value": null,
+      "on": [{
+        "events": "[mousedown, window:mouseup] > window:mousemove",
+        "update": "invert(cloned, xy())"
+      }]
+    },
+    {
+      "name": "delta", "value": null,
+      "on": [{
+        "events": {"signal": "drag"},
+        "update": "[drag[0] - start[0], start[1] - drag[1]]"
+      }]
+    },
+    {
+      "name": "rotateX", "value": 0,
+      "on": [{
+        "events": {"signal": "delta"},
+        "update": "angles[0] + delta[0]"
+      }]
+    },
+    {
+      "name": "centerY", "value": 0,
+      "on": [{
+        "events": {"signal": "delta"},
+        "update": "clamp(angles[1] + delta[1], -60, 60)"
+      }]
+    }
+  ],
   
-    "projections": [
-      {
-        "name": "projection",
-        "type": "mercator",
-        "scale": {"signal": "scale"},
-        "rotate": [{"signal": "rotateX"}, 0, 0],
-        "center": [0, {"signal": "centerY"}],
-        "translate": [{"signal": "tx"}, {"signal": "ty"}]
-      }
-    ],
+  "projections": [
+    {
+      "name": "projection",
+      "type": "mercator",
+      "scale": {"signal": "scale"},
+      "rotate": [{"signal": "rotateX"}, 0, 0],
+      "center": [0, {"signal": "centerY"}],
+      "translate": [{"signal": "tx"}, {"signal": "ty"}]
+    }
+  ],
   
-    "data": [
-      {
-        "name": "world",
-        "url": "data/world-110m.json",
-        "format": {
-          "type": "topojson",
-          "feature": "countries"
+  "marks": [
+    {
+      "type": "shape",
+      "from": {"data": "graticule"},
+      "encode": {
+        "enter": {
+          "strokeWidth": {"value": 1},
+          "stroke": {"value": "#ddd"},
+          "fill": {"value": null}
         }
       },
-      {
-        "name": "graticule",
-        "transform": [
-          { "type": "graticule", "step": [15, 15] }
-        ]
+      "transform": [
+        { "type": "geoshape", "projection": "projection" }
+      ]
+    },
+    {
+      "type": "shape",
+      "from": {"data": "world"},
+      "encode": {
+        "enter": {
+          "tooltip": {"signal": "name"}
+        },
+        "update": {
+          "strokeWidth": {"value": 0.5},
+          "stroke": {"value": "#bbb"},
+          "fill": {"value": "#e5e8d3"}
+        },
+        "hover": {"fill": {"value": "pink"}}
       },
-      {
-        "name": "airports",
-        "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
-        "format": {"type": "csv", "parse": "auto", "delimiter": ","},
-        "transform": [
-          {
-            "type": "geopoint",
-            "projection": "projection",
-            "fields": ["longitude", "latitude"]
-          },
-          {
-            "type": "filter",
-            "expr": "datum.x != null && datum.y != null"
-          }
-        ]
-      }
-    ],
-  
-    "marks": [
-      {
-        "type": "shape",
-        "from": {"data": "graticule"},
-        "encode": {
-          "enter": {
-            "strokeWidth": {"value": 1},
-            "stroke": {"value": "#ddd"},
-            "fill": {"value": null}
+      "transform": [
+        { "type": "geoshape", "projection": "projection" }
+      ]
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "ufo-sightings"},
+      "encode": {
+        "enter": {
+          "size": {"value": 16},
+          "fill": {"value": "steelblue"},
+          "fillOpacity": {"value": 0.8},
+          "stroke": {"value": "white"},
+          "strokeWidth": {"value": 1.5},
+          "tooltip": {
+            "signal": "{'title': datum.city, 'Shape': datum.shape}"
           }
         },
-        "transform": [
-          { "type": "geoshape", "projection": "projection" }
-        ]
-      },
-      {
-        "type": "shape",
-        "from": {"data": "world"},
-        "encode": {
-          "enter": {
-            "tooltip": {"signal": "datum.countries"}
-          },
-          "update": {
-            "strokeWidth": {"value": 0.5},
-            "stroke": {"value": "#bbb"},
-            "fill": {"value": "#e5e8d3"}
-          },
-          "hover": {"fill": {"value": "pink"}}
-        },
-        "transform": [
-          { "type": "geoshape", "projection": "projection" }
-        ]
-      },
-      {
-        "type": "symbol",
-        "from": {"data": "airports"},
-        "encode": {
-          "enter": {
-            "size": {"value": 16},
-            "fill": {"value": "steelblue"},
-            "fillOpacity": {"value": 0.8},
-            "stroke": {"value": "white"},
-            "strokeWidth": {"value": 1.5},
-            "tooltip": {
-              "signal": "{'title': datum.city, 'Shape': datum.shape}"
-            }
-          },
-          "update": {
-            "x": {"field": "x"},
-            "y": {"field": "y"}
-          }
+        "update": {
+          "x": {"field": "x"},
+          "y": {"field": "y"}
         }
       }
-    ]
-  }
+    }
+  ]
+}
   
