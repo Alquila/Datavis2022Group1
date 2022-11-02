@@ -1,0 +1,174 @@
+code,id,name
+AF,4,Afghanistan
+AL,8,Albania
+DZ,12,Algeria
+AO,24,Angola
+AQ,10,Antarctica
+AR,32,Argentina
+AM,51,Armenia
+AU,36,Australia
+AT,40,Austria
+AZ,31,Azerbaijan
+BS,44,Bahamas
+BD,50,Bangladesh
+BY,112,Belarus
+BE,56,Belgium
+BZ,84,Belize
+BJ,204,Benin
+BT,64,Bhutan
+BO,68,"Bolivia, Plurinational State of"
+BA,70,Bosnia and Herzegovina
+BW,72,Botswana
+BR,76,Brazil
+BN,96,Brunei Darussalam
+BG,100,Bulgaria
+BF,854,Burkina Faso
+BI,108,Burundi
+KH,116,Cambodia
+CM,120,Cameroon
+CA,124,Canada
+CF,140,Central African Republic
+TD,148,Chad
+CL,152,Chile
+CN,156,China
+CO,170,Colombia
+CG,178,Congo
+CD,180,"Congo, the Democratic Republic of the"
+CR,188,Costa Rica
+,384,Cote d'Ivoire
+HR,191,Croatia
+CU,192,Cuba
+CY,196,Cyprus
+CZ,203,Czech Republic
+DK,208,Denmark
+DJ,262,Djibouti
+DO,214,Dominican Republic
+EC,218,Ecuador
+EG,818,Egypt
+SV,222,El Salvador
+GQ,226,Equatorial Guinea
+ER,232,Eritrea
+EE,233,Estonia
+ET,231,Ethiopia
+FK,238,Falkland Islands (Malvinas)
+FJ,242,Fiji
+FI,246,Finland
+FR,250,France
+TF,260,French Southern Territories
+GA,266,Gabon
+GM,270,Gambia
+GE,268,Georgia
+DE,276,Germany
+GH,288,Ghana
+GR,300,Greece
+GL,304,Greenland
+GT,320,Guatemala
+GN,324,Guinea
+GW,624,Guinea-Bissau
+GY,328,Guyana
+HT,332,Haiti
+HN,340,Honduras
+HU,348,Hungary
+IS,352,Iceland
+IN,356,India
+ID,360,Indonesia
+IR,364,"Iran, Islamic Republic of"
+IQ,368,Iraq
+IE,372,Ireland
+IL,376,Israel
+IT,380,Italy
+JM,388,Jamaica
+JP,392,Japan
+JO,400,Jordan
+KZ,398,Kazakhstan
+KE,404,Kenya
+KP,408,"Korea, Democratic People's Republic of"
+KR,410,"Korea, Republic of"
+KW,414,Kuwait
+KG,417,Kyrgyzstan
+LA,418,Lao People's Democratic Republic
+LV,428,Latvia
+LB,422,Lebanon
+LS,426,Lesotho
+LR,430,Liberia
+LY,434,Libya
+LT,440,Lithuania
+LU,442,Luxembourg
+,807,"Macedonia, the former Yugoslav Republic of"
+MG,450,Madagascar
+MW,454,Malawi
+MY,458,Malaysia
+ML,466,Mali
+MR,478,Mauritania
+MX,484,Mexico
+MD,498,"Moldova, Republic of"
+MN,496,Mongolia
+ME,499,Montenegro
+MA,504,Morocco
+MZ,508,Mozambique
+MM,104,Myanmar
+NA,516,Namibia
+NP,524,Nepal
+NL,528,Netherlands
+NC,540,New Caledonia
+NZ,554,New Zealand
+NI,558,Nicaragua
+NE,562,Niger
+NG,566,Nigeria
+NO,578,Norway
+OM,512,Oman
+PK,586,Pakistan
+PA,591,Panama
+PG,598,Papua New Guinea
+PY,600,Paraguay
+PE,604,Peru
+PH,608,Philippines
+PL,616,Poland
+PT,620,Portugal
+PR,630,Puerto Rico
+QA,634,Qatar
+RO,642,Romania
+RU,643,Russian Federation
+RW,646,Rwanda
+SA,682,Saudi Arabia
+SN,686,Senegal
+RS,688,Serbia
+SL,694,Sierra Leone
+SK,703,Slovakia
+SI,705,Slovenia
+SB,90,Solomon Islands
+SO,706,Somalia
+ZA,710,South Africa
+SS,728,South Sudan
+ES,724,Spain
+LK,144,Sri Lanka
+SD,729,Sudan
+SR,740,Suriname
+SZ,748,Swaziland
+SE,752,Sweden
+CH,756,Switzerland
+SY,760,Syrian Arab Republic
+TW,158,"Taiwan, Province of China"
+TJ,762,Tajikistan
+TZ,834,"Tanzania, United Republic of"
+TH,764,Thailand
+TL,626,Timor-Leste
+TG,768,Togo
+TT,780,Trinidad and Tobago
+TN,788,Tunisia
+TR,792,Turkey
+TM,795,Turkmenistan
+UG,800,Uganda
+UA,804,Ukraine
+AE,784,United Arab Emirates
+GB,826,United Kingdom
+US,840,United States
+UY,858,Uruguay
+UZ,860,Uzbekistan
+VU,548,Vanuatu
+VE,862,"Venezuela, Bolivarian Republic of"
+VN,704,Viet Nam
+EH,732,Western Sahara
+YE,887,Yemen
+ZM,894,Zambia
+ZW,716,Zimbabwe
