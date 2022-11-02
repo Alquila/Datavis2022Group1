@@ -156,7 +156,10 @@
             "fill": {"value": "steelblue"},
             "fillOpacity": {"value": 0.8},
             "stroke": {"value": "white"},
-            "strokeWidth": {"value": 1.5}
+            "strokeWidth": {"value": 1.5},
+            "tooltip": {
+              "signal": "{'title': datum.city, 'Shape': datum.shape}"
+            }
           },
           "update": {
             "x": {"field": "x"},
