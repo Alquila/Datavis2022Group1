@@ -134,10 +134,14 @@
         "from": {"data": "world"},
         "encode": {
           "enter": {
+            "tooltip": {"signal": "datum.countries"}
+          },
+          "update": {
             "strokeWidth": {"value": 0.5},
             "stroke": {"value": "#bbb"},
             "fill": {"value": "#e5e8d3"}
-          }
+          },
+          "hover": {"fill": {"value": "pink"}}
         },
         "transform": [
           { "type": "geoshape", "projection": "projection" }
