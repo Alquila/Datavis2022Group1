@@ -150,7 +150,7 @@
       "from": {"data": "world"},
       "encode": {
         "enter": {
-          "tooltip": {"signal": "name"}
+          "tooltip": {"value": "lol"}
         },
         "update": {
           "strokeWidth": {"value": 0.5},
