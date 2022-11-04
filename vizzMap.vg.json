@@ -12,31 +12,6 @@
       "format": {"type": "csv", "parse": "auto", "delimiter": ","}
     },
     {
-      "name": "world",
-      "url": "data/world-110m.json",
-      "format": {
-        "type": "topojson",
-        "feature": "countries"
-      },
-      "transform": [
-        {
-          "type": "lookup",
-          "from": "country-names",
-          "key": "id",
-          "fields": ["id"],
-          "values": ["name"],
-          "as": ["name"],
-          "default": "some country"
-        }
-      ]
-    },
-    {
-      "name": "graticule",
-      "transform": [
-        { "type": "graticule", "step": [15, 15] }
-      ]
-    },
-    {
       "name": "ufo-sightings",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
       "format": {"type": "csv", "parse": "auto", "delimiter": ","},
@@ -50,6 +25,51 @@
           "type": "filter",
           "expr": "datum.x != null && datum.y != null"
         }
+      ]
+    },
+    {
+      "name": "spots",
+      "source" : ["ufo-sightings"],
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["country"],
+          "as": ["counts"]
+        }
+      ]
+    },
+    {
+      "name": "world",
+      "url": "data/world-110m.json",
+      "format": {
+        "type": "topojson",
+        "feature": "countries"
+      },
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "country-names",
+          "key": "id",
+          "values": ["name"],
+          "fields": ["id"],
+          "as": ["name"],
+          "default": "some country"
+        },
+        {
+          "type": "lookup",
+          "from": "spots",
+          "key": "country",
+          "values": ["counts"],
+          "fields": ["name"],
+          "as": ["countrycounts"],
+          "default": 0
+        }
+      ]
+    },
+    {
+      "name": "graticule",
+      "transform": [
+        { "type": "graticule", "step": [15, 15] }
       ]
     }
   ],
@@ -150,7 +170,10 @@
       "from": {"data": "world"},
       "encode": {
         "enter": {
-          "tooltip": {"value": "lol"}
+          "tooltip": {
+            "signal" : "{title: datum.name + ', ' + datum.countrycounts +'.'}"
+          }
+          
         },
         "update": {
           "strokeWidth": {"value": 0.5},
