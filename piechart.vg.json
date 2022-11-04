@@ -1,0 +1,105 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "width": 500,
+    "height": 500,
+    "padding": 5,
+     
+    "data": [
+        {
+            "name": "table",
+            "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/cleanData.csv",
+            "format": {"type": "csv", "delimiter": ","}
+        },
+        {
+          "name": "shapes1",
+          "source": ["table"],
+          "transform": [
+                {"type": "aggregate", 
+                "groupby" :["shape"],
+                "fields": ["shape"],
+                "ops": ["count"], 
+                "as":    ["field"]},
+                {"type": "filter", "expr": "datum.shape != \"\""},
+                {"type": "filter", "expr": "datum.field > 10"}
+                ]
+        },{
+          "name": "shapes",
+          "source": ["shapes1"],
+          "transform": [
+                {
+                  "type": "pie",
+                  "field": "field",
+                  "startAngle":0,
+                  "endAngle": 6.29,
+                  "sort": true
+                },
+                {"type": "formula", "expr": "datum.shape + ': ' + datum.field", "as": "tooltip"}
+
+                ]
+        }
+    ],
+
+  "scales": [
+    {
+      "name": "color",
+      "type": "ordinal",
+      "domain": {"data": "shapes", "field": "field"},
+      "range": {"scheme": "category20"}
+    },
+     {
+      "name": "r",
+      "type": "threshold",
+      "domain": {"data": "shapes", "field": "field"},
+      "zero": true,
+      "range": [20, 200]
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "arc",
+      "from": {"data": "shapes"},
+      "encode": {
+        "enter":{
+          "fill": {"scale": "color", "field": "field"},
+            "x": {"signal": "width / 2"},
+            "y": {"signal": "height / 2"},
+            "startAngle": {"field": "startAngle"},
+          "endAngle": {"field": "endAngle"},
+          "innerRadius": {"value": 0},
+          "outerRadius": {"signal": "width / 2"},
+          "cornerRadius": {"value": 0},
+          "tooltip": {"field": "tooltip"}
+        },
+        "update":{
+          "stroke": {"value": "white"},
+          "strokeWidth": {"value": 0.5},
+          "zindex": {"value": 0}
+        },
+        "hover": {
+          "stroke": {"value": "red"},
+          "strokeWidth": {"value": 2},
+          "zindex": {"value": 1}
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {"data": "shapes"},
+      "fontsize": 12,
+      "encode": {
+        "enter":{
+          "x": {"field": {"group": "width"}, "mult": 0.5},
+          "y": {"field": {"group": "height"}, "mult": 0.5},
+          "radius": {"scale":"r", "field": "field", "offset": 10},
+          "theta": {"signal": "(datum.startAngle + datum.endAngle)/2"},
+          "fill": {"value": "#000"},
+          "align": {"value": "center"},
+          "baseline": {"value": "middle"},
+          "text": {"field": "field"}
+        }
+      }
+
+    }
+  ]
+}
