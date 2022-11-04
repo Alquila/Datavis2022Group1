@@ -158,12 +158,12 @@ if __name__ == "__main__":
     #data = dropComments(data)
     #writeToNewFile(data)
     # print("new file should exist")
-    dropRows(data)
+    #dropRows(data)
 
-    # missing(data)
+    missing(data)
     # print("")
     # print(missing_zero_values_table(data)) #now countries where fixed but we still have lot of empty states
     # missing(data)
     # column = data['longitude'] 
     # count = column[column == 0].count()
-    # print('Count of zeros in longitude : ', count )
+    #print('Count of zeros in longitude : ', count )
