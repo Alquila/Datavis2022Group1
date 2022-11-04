@@ -57,18 +57,19 @@ def update_country_state(data):
                     break
             for country in pandasCountries:
                 if (data.loc[x,"city"].find(country)) > 0:
-                    data.loc[x,"country"] = country
+                    data.loc[x,"country"] = country.capitalize()
                     break
+        data.loc[x,"country"] = data.loc[x,"country"].capitalize()
 
 ### Opdater lande så de får fuldt navn
 def update_ca_and_uk(data):
     for x in data.index:
-        name = data.loc[x,"country"]
+        name = data.loc[x,"country"].lower()
         if (name == "ca") | (name == "canada"):
             data.loc[x, "country"] = "Canada"
         elif (name == "uk") | (name == "gb"):
             data.loc[x, "country"] = "United Kingdom"
-        elif (name == "us") | (name == "united states"):
+        elif (name == "us") | (name == "united states") | (name == "usa"):
             data.loc[x, "country"] = "United States"
         elif (name == "au") | (name == "australia"):
             data.loc[x,"country"] = "Australia"
@@ -110,6 +111,25 @@ def countBadRows(data, lower):
     return index
 
 
+#to streamline shape data
+def cleanShapes(data):
+    #TODO what do we want the shapes to be
+    #TODO burde vi spørge Hans-Jürg hvor meget vi må ændre
+    for x in data.index:
+        shape = data.loc[x, "shape"]
+        if (shape == "hexagon") | (shape == "dome") | (shape == "changed") | (shape == "crescent") :
+            data.loc[x, "shape"] = "other" 
+        elif (shape == "other"):#er other en shape?
+            data.loc[x, "shape"] = "unknown" 
+        elif (shape == "pyramid"):
+            data.loc[x,"shape"] = "triangle" #for that one pyramid shape
+        elif (shape == "round") | (shape == "sphere"): 
+            data.loc[x,"shape"] = "circle"
+        elif (shape == "cylinder"):
+            data.loc[x,"shape"] = "cigar"
+        data.loc[x,"shape"].capitalize() #because it looks nice
+
+
 ### ---------- TEST OG PRINT FUNCTIONS
 
 ### Drop Comment coloumn form data filde
@@ -145,7 +165,8 @@ def writeToNewFile(data):
 if __name__ == "__main__":
     #    display(data.head(10))
     # print("iii")
-    # update_ca_and_uk(data)
+    update_country_state(data)
+    update_ca_and_uk(data)
     # dropLatLong(data)
     # findMissingCitiesFromLatLong(data)
     # print(missing_zero_values_table(data))
@@ -156,7 +177,7 @@ if __name__ == "__main__":
     # print(data.head)
     # newData = onlyUsa(data)
     #data = dropComments(data)
-    #writeToNewFile(data)
+    writeToNewFile(data)
     # print("new file should exist")
     #dropRows(data)
 

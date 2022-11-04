@@ -31,7 +31,7 @@
                   "field": "field",
                   "startAngle":0,
                   "endAngle": 6.29,
-                  "sort": true
+                  "sort": false
                 },
                 {"type": "formula", "expr": "datum.shape + ': ' + datum.field", "as": "tooltip"}
 
@@ -51,9 +51,25 @@
       "type": "threshold",
       "domain": {"data": "shapes", "field": "field"},
       "zero": true,
-      "range": [20, 200]
+      "range": [20, 250]
     }
   ],
+
+  "title":{
+    "text": "Pie chart over shapes of sightings",
+    "anchor": "start",
+    "font": "arial",
+    "fontSize": 14,
+    "fontStyle": "normal",
+    "encode":{
+        "title":{
+            "interactive": true,
+            "enter": {"fill": {"value": "purple"}},
+            "update": {"fontStyle": {"value": "normal"}, "fill":{"value": "purple"}},
+            "hover": {"fontStyle": {"value": "italics"},"fill":{"value": "blue"}}
+        }
+    }
+  },
 
   "marks": [
     {
@@ -96,7 +112,7 @@
           "fill": {"value": "#000"},
           "align": {"value": "center"},
           "baseline": {"value": "middle"},
-          "text": {"field": "field"}
+          "text": {"field": "shape"}
         }
       }
 
