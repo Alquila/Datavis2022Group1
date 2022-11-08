@@ -13,7 +13,7 @@
     },
     {
       "name": "ufo-sightings",
-      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
+      "url": "data/smallDataset.csv",
       "format": {"type": "csv", "parse": "auto", "delimiter": ","},
       "transform": [
         {

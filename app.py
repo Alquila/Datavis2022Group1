@@ -6,7 +6,7 @@ from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent="geoapiExercises")
 
-data = pd.read_csv("data/cleanData.csv", low_memory=False, sep=",")
+data = pd.read_csv("data/smallDataset.csv", low_memory=False, sep=",")
 data = data.astype({'city': 'string'})
 # data = pd.read_csv("data/complete.csv", low_memory=False, sep=",", error_bad_lines=False)
 pd.to_numeric(data['latitude'])
@@ -160,7 +160,7 @@ def onlyUsa(data):
 ### Define name of new file
 def writeToNewFile(data):
     print(data.head)
-    data.to_csv("data/cleanData.csv", sep=",",index=False)
+    data.to_csv("data/smallDataset.csv", sep=",",index=False)
 
 if __name__ == "__main__":
     #    display(data.head(10))

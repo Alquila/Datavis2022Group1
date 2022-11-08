@@ -16,7 +16,7 @@ BE,56,Belgium
 BZ,84,Belize
 BJ,204,Benin
 BT,64,Bhutan
-BO,68,"Bolivia, Plurinational State of"
+BO,68,Bolivia
 BA,70,Bosnia and Herzegovina
 BW,72,Botswana
 BR,76,Brazil
@@ -33,7 +33,7 @@ CL,152,Chile
 CN,156,China
 CO,170,Colombia
 CG,178,Congo
-CD,180,"Congo, the Democratic Republic of the"
+CD,180,Congo
 CR,188,Costa Rica
 ,384,Cote d'Ivoire
 HR,191,Croatia
@@ -72,7 +72,7 @@ HU,348,Hungary
 IS,352,Iceland
 IN,356,India
 ID,360,Indonesia
-IR,364,"Iran, Islamic Republic of"
+IR,364,Iran
 IQ,368,Iraq
 IE,372,Ireland
 IL,376,Israel
@@ -82,8 +82,8 @@ JP,392,Japan
 JO,400,Jordan
 KZ,398,Kazakhstan
 KE,404,Kenya
-KP,408,"Korea, Democratic People's Republic of"
-KR,410,"Korea, Republic of"
+KP,408,"North Korea"
+KR,410,"South Korea"
 KW,414,Kuwait
 KG,417,Kyrgyzstan
 LA,418,Lao People's Democratic Republic
@@ -148,7 +148,7 @@ SZ,748,Swaziland
 SE,752,Sweden
 CH,756,Switzerland
 SY,760,Syrian Arab Republic
-TW,158,"Taiwan, Province of China"
+TW,158,Taiwan
 TJ,762,Tajikistan
 TZ,834,"Tanzania, United Republic of"
 TH,764,Thailand
@@ -166,7 +166,7 @@ US,840,United States
 UY,858,Uruguay
 UZ,860,Uzbekistan
 VU,548,Vanuatu
-VE,862,"Venezuela, Bolivarian Republic of"
+VE,862,Venezuela
 VN,704,Viet Nam
 EH,732,Western Sahara
 YE,887,Yemen
