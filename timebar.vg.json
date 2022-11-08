@@ -1,0 +1,161 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "width": 500,
+    "height": 500,
+    "padding": 5,  
+    "autosize":"pad",
+  
+    "data": [
+        {
+            "name": "table",
+            "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
+            "format": {"type": "csv", "delimiter": ",", "parse":"auto"}
+        },
+        {
+          "name": "times2",
+          "source": ["table"],
+          "transform": [
+                {
+                  "type": "timeunit",
+                  "units":["year"],
+                  "field": "date"
+                }
+                ]
+        },
+        {
+          "name": "times",
+          "source": ["times2"],
+          "transform": [
+            { "type":"joinaggregate",
+            "groupby": ["date"],
+            "as": ["count"]
+            },
+            {"type": "filter", "expr": "datum.date >= -638326800000"}
+          ]
+        },
+        {
+          "name": "bro",
+          "source": ["times"],
+          "transform": [
+            {"type": "aggregate", "groupby": ["unit0"]},
+            {"type": "formula", "expr": "year(datum.unit0)+ ': ' + datum.count" , "as": "eee"}
+          ]
+        }
+    ],
+  
+  "scales": [
+        {
+        "name": "xscale",
+        "type": "band",
+        "domain": {"data": "times", "field": "unit0"},
+        "range": "width",
+        "padding": 0.05,
+        "round": true
+      },
+      {
+        "name": "xtime",
+        "type": "time",
+        "range": "width",
+        "nice":"day",
+        "domain": {"data": "times", "field": "unit0"}
+      },
+      {
+        "name": "ytime",
+        "nice":  true,
+        "range": "height",
+        "domain": {"data": "times", "field": "count"}
+      }
+  ],
+   "layout": {
+    "padding": 100,
+    "columns": 1,
+    "align": "each",
+    "bounds":"full",
+    "center":false
+  },
+
+  "marks": [
+    {
+      "type": "group",
+      "axes": [
+      { "orient": "bottom", "scale": "xtime", "title": "ge", "labelAngle": 90, "labelAlign":"left", "labelOffset": 7 },
+      { "orient": "left", "scale": "ytime" }
+    ],  
+      "marks":[
+        {
+      "type": "symbol",
+      "from": {"data": "times"},
+      "encode": {
+        "enter":{
+          "x":{"field": "unit0", "scale": "xtime"},
+          "width":{"scale": "xtime", "band" : 1},
+          "y":{"field": "count", "scale": "ytime"},
+          "y2":{"scale": "ytime", "value": 0}
+        }
+        }
+         
+      }
+      ]
+    },
+    {
+      "type": "group",
+
+      "scales": [
+        {
+          "name": "x",
+          "type": "band",
+          "domain": {"data": "bro", "field": "unit0", "sort":true},
+        "range": "width",
+        "padding": 0.5,
+        "round": true
+        
+        },
+        {
+          "name": "y",
+        "domain": {"data": "bro", "field": "count"},
+        "nice": true,
+        "range": "height"
+        }
+      ],
+
+      "axes": [
+         { "orient": "bottom", "scale": "x", "title": "ge", "labelAngle": 90, "labelAlign":"left", "labelOffset": 7, "labelFontSize": 10 },
+      { "orient": "left", "scale": "y" }
+      ],
+
+      "marks":[
+        {
+      "type": "rect",
+      "from": {"data": "bro"},
+      "encode": {
+        "enter":{
+          "x":{"field": "unit0", "scale": "x"},
+          "width":{"scale": "x", "band" : 1},
+          "y":{"field": "count", "scale": "y"},
+          "y2":{"scale": "y", "value": 0},
+          "tooltip": {"field": "eee"}
+        },
+        "update": {
+            "fill": {"value": "steelblue"}
+          },
+          "hover": {
+            "fill": {"value": "red"}
+          }
+        }
+         
+      }
+      ]
+    }
+  ],
+
+  "title":{
+    "text": "Bar chart over percentage of shapes in sightings",
+    "anchor": "start",
+    "font": "arial",
+    "fontSize": 14,
+    "fontStyle": "normal",
+    "encode":{"title":{"enter": {"fill": {"value": "purple"}}}}
+  }
+
+
+  }

@@ -98,6 +98,20 @@
 
 "marks": [
   {
+    "type": "symbol",
+      "encode": {
+      "enter": {
+        "fill": {"value": "#939597"},
+        "size": {"value": 525000},
+        "shape": {"value": "square"},
+        "x": {"signal": "width / 2"},
+        "y": {"signal": "width / 2"},
+        "stroke": {"value": "#652c90"},
+        "opacity": {"value": 0.5}
+      }
+      }
+    },
+  {
     "type": "arc",
     "from": {"data": "shapes"},
     "encode": {

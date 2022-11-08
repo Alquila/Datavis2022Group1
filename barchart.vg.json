@@ -1,0 +1,116 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "width": 500,
+    "height": 500,
+    "padding": 5,  
+  
+    "data": [
+        {
+            "name": "table",
+            "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
+            "format": {"type": "csv", "delimiter": ","}
+        },
+        {
+          "name": "shapes1",
+          "source": ["table"],
+          "transform": [
+                {"type": "aggregate", 
+                "groupby" :["shape"],
+                "fields": ["shape"],
+                "ops": ["count"], 
+                "as":    ["field"]},
+                {"type": "filter", "expr": "datum.shape != \"\""},
+                {"type": "filter", "expr": "datum.field > 10"}
+                ]
+        },{
+          "name": "shapes",
+          "source": ["shapes1"],
+          "transform": [
+                {
+                  "type": "pie",
+                  "field": "field",
+                  "startAngle":0,
+                  "endAngle": 6.29
+                },
+                {"type": "formula", "expr": "datum.shape + ': ' + datum.field", "as": "tooltip"}
+  
+                ]
+        },
+        {
+          "name": "baa",
+          "source": ["shapes1"],
+          "transform": [
+            { "type":"joinaggregate",
+            "fields": ["field"],
+            "ops": ["sum"],
+            "as": ["TotalSum"]
+            },
+            {
+              "type": "formula",
+              "expr": "datum.field/datum.TotalSum * 100",
+              "as": "percent"
+            }
+          ]
+        }
+    ],
+  
+  "scales": [
+        {
+        "name": "xscale",
+        "type": "band",
+        "domain": {"data": "baa", "field": "shape"},
+        "range": "width",
+        "padding": 0.05,
+        "round": true
+      },
+      {
+        "name": "yscale",
+        "domain": {"data": "baa", "field": "percent"},
+        "nice": true,
+        "range": "height"
+      }
+  ],
+  
+  "axes": [
+      { "orient": "bottom", "scale": "xscale", "title": "ge", "labelAngle": 90, "labelAlign":"left", "labelOffset": 7 },
+      { "orient": "left", "scale": "yscale" }
+    ],
+  
+  
+  "title":{
+    "text": "Bar chart over percentage of shapes in sightings",
+    "anchor": "start",
+    "font": "arial",
+    "fontSize": 14,
+    "fontStyle": "normal",
+    "encode":{
+        "title":{
+            "interactive": true,
+            "enter": {"fill": {"value": "purple"}},
+            "update": {"fontStyle": {"value": "normal"}, "fill":{"value": "purple"}},
+            "hover": {"fontStyle": {"value": "italics"},"fill":{"value": "blue"}}
+        }
+    }
+  },
+  
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "baa"},
+      "encode": {
+        "enter":{
+          "x":{"field": "shape", "scale": "xscale" },
+          "width":{"scale": "xscale", "band" : 1},
+          "y":{"field": "percent", "scale": "yscale"},
+          "y2":{"scale": "yscale", "value": 0}
+        },
+          "update": {
+            "fill": {"value": "steelblue"}
+          },
+          "hover": {
+            "fill": {"value": "red"}
+          }
+      }
+    }
+  ]
+  }
