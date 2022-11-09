@@ -4,76 +4,7 @@
   "width": 900,
   "height": 500,
   "autosize": "none",
-  
-  "data": [
-    {
-      "name": "country-names",
-      "url": "data/world-110m-country-codes.csv",
-      "format": {"type": "csv", "parse": "auto", "delimiter": ","}
-    },
-    {
-      "name": "ufo-sightings",
-      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
-      "format": {"type": "csv", "parse": "auto", "delimiter": ","},
-      "transform": [
-        {
-          "type": "geopoint",
-          "projection": "projection",
-          "fields": ["longitude", "latitude"]
-        },
-        {
-          "type": "filter",
-          "expr": "datum.x != null && datum.y != null"
-        }
-      ]
-    },
-    {
-      "name": "spots",
-      "source" : ["ufo-sightings"],
-      "transform": [
-        {
-          "type": "aggregate",
-          "groupby": ["country"],
-          "as": ["counts"]
-        }
-      ]
-    },
-    {
-      "name": "world",
-      "url": "data/world-110m.json",
-      "format": {
-        "type": "topojson",
-        "feature": "countries"
-      },
-      "transform": [
-        {
-          "type": "lookup",
-          "from": "country-names",
-          "key": "id",
-          "values": ["name"],
-          "fields": ["id"],
-          "as": ["name"],
-          "default": "some country"
-        },
-        {
-          "type": "lookup",
-          "from": "spots",
-          "key": "country",
-          "values": ["counts"],
-          "fields": ["name"],
-          "as": ["countrycounts"],
-          "default": 0
-        }
-      ]
-    },
-    {
-      "name": "graticule",
-      "transform": [
-        { "type": "graticule", "step": [15, 15] }
-      ]
-    }
-  ],
-
+ 
   "signals": [
     { "name": "tx", "update": "width / 2" },
     { "name": "ty", "update": "height / 2" },
@@ -136,8 +67,93 @@
         "events": {"signal": "delta"},
         "update": "clamp(angles[1] + delta[1], -60, 60)"
       }]
+    },
+    { "name": "shape", "value": "all",
+      "bind": {"input": "select", "name":"Shape ", "options": [
+        "cylinder", "circle", "rectangle", "cross", "diamond", "triangle",
+        "unknown", "other", "light", "fireball", "egg", "chevron", "teardrop",
+        "sphere", "disk","oval", "cigar", "formation", "flash", "cone",
+        "changing", "all"
+      ]
+    } }
+  ],
+   
+  "data": [
+    {
+      "name": "country-names",
+      "url": "data/world-110m-country-codes.csv",
+      "format": {"type": "csv", "parse": "auto", "delimiter": ","}
+    },
+    {
+      "name": "ufo-sightings",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
+      "format": {"type": "csv", "parse": "auto", "delimiter": ","},
+      "transform": [
+        {
+          "type": "geopoint",
+          "projection": "projection",
+          "fields": ["longitude", "latitude"]
+        },
+        {
+          "type": "filter",
+          "expr": "datum.x != null && datum.y != null"
+        },
+        {
+          "type": "formula", 
+          "expr": "if(shape=='all' || datum.shape==shape,1,0)", "as": "cond_shape"
+        },
+        {
+          "type": "filter", "expr": "datum.cond_shape == 1"
+        }
+      ]
+    },
+    {
+      "name": "spots",
+      "source" : ["ufo-sightings"],
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": ["country"],
+          "as": ["counts"]
+        }
+      ]
+    },
+    {
+      "name": "world",
+      "url": "data/world-110m.json",
+      "format": {
+        "type": "topojson",
+        "feature": "countries"
+      },
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "country-names",
+          "key": "id",
+          "values": ["name"],
+          "fields": ["id"],
+          "as": ["name"],
+          "default": "some country"
+        },
+        {
+          "type": "lookup",
+          "from": "spots",
+          "key": "country",
+          "values": ["counts"],
+          "fields": ["name"],
+          "as": ["countrycounts"],
+          "default": 0
+        }
+      ]
+    },
+    {
+      "name": "graticule",
+      "transform": [
+        { "type": "graticule", "step": [15, 15] }
+      ]
     }
   ],
+
   
   "projections": [
     {
