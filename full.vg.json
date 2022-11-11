@@ -1,0 +1,31 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "A basic pie chart example.",
+    "width": 600,
+    "height": 800,
+    "autosize": "none",
+  
+    "signals": [
+      {"name": "mapHeight", "value": 400},
+      {"name": "timeHeight", "value": 200}
+    ],
+  
+    "layout": {
+      "padding": 100,
+      "columns": 1,
+      "align": "each",
+      "bounds":"full",
+      "center":false
+    },
+  
+    "marks": [
+      {
+        "type": "group",
+        "name": "mapgroup",
+        "description": "Map of stuff"
+      }
+    ]
+  
+  
+  }
+  
