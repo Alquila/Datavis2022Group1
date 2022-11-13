@@ -1,13 +1,20 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "width": 500,
-  "height": 500,
+  "width": 900,
+  "height": 400,
   "padding": 5,  
   "autosize":"pad",
 
   "signals": [
+    {
+      "name": "timeunit", "value": ["day"],
+      "bind": {"input": "select", "options": [
+        ["year"], ["month"], ["date"], ["day"]
+      ]}
+    },
     {"name": "oneheight", "value": 300},
-    {"name": "twoheight", "value": 200}
+    {"name": "twoheight", "value": 100},
+    {"name": "threeheight", "value": 200}
   ],
 
   "data": [
@@ -35,7 +42,8 @@
           "groupby": ["date"],
           "as": ["count"]
           },
-          {"type": "filter", "expr": "datum.date >= -638326800000"}
+          {"type": "filter", "expr": "datum.date >= -638326800000"},
+          {"type": "formula", "expr": "year(datum.unit0)+ ': ' + datum.count" , "as": "ee2"}
         ]
       },
       {
@@ -45,6 +53,26 @@
           {"type": "aggregate", "groupby": ["unit0"]},
           {"type": "formula", "expr": "year(datum.unit0)+ ': ' + datum.count" , "as": "eee"}
         ]
+      },
+      {
+        "name": "bro2",
+        "source": ["table"],
+        "transform": [
+          {"type": "filter", "expr": "datum.date >= -708326800000"},
+        {
+          "type": "timeunit",
+          "field": "date",
+          "units": {"signal": "timeunit"},
+          "signal": "tbin"
+        },
+        {
+          "type": "aggregate",
+          "groupby": ["unit0"],
+          "ops": ["count"],
+          "fields": [null],
+          "as": ["count"]
+        }
+      ]
       }
   ],
 
@@ -52,7 +80,7 @@
   {
     "name": "layout",
     "type": "band",
-    "domain": ["one", "two"],
+    "domain": ["one", "two", "three"],
     "range": "height"
   },
       {
@@ -93,7 +121,7 @@
         "y":{"scale": "layout", "value": "one", "offset": 10},
         "width":{"signal": "width"},
         "height": {"signal": "oneheight"},
-        "fill": {"value": "#939597"}
+        "fill": {"value": "#fadcfc"}
       }
     },
 
@@ -119,12 +147,9 @@
         "x":{"field": "unit0", "scale": "xtime"},
         "width":{"scale": "xtime", "band" : 1},
         "y":{"field": "count", "scale": "yy"},
-        "y2":{"scale": "yy", "value": 0}
-      }
-      }
-       
-    }
-    ]
+        "y2":{"scale": "yy", "value": 0},
+        "tooltip": {"field": "ee2"}
+      }}}]
   },
   {
     "type": "group",
@@ -133,7 +158,7 @@
         "y": {"scale": "layout", "value": "two", "offset": 200},
         "width":{"signal": "width"},
         "height": {"signal": "twoheight"},
-        "fill": {"value": "#939597"}
+        "fill": {"value": "#fadcfc"}
       }
     },
     "scales": [
@@ -142,9 +167,15 @@
         "type": "band",
         "domain": {"data": "bro", "field": "unit0", "sort":true},
       "range": "width",
-      "padding": 0.5,
+      "padding": 0.4,
       "round": true
-      
+      },
+      {
+        "name": "x2",
+        "type": "time",
+        "domain": {"data": "bro", "field": "unit0", "sort": true},
+        "range": "width",
+        "padding": 0.3
       },
       {
         "name": "y",
@@ -155,14 +186,14 @@
       {
         "name": "yy",
         "type": "linear",
-        "domain": {"data": "times", "field": "count"},
+        "domain": {"data": "bro", "field": "count"},
         "range": [{"signal": "twoheight"},0]
       }
     ],
 
     "axes": [
-       { "orient": "bottom", "scale": "x", "title": "ge", "labelAngle": 90, "labelAlign":"left", "labelOffset": 7, "labelFontSize": 10 },
-    { "orient": "left", "scale": "y" }
+       { "orient": "bottom", "scale": "x", "title": "ge", "labelAngle": 90, "labelAlign":"left", "labelOffset": 0, "labelFontSize": 10},
+    { "orient": "left", "scale": "yy" }
     ],
 
     "marks":[
@@ -173,8 +204,8 @@
       "enter":{
         "x":{"field": "unit0", "scale": "x"},
         "width":{"scale": "x", "band" : 1},
-        "y":{"field": "count", "scale": "y"},
-        "y2":{"scale": "y", "value": 0},
+        "y":{"field": "count", "scale": "yy"},
+        "y2":{"scale": "yy", "value": 0},
         "tooltip": {"field": "eee"}
       },
       "update": {
@@ -187,6 +218,62 @@
        
     }
     ]
+  },
+  {
+    "type": "group",
+    "encode": {
+      "enter":{
+        "y": {"scale": "layout", "value": "three", "offset": 0},
+        "width":{"signal": "width"},
+        "height": {"signal": "threeheight"},
+        "fill": {"value": "#fadcfc"}
+      }
+    },
+
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "band",
+      "range": "width",
+      "padding": 0.1,
+      "round": true,
+      "domain": {"signal": "timeSequence(tbin.unit, tbin.start, tbin.stop)"}
+    },
+    {
+      "name": "yscale",
+      "type": "linear",
+      "range": [{"signal": "threeheight"},0],
+      "domain": {"data": "bro2", "field": "count"},
+      "zero": true,
+      "nice": true
+    }
+  ],
+
+  "axes": [
+    { "orient": "bottom", "scale": "xscale",
+      "formatType": "time", "format": {"signal": "timeUnitSpecifier(tbin.units, {hours: '%H'})"}, "labelAngle": 90, "labelAlign":"left", "labelOffset": 6, "labelFontSize": 10,"labelOverlap":"greedy" },
+    { "orient": "left", "scale": "yscale", "tickCount": 7,"title": "fesælmf" }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "bro2"},
+      "encode": {
+        "update": {
+          "x": {"scale": "xscale", "field": "unit0"},
+          "width": {"scale": "xscale", "band": 1},
+          "y": {"scale": "yscale", "field": "count"},
+          "y2": {"scale": "yscale", "value": 0},
+          "fill": {"value": "steelblue"},
+          "tooltip": {"signal": "{timeunit: timeFormat(datum.unit0, timeUnitSpecifier(tbin.units)), count: format(datum.count, ',') }"}
+        },
+        "hover": {
+          "fill": {"value": "firebrick"}
+        }
+      }
+    }
+  ]
   }
 ],
 
