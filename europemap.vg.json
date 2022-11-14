@@ -19,7 +19,23 @@
           "transform": [
               { "type": "graticule", "step": [15, 15] }
           ]
+      },
+      {
+    "name": "ufo-sightings",
+    "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
+    "format": {"type": "csv", "parse": "auto", "delimiter": ","},
+    "transform": [
+      {
+        "type": "geopoint",
+        "projection": "projection",
+        "fields": ["longitude", "latitude"]
+      },
+      {
+        "type": "filter",
+        "expr": "datum.x != null && datum.y != null"
       }
+    ]
+  }
   ],
 
   "projections": [
@@ -71,7 +87,27 @@
       "transform": [
         { "type": "geoshape", "projection": "projection" }
       ]
+    },
+  {
+    "type": "symbol",
+    "from": {"data": "ufo-sightings"},
+    "encode": {
+      "enter": {
+        "size": {"value": 16},
+        "fill": {"value": "steelblue"},
+        "fillOpacity": {"value": 0.8},
+        "stroke": {"value": "white"},
+        "strokeWidth": {"value": 1.5},
+        "tooltip": {
+          "signal": "{'title': datum.city, 'Shape': datum.shape}"
+        }
+      },
+      "update": {
+        "x": {"field": "x"},
+        "y": {"field": "y"}
+      }
     }
+  }
   ]
 
 

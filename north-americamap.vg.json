@@ -1,0 +1,81 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "An interactive world map supporting pan and zoom.",
+    "width": 500,
+    "height": 500,
+    "autosize": "none", 
+  
+    "data": [
+        {
+            "name": "north-america",
+            "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/north-america.json",
+            "format": {
+              "type": "topojson",
+              "feature": "continent_North_America_subunits"
+            }
+        },
+        {
+            "name": "graticule",
+            "transform": [
+                { "type": "graticule", "step": [15, 15] }
+            ]
+        }
+    ],
+  
+    "projections": [
+      {
+        "name": "projection",
+        "type": "mercator",
+        "size":{"signal": "[width,height]"},
+        "fit": {"signal": "data('north-america')"}
+      }
+    ],
+  
+    "scales": [
+      {
+        "name": "color",
+        "type": "quantize",
+        "domain": [0, 0.15],
+        "range": {"scheme": "blues", "count": 7}
+      }
+    ],
+    
+    "marks": [
+      {
+        "type": "shape",
+        "from": {"data": "graticule"},
+        "encode": {
+          "enter": { },
+          "hover": { "fill": {"value": "red"} }
+        },
+        "transform": [
+          { "type": "geoshape", "projection": "projection" }
+        ]
+      },
+      {
+        "type": "shape",
+        "from": {"data": "north-america"},
+        "encode": {
+          "enter":{
+            "strokeWidth": {"value": 0.25},
+              "stroke": {"value": "#888"},
+              "fill": {"value": "pink"}
+          },
+          "update": {
+            "zindex": {"value": 0}
+          },
+          "hover": {
+            "zindex": {"value": 1}
+          }
+        },
+        "transform": [
+          { "type": "geoshape", "projection": "projection" }
+        ]
+      }
+    ]
+  
+  
+  }
+  
+    
+  
