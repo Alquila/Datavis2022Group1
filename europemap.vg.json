@@ -1,26 +1,57 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
-  "description": "An interactive world map supporting pan and zoom.",
-  "width": 500,
-  "height": 500,
-  "autosize": "none", 
+  "description": "A basic pie chart example.",
+  "width": 900,
+  "height": 600,
+  "autosize": "pad",
+
+  "signals": [
+    {"name": "mapHeight", "value": 400},
+    {"name": "timeHeight", "value": 100},
+    {"name": "mapWidth", "value": 450},
+    {"name": "shapeHeight", "value": 400}
+  ],
+  "scales": [
+    {
+  "name": "layouty",
+  "type": "band",
+  "domain": ["one", "two", "three"],
+  "range": "height"
+},
+{
+  "name": "layoutx",
+  "type": "band",
+  "domain": ["one, two"],
+  "range": "width"
+}
+  ],
+
+  "projections": [
+  {
+    "name": "projection",
+    "type": "mercator",
+    "size":{"signal": "[mapWidth,mapHeight]"},
+    "fit": {"signal": "data('europe')"},
+    "clipExtent": [[0, 0], [450, 400]]
+  }
+],
 
   "data": [
-      {
+    {
           "name": "europe",
           "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/europe.json",
           "format": {
             "type": "topojson",
             "feature": "continent_Europe_subunits"
           }
-      },
-      {
+    },
+    {
           "name": "graticule",
           "transform": [
-              { "type": "graticule", "step": [15, 15] }
+              { "type": "graticule", "step": [10, 10] }
           ]
-      },
-      {
+    },
+    {
     "name": "ufo-sightings",
     "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
     "format": {"type": "csv", "parse": "auto", "delimiter": ","},
@@ -35,29 +66,53 @@
         "expr": "datum.x != null && datum.y != null"
       }
     ]
-  }
+    }
   ],
 
-  "projections": [
+
+"layout": {
+    "padding": 20,
+    "columns": 2,
+    "align": "each",
+    "bounds":"flush",
+    "center":true
+  },  
+
+  "marks": [
+    {
+      "type": "group",
+      "name": "first",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "mapHeight"},
+          "fill": {"value": "#fadcfc"}
+        }
+      },
+
+      "data": [
+        {
+          "name": "north-america",
+          "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/north-america.json",
+          "format": {
+            "type": "topojson",
+            "feature": "continent_North_America_subunits"
+          }
+      }
+      ],
+
+        "projections": [
     {
       "name": "projection",
       "type": "mercator",
-      "size":{"signal": "[width,height]"},
-      "fit": {"signal": "data('europe')"}
-    }
-  ],
+      "size":{"signal": "[mapWidth,mapHeight]"},
+      "fit": {"signal": "data('north-america')"},
+      "clipExtent": [[0, 0], [450, 400]]
+    }],
 
-  "scales": [
-    {
-      "name": "color",
-      "type": "quantize",
-      "domain": [0, 0.15],
-      "range": {"scheme": "blues", "count": 7}
-    }
-  ],
-  
-  "marks": [
-    {
+    "marks": [
+        {
       "type": "shape",
       "from": {"data": "graticule"},
       "encode": {
@@ -70,15 +125,12 @@
     },
     {
       "type": "shape",
-      "from": {"data": "europe"},
+      "from": {"data": "north-america"},
       "encode": {
         "enter":{
           "strokeWidth": {"value": 0.25},
             "stroke": {"value": "#888"},
-            "fill": {"value": "pink"},
-            "tooltip": {
-          "signal": "{'Country': datum.properties['geounit']}"
-        }
+            "fill": {"value": "pink"}
         },
         "update": {
           "zindex": {"value": 0}
@@ -91,29 +143,163 @@
         { "type": "geoshape", "projection": "projection" }
       ]
     },
-  {
-    "type": "symbol",
-    "from": {"data": "ufo-sightings"},
-    "encode": {
-      "enter": {
-        "size": {"value": 16},
-        "fill": {"value": "steelblue"},
-        "fillOpacity": {"value": 0.8},
-        "stroke": {"value": "white"},
-        "strokeWidth": {"value": 1.5},
-        "tooltip": {
-          "signal": "{'title': datum.city, 'Shape': datum.shape}"
+    {
+      "type": "symbol",
+      "from": {"data": "ufo-sightings"},
+      "clip": true,
+      "encode": {
+        "enter": {
+          "size": {"value": 16},
+          "fill": {"value": "steelblue"},
+          "fillOpacity": {"value": 0.8},
+          "stroke": {"value": "white"},
+          "strokeWidth": {"value": 1.5},
+          "tooltip": {
+            "signal": "{'title': datum.city, 'Shape': datum.shape}"
+          }
+        },
+        "update": {
+          "x": {"field": "x"},
+          "y": {"field": "y"}
         }
-      },
-      "update": {
-        "x": {"field": "x"},
-        "y": {"field": "y"}
       }
     }
+    ]
+
+    },
+    {
+      "type": "group",
+      "name": "yellow",
+      "clip":true, 
+      "foreground": true,
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "mapHeight"},
+          "fill": {"value": "#fadc11"}
+        }
+      },
+
+      "projections": [
+    {
+      "name": "projection",
+      "type": "mercator",
+      "size":{"signal": "[mapWidth,mapHeight]"},
+      "fit": {"signal": "data('europe')"},
+      "clipExtent": [[0, 0], [450, 400]]
+    }],
+
+    "marks": [
+        {
+    "type": "shape",
+    "from": {"data": "graticule"},
+    "encode": {
+      "enter": { },
+      "hover": { "fill": {"value": "red"} }
+    },
+    "transform": [
+      { "type": "geoshape", "projection": "projection" }
+    ]
+  },
+  {
+    "type": "shape",
+    "from": {"data": "europe"},
+    "encode": {
+      "enter":{
+        "strokeWidth": {"value": 0.25},
+          "stroke": {"value": "#888"},
+          "fill": {"value": "pink"},
+          "tooltip": {
+        "signal": "{'Country': datum.properties['geounit']}"
+      }
+      },
+      "update": {
+        "zindex": {"value": 0}
+      },
+      "hover": {
+        "zindex": {"value": 1}
+      }
+    },
+    "transform": [
+      { "type": "geoshape", "projection": "projection" }
+    ]
+  },
+{
+  "type": "symbol",
+  "from": {"data": "ufo-sightings"},
+  "clip": true,
+  "encode": {
+    "enter": {
+      "size": {"value": 16},
+      "fill": {"value": "steelblue"},
+      "fillOpacity": {"value": 0.8},
+      "stroke": {"value": "white"},
+      "strokeWidth": {"value": 1.5},
+      "tooltip": {
+        "signal": "{'title': datum.city, 'Shape': datum.shape}"
+      }
+    },
+    "update": {
+      "x": {"field": "x"},
+      "y": {"field": "y"}
+    }
   }
+}
+      ]
+
+    },
+    {
+      "type": "group",
+      "name": "group3",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "timeHeight"},
+          "fill": {"value": "lightblue"}
+        }
+      }
+    },
+    {
+      "type": "group",
+      "name": "pink",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "timeHeight"},
+          "fill": {"value": "pink"}
+        }
+      },
+      "marks": [
+        {
+          "type": "group",
+          "name": "efs",
+          "encode": {
+          "enter":{
+            "y":{"signal": "timeHeight/2"},
+           "x":{"signal": "mapWidth/2"},
+           "width":{"signal": "mapWidth/2"},
+           "height": {"signal": "timeHeight"},
+           "fill": {"value": "red"}
+        }
+      }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "name": "mapgroup5",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "shapeHeight"},
+          "fill": {"value": "green"}
+        }
+      }
+    }
   ]
 
 
 }
-
-  

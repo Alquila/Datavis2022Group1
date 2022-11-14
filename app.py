@@ -161,6 +161,22 @@ def onlyUsa(data):
 def writeToNewFile(data):
     print(data.head)
     data.to_csv("data/smallDataset.csv", sep=",",index=False)
+    
+### Clean Data 
+def cleanData(data):
+    dropLatLong(data)
+    findMissingCitiesFromLatLong(data)
+    update_country_state(data)
+    update_ca_and_uk(data)
+    split_datetime(data)
+    
+    ## Remove everything other than Europe and North-America Country
+    
+### TODO: Make North-America Data set
+def makeNorthAmericaDataSet(data):
+    print('no')
+
+### TODO: Make Europe Data set
 
 if __name__ == "__main__":
     #    display(data.head(10))
