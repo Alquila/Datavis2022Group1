@@ -1,7 +1,8 @@
 [
     {
       "id": 1,
-      "name": "UFO shapes"
+      "name": "UFO shapes",
+      "parent": null
     },
     {
       "id": 2,
