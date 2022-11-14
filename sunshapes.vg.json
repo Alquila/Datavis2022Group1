@@ -45,7 +45,7 @@
             "x": {"signal": "width / 2"},
             "y": {"signal": "height / 2"},
             "fill": {"scale": "color", "field": "depth"},
-            "tooltip": {"signal": "datum.name + (datum.size ? ', ' + datum.size + ' bytes' : '')"}
+            "tooltip": {"signal": "datum.name + (datum.size ? ', ' + datum.size + ' sightings' : '')"}
           },
           "update": {
             "startAngle": {"field": "a0"},
@@ -53,7 +53,7 @@
             "innerRadius": {"field": "r0"},
             "outerRadius": {"field": "r1"},
             "stroke": {"value": "white"},
-            "strokeWidth": {"value": 0.5},
+            "strokeWidth": {"value": 1},
             "zindex": {"value": 0}
           },
           "hover": {

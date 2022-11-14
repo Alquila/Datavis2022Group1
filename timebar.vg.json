@@ -14,7 +14,10 @@
     },
     {"name": "oneheight", "value": 300},
     {"name": "twoheight", "value": 100},
-    {"name": "threeheight", "value": 200}
+    {"name": "threeheight", "value": 200},
+     {
+      "name": "detailDomain"
+    }
   ],
 
   "data": [
@@ -73,6 +76,19 @@
           "as": ["count"]
         }
       ]
+      },
+      {
+        "name": "bro3",
+        "source": ["table"],
+        "transform": [
+          {
+          "type": "aggregate",
+          "groupby": ["date"],
+          "ops": ["count"],
+          "fields": [null],
+          "as": ["count"]
+        }
+        ]
       }
   ],
 
@@ -114,44 +130,203 @@
 },
 
 "marks": [
+ 
   {
     "type": "group",
     "encode": {
       "enter":{
-        "y":{"scale": "layout", "value": "one", "offset": 10},
+        "y": {"scale": "layout", "value": "three", "offset": 0},
         "width":{"signal": "width"},
-        "height": {"signal": "oneheight"},
+        "height": {"signal": "threeheight"},
         "fill": {"value": "#fadcfc"}
       }
     },
 
-    "scales": [
-      {
-        "name": "yy",
-        "type": "linear",
-        "domain": {"data": "times", "field": "count"},
-        "range": [{"signal": "oneheight"},0]
-      }
-    ],
+  "scales": [
+    {
+      "name": "xscale",
+      "type": "band",
+      "range": "width",
+      "padding": 0.1,
+      "round": true,
+      "domain": {"signal": "timeSequence(tbin.unit, tbin.start, tbin.stop)"}
+    },
+    {
+      "name": "yscale",
+      "type": "linear",
+      "range": [{"signal": "threeheight"},0],
+      "domain": {"data": "bro2", "field": "count"},
+      "zero": true,
+      "nice": true
+    }
+  ],
 
-    "axes": [
-    { "orient": "bottom", "scale": "xtime", "title": "ge", "labelAngle": 90, "labelAlign":"left", "labelOffset": 7 },
-    { "orient": "left", "scale": "yy" }
-  ],  
-    "marks":[
-      {
-    "type": "symbol",
-    "from": {"data": "times"},
+  "axes": [
+    { "orient": "bottom", "scale": "xscale",
+      "formatType": "time", "format": {"signal": "timeUnitSpecifier(tbin.units, {hours: '%H'})"}, "labelAngle": 90, "labelAlign":"left", "labelOffset": 6, "labelFontSize": 10,"labelOverlap":"greedy" },
+    { "orient": "left", "scale": "yscale", "tickCount": 7,"title": "fesælmf" }
+  ],
+
+  "marks": [
+    {
+      "type": "rect",
+      "from": {"data": "bro2"},
+      "encode": {
+        "update": {
+          "x": {"scale": "xscale", "field": "unit0"},
+          "width": {"scale": "xscale", "band": 1},
+          "y": {"scale": "yscale", "field": "count"},
+          "y2": {"scale": "yscale", "value": 0},
+          "fill": {"value": "steelblue"},
+          "tooltip": {"signal": "{timeunit: timeFormat(datum.unit0, timeUnitSpecifier(tbin.units)), count: format(datum.count, ',') }"}
+        },
+        "hover": {
+          "fill": {"value": "firebrick"}
+        }
+      }
+    }
+  ]
+  },
+  {"name": "areatime",
+    "type": "group",
     "encode": {
       "enter":{
-        "x":{"field": "unit0", "scale": "xtime"},
-        "width":{"scale": "xtime", "band" : 1},
-        "y":{"field": "count", "scale": "yy"},
-        "y2":{"scale": "yy", "value": 0},
-        "tooltip": {"field": "ee2"}
-      }}}]
+        "width":{"signal": "width"},
+        "height": {"signal": "threeheight"},
+        "fill": {"value": "#fadcfc"}
+      }
+    },
+    "signals": [
+        {
+          "name": "brush", "value": 0,
+          "on": [
+            {
+              "events": "@overview:mousedown",
+              "update": "[x(), x()]"
+            },
+            {
+              "events": "[@overview:mousedown, window:mouseup] > window:mousemove!",
+              "update": "[brush[0], clamp(x(), 0, width)]"
+            },
+            {
+              "events": {"signal": "delta"},
+              "update": "clampRange([anchor[0] + delta, anchor[1] + delta], 0, width)"
+            }
+          ]
+        },
+        {
+          "name": "anchor", "value": null,
+          "on": [{"events": "@brush:mousedown", "update": "slice(brush)"}]
+        },
+        {
+          "name": "xdown", "value": 0,
+          "on": [{"events": "@brush:mousedown", "update": "x()"}]
+        },
+        {
+          "name": "delta", "value": 0,
+          "on": [
+            {
+              "events": "[@brush:mousedown, window:mouseup] > window:mousemove!",
+              "update": "x() - xdown"
+            }
+          ]
+        },
+        {
+          "name": "detailDomain",
+          "push": "outer",
+          "on": [
+            {
+              "events": {"signal": "brush"},
+              "update": "span(brush) ? invert('xOverview', brush) : null"
+            }
+          ]
+        }
+      ],
+    "scales": [
+      {
+        "name": "overview",
+        "type": "time",
+        "range": "width",
+        "domain":{"data": "bro3", "field": "date"}
+      },
+      {
+        "name": "yoverview",
+        "type": "linear",
+        "range": [{"signal": "threeheight"},0],
+        "domain":{"data": "bro3", "field": "count"}
+      }
+    ],
+    "axes": [
+        {"orient": "bottom", "scale": "overview"},
+        {"orient":"left", "scale": "yoverview"}
+      ],
+    "marks": [
+      {
+        "type": "area",
+        "interactive": true,
+        "from": {"data": "bro3"},
+        "encode": {
+          "enter":{"tooltip": {"signal": "{timeunit: timeFormat(datum.date), count: datum.count }"}},
+          "update":{
+            "x":{"scale": "overview", "field": "date"},
+            "y":{"scale": "yoverview", "field": "count"},
+            "y2":{"scale": "yoverview", "value": 0},
+            "fill":{"value": "steelblue"}            
+          },
+        "hover": {
+          "fill": {"value": "firebrick"}
+        }
+        }
+      },
+      {
+          "type": "rect",
+          "name": "brush",
+          "encode": {
+            "enter": {
+              "y": {"value": 0},
+              "height": {"value": 70},
+              "fill": {"value": "#333"},
+              "fillOpacity": {"value": 0.2}
+            },
+            "update": {
+              "x": {"signal": "brush[0]"},
+              "x2": {"signal": "brush[1]"}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "enter": {
+              "y": {"value": 0},
+              "height": {"value": 70},
+              "width": {"value": 1},
+              "fill": {"value": "firebrick"}
+            },
+            "update": {
+              "x": {"signal": "brush[0]"}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "enter": {
+              "y": {"value": 0},
+              "height": {"value": 70},
+              "width": {"value": 1},
+              "fill": {"value": "firebrick"}
+            },
+            "update": {
+              "x": {"signal": "brush[1]"}
+            }
+          }
+        }
+    ]
   },
-  {
+   {
     "type": "group",
     "encode": {
       "enter":{
@@ -219,61 +394,42 @@
     }
     ]
   },
-  {
+   {
     "type": "group",
     "encode": {
       "enter":{
-        "y": {"scale": "layout", "value": "three", "offset": 0},
+        "y":{"scale": "layout", "value": "one", "offset": 10},
         "width":{"signal": "width"},
-        "height": {"signal": "threeheight"},
+        "height": {"signal": "oneheight"},
         "fill": {"value": "#fadcfc"}
       }
     },
 
-  "scales": [
-    {
-      "name": "xscale",
-      "type": "band",
-      "range": "width",
-      "padding": 0.1,
-      "round": true,
-      "domain": {"signal": "timeSequence(tbin.unit, tbin.start, tbin.stop)"}
-    },
-    {
-      "name": "yscale",
-      "type": "linear",
-      "range": [{"signal": "threeheight"},0],
-      "domain": {"data": "bro2", "field": "count"},
-      "zero": true,
-      "nice": true
-    }
-  ],
-
-  "axes": [
-    { "orient": "bottom", "scale": "xscale",
-      "formatType": "time", "format": {"signal": "timeUnitSpecifier(tbin.units, {hours: '%H'})"}, "labelAngle": 90, "labelAlign":"left", "labelOffset": 6, "labelFontSize": 10,"labelOverlap":"greedy" },
-    { "orient": "left", "scale": "yscale", "tickCount": 7,"title": "fesælmf" }
-  ],
-
-  "marks": [
-    {
-      "type": "rect",
-      "from": {"data": "bro2"},
-      "encode": {
-        "update": {
-          "x": {"scale": "xscale", "field": "unit0"},
-          "width": {"scale": "xscale", "band": 1},
-          "y": {"scale": "yscale", "field": "count"},
-          "y2": {"scale": "yscale", "value": 0},
-          "fill": {"value": "steelblue"},
-          "tooltip": {"signal": "{timeunit: timeFormat(datum.unit0, timeUnitSpecifier(tbin.units)), count: format(datum.count, ',') }"}
-        },
-        "hover": {
-          "fill": {"value": "firebrick"}
-        }
+    "scales": [
+      {
+        "name": "yy",
+        "type": "linear",
+        "domain": {"data": "times", "field": "count"},
+        "range": [{"signal": "oneheight"},0]
       }
-    }
-  ]
+    ],
+
+    "axes": [
+    { "orient": "bottom", "scale": "xtime", "title": "ge", "labelAngle": 90, "labelAlign":"left", "labelOffset": 7 },
+    { "orient": "left", "scale": "yy" }
+  ],  
+    "marks":[
+      {
+    "type": "symbol",
+    "from": {"data": "times"},
+    "encode": {
+      "enter":{
+        "x":{"field": "unit0", "scale": "xtime"},
+        "width":{"scale": "xtime", "band" : 1},
+        "y":{"field": "count", "scale": "yy"},
+        "y2":{"scale": "yy", "value": 0},
+        "tooltip": {"field": "ee2"}
+      }}}]
   }
 ],
 
