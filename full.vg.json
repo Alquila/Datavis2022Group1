@@ -1,31 +1,90 @@
 {
-    "$schema": "https://vega.github.io/schema/vega/v5.json",
-    "description": "A basic pie chart example.",
-    "width": 600,
-    "height": 800,
-    "autosize": "none",
-  
-    "signals": [
-      {"name": "mapHeight", "value": 400},
-      {"name": "timeHeight", "value": 200}
-    ],
-  
-    "layout": {
-      "padding": 100,
-      "columns": 1,
-      "align": "each",
-      "bounds":"full",
-      "center":false
-    },
-  
-    "marks": [
-      {
-        "type": "group",
-        "name": "mapgroup",
-        "description": "Map of stuff"
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "description": "A basic pie chart example.",
+  "width": 900,
+  "height": 600,
+  "autosize": "pad",
+
+  "signals": [
+    {"name": "mapHeight", "value": 400},
+    {"name": "timeHeight", "value": 200},
+    {"name": "mapWidth", "value": 450},
+    {"name": "timewidth", "value": 400}
+  ],
+
+  "layout": {
+    "padding": 20,
+    "columns": 2,
+    "align": "each",
+    "bounds":"full",
+    "center":false
+  },
+
+  "scales": [
+    {
+  "name": "layouty",
+  "type": "band",
+  "domain": ["one", "two", "three"],
+  "range": "height"
+},
+{
+  "name": "layoutx",
+  "type": "band",
+  "domain": ["one, two"],
+  "range": "width"
+}
+  ],
+
+  "marks": [
+    {
+      "type": "group",
+      "name": "mapgroup",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "mapHeight"},
+          "fill": {"value": "#fadcfc"}
+        }
       }
-    ]
-  
-  
-  }
-  
+    },
+    {
+      "type": "group",
+      "name": "mapgroup2",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "mapHeight"},
+          "fill": {"value": "#fadc11"}
+        }
+      }
+    },
+    {
+      "type": "group",
+      "name": "mapgroup3",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "timeHeight"},
+          "fill": {"value": "#fadc11"}
+        }
+      }
+    },
+    {
+      "type": "group",
+      "name": "mapgroup4",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "timeHeight"},
+          "fill": {"value": "#fadcfc"}
+        }
+      }
+    }
+  ]
+
+
+}
