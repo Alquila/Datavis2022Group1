@@ -7,9 +7,9 @@
 
   "signals": [
     {"name": "mapHeight", "value": 400},
-    {"name": "timeHeight", "value": 200},
+    {"name": "timeHeight", "value": 100},
     {"name": "mapWidth", "value": 450},
-    {"name": "timewidth", "value": 400}
+    {"name": "shapeHeight", "value": 400}
   ],
 
   "layout": {
@@ -17,7 +17,7 @@
     "columns": 2,
     "align": "each",
     "bounds":"full",
-    "center":false
+    "center":true
   },
 
   "scales": [
@@ -38,7 +38,7 @@
   "marks": [
     {
       "type": "group",
-      "name": "mapgroup",
+      "name": "first",
       "description": "Map of stuff",
       "encode": {
         "enter":{
@@ -50,7 +50,7 @@
     },
     {
       "type": "group",
-      "name": "mapgroup2",
+      "name": "yellow",
       "description": "Map of stuff",
       "encode": {
         "enter":{
@@ -62,25 +62,52 @@
     },
     {
       "type": "group",
-      "name": "mapgroup3",
+      "name": "group3",
       "description": "Map of stuff",
       "encode": {
         "enter":{
           "width":{"signal": "mapWidth"},
           "height": {"signal": "timeHeight"},
-          "fill": {"value": "#fadc11"}
+          "fill": {"value": "lightblue"}
         }
       }
     },
     {
       "type": "group",
-      "name": "mapgroup4",
+      "name": "pink",
       "description": "Map of stuff",
       "encode": {
         "enter":{
           "width":{"signal": "mapWidth"},
           "height": {"signal": "timeHeight"},
-          "fill": {"value": "#fadcfc"}
+          "fill": {"value": "pink"}
+        }
+      },
+      "marks": [
+        {
+          "type": "group",
+          "name": "efs",
+          "encode": {
+          "enter":{
+            "y":{"signal": "timeHeight/2"},
+           "x":{"signal": "mapWidth/2"},
+           "width":{"signal": "mapWidth/2"},
+           "height": {"signal": "timeHeight"},
+           "fill": {"value": "red"}
+        }
+      }
+        }
+      ]
+    },
+    {
+      "type": "group",
+      "name": "mapgroup5",
+      "description": "Map of stuff",
+      "encode": {
+        "enter":{
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "shapeHeight"},
+          "fill": {"value": "green"}
         }
       }
     }
