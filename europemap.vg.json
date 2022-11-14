@@ -75,7 +75,10 @@
         "enter":{
           "strokeWidth": {"value": 0.25},
             "stroke": {"value": "#888"},
-            "fill": {"value": "pink"}
+            "fill": {"value": "pink"},
+            "tooltip": {
+          "signal": "{'Country': datum.properties['geounit']}"
+        }
         },
         "update": {
           "zindex": {"value": 0}

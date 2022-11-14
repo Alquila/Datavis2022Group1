@@ -1,0 +1,146 @@
+[
+    {
+      "id": 1,
+      "name": "UFO shapes"
+    },
+    {
+      "id": 2,
+      "name": "light",
+      "parent": 5
+    },
+    {
+      "id": 3,
+      "name": "fireball",
+      "parent": 5
+    },
+    {
+      "id": 4,
+      "name": "flash",
+      "parent": 5
+    },
+    {
+      "id": 5,
+      "name": "lights",
+      "parent": 1
+    },
+    {
+      "id": 6,
+      "name": "Geometry",
+      "parent": 1
+    },
+    {
+      "id": 7,
+      "name": "rectangle",
+      "parent": 6
+    },
+    {
+      "id": 8,
+      "name": "Round",
+      "parent": 6
+    },
+    {
+      "id": 9,
+      "name": "egg",
+      "parent": 8
+    },
+    {
+      "id": 10,
+      "name": "oval",
+      "parent": 8
+    },
+    {
+      "id": 11,
+      "name": "circle",
+      "parent": 8
+    },
+    {
+      "id": 12,
+      "name": "disk",
+      "parent": 8
+    },
+    {
+      "id": 13,
+      "name": "sphere",
+      "parent": 8
+    },
+    {
+      "id": 14,
+      "name": "barrel",
+      "parent": 6
+    },
+    {
+      "id": 15,
+      "name": "cigar",
+      "parent": 14
+    },
+    {
+      "id": 16,
+      "name": "cylinder",
+      "parent": 14
+    },
+    {
+      "id": 17,
+      "name": "pyramid",
+      "parent": 6
+    },
+    {
+      "id": 18,
+      "name": "cone",
+      "parent": 17
+    },
+    {
+      "id": 19,
+      "name": "triangle",
+      "parent": 17
+    },
+    {
+      "id": 20,
+      "name": "teardrop",
+      "parent": 17
+    },
+    {
+      "id": 21,
+      "name": "objects",
+      "parent": 6
+    },
+    {
+      "id": 22,
+      "name": "diamonds",
+      "parent": 21
+    },
+    {
+      "id": 23,
+      "name": "cross",
+      "parent": 21
+    },
+    {
+      "id": 24,
+      "name": "chevron",
+      "parent": 21
+    },
+    {
+      "id": 25,
+      "name": "otherwiseDescribed",
+      "parent": 1
+    },
+    {
+      "id": 26,
+      "name": "formation",
+      "parent": 25
+    },
+    {
+      "id": 27,
+      "name": "unknown",
+      "parent": 25
+    },
+    {
+      "id": 28,
+      "name": "other",
+      "parent": 25
+    },
+    {
+      "id": 29,
+      "name": "changing",
+      "parent": 25
+    }
+  ]
