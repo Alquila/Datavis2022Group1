@@ -6,17 +6,20 @@
     {
       "id": 2,
       "name": "light",
-      "parent": 5
+      "parent": 5,
+      "size": 16565
     },
     {
       "id": 3,
       "name": "fireball",
-      "parent": 5
+      "parent": 5,
+      "size": 6208
     },
     {
       "id": 4,
       "name": "flash",
-      "parent": 5
+      "parent": 5,
+      "size": 1328
     },
     {
       "id": 5,
@@ -31,7 +34,8 @@
     {
       "id": 7,
       "name": "rectangle",
-      "parent": 6
+      "parent": 6,
+      "size": 1297
     },
     {
       "id": 8,
@@ -41,27 +45,32 @@
     {
       "id": 9,
       "name": "egg",
-      "parent": 8
+      "parent": 8,
+      "size": 759
     },
     {
       "id": 10,
       "name": "oval",
-      "parent": 8
+      "parent": 8,
+      "size": 3733
     },
     {
       "id": 11,
       "name": "circle",
-      "parent": 8
+      "parent": 8,
+      "size": 7608
     },
     {
       "id": 12,
       "name": "disk",
-      "parent": 8
+      "parent": 8,
+      "size": 5213
     },
     {
       "id": 13,
       "name": "sphere",
-      "parent": 8
+      "parent": 8,
+      "size": 5387
     },
     {
       "id": 14,
@@ -71,12 +80,14 @@
     {
       "id": 15,
       "name": "cigar",
-      "parent": 14
+      "parent": 14,
+      "size": 2057
     },
     {
       "id": 16,
       "name": "cylinder",
-      "parent": 14
+      "parent": 14,
+      "size": 1283
     },
     {
       "id": 17,
@@ -86,17 +97,20 @@
     {
       "id": 18,
       "name": "cone",
-      "parent": 17
+      "parent": 17,
+      "size": 316
     },
     {
       "id": 19,
       "name": "triangle",
-      "parent": 17
+      "parent": 17,
+      "size": 7865
     },
     {
       "id": 20,
       "name": "teardrop",
-      "parent": 17
+      "parent": 17,
+      "size": 750
     },
     {
       "id": 21,
@@ -106,17 +120,20 @@
     {
       "id": 22,
       "name": "diamonds",
-      "parent": 21
+      "parent": 21,
+      "size": 1178
     },
     {
       "id": 23,
       "name": "cross",
-      "parent": 21
+      "parent": 21,
+      "size": 233
     },
     {
       "id": 24,
       "name": "chevron",
-      "parent": 21
+      "parent": 21,
+      "size": 952
     },
     {
       "id": 25,
@@ -126,21 +143,25 @@
     {
       "id": 26,
       "name": "formation",
-      "parent": 25
+      "parent": 25,
+      "size": 2457
     },
     {
       "id": 27,
       "name": "unknown",
-      "parent": 25
+      "parent": 25,
+      "size": 5584
     },
     {
       "id": 28,
       "name": "other",
-      "parent": 25
+      "parent": 25,
+      "size": 5649
     },
     {
       "id": 29,
       "name": "changing",
-      "parent": 25
+      "parent": 25,
+      "size": 1962
     }
   ]
