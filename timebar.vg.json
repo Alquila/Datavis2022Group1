@@ -252,7 +252,7 @@
       {
         "name": "yoverview",
         "type": "linear",
-        "range": [{"signal": "threeheight"},0],
+        "range": "height",
         "domain":{"data": "bro3", "field": "count"}
       }
     ],
@@ -262,16 +262,18 @@
       ],
     "marks": [
       {
-        "type": "area",
-        "interactive": true,
+        "type": "line",
+        //"interactive": true,
         "from": {"data": "bro3"},
         "encode": {
-          "enter":{"tooltip": {"signal": "{timeunit: timeFormat(datum.date), count: datum.count }"}},
+          "enter":{"tooltip": {"signal": "{timeunit: (datum.date), count: datum.count }"}},
           "update":{
-            "x":{"scale": "overview", "field": "date"},
+            "x":{"scale": "overview", "field": "date", "sort": {"order": "descending"}},
             "y":{"scale": "yoverview", "field": "count"},
-            "y2":{"scale": "yoverview", "value": 0},
-            "fill":{"value": "steelblue"}            
+            "stroke": {"value": "blue"},
+            "strokeWidth":{"value": 2}
+            //"y2":{"scale": "yoverview", "value": 0},
+            //"fill":{"value": "steelblue"}            
           },
         "hover": {
           "fill": {"value": "firebrick"}
