@@ -9,7 +9,8 @@
     {"name": "mapHeight", "value": 400},
     {"name": "mapWidth", "value": 400},
     {"name": "timeHeight", "value": 100},
-    {"name": "shapeHeight", "value": 400}
+    {"name": "shapeHeight", "value": 400},
+    {"name": "howto"}
   ],
 "scales": [
     {
@@ -122,9 +123,8 @@
         "fields": ["longitude", "latitude"]
       },
       {
-        "type": "filter",
-        "expr": "datum.x != null && datum.y != null"
-      }
+          "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
+        } 
     ]
     }
     ],
@@ -210,7 +210,10 @@
         "type": "geopoint",
         "projection": "projection",
         "fields": ["longitude", "latitude"]
-      }
+      },
+      {
+          "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
+        } 
     ]
     }
     ],
@@ -282,6 +285,7 @@
       "marks": [
         {
           "type": "group",
+          "name": "timee",
           "encode": {
           "enter":{
             "width":{"signal": "mapWidth*2"},
@@ -314,6 +318,54 @@
             }
           ],
 
+          "signals": [
+            {
+          "name": "brush", "value": 0,
+          "on": [
+            {
+              "events": "@timee:mousedown",
+              "update": "[x(), x()]"
+            },
+            {
+              "events": "[@timee:mousedown, window:mouseup] > window:mousemove!",
+              "update": "[brush[0], clamp(x(), 0, width)]"
+            },
+            {
+              "events": {"signal": "delta"},
+              "update": "clampRange([anchor[0] + delta, anchor[1] + delta], 0, width)"
+            }
+          ]
+        },
+        {
+          "name": "anchor", "value": null,
+          "on": [{"events": "@brush:mousedown", "update": "slice(brush)"}]
+        },
+        {
+          "name": "xdown", "value": 0,
+          "on": [{"events": "@brush:mousedown", "update": "x()"}]
+        },
+        {
+          "name": "delta", "value": 0,
+          "on": [
+            {
+              "events": "[@brush:mousedown, window:mouseup] > window:mousemove!",
+              "update": "x() - xdown"
+            }
+          ]
+        },
+        {
+          "name": "howto",
+          "push": "outer",
+          "on": [
+            {
+              "events": {"signal": "brush"},
+              "update": "span(brush) ? invert('x', brush) : null"
+            }
+          ]
+        }
+          ],
+
+
           "scales": [
     {
       "name": "x",
@@ -329,10 +381,10 @@
       "nice": true,
       "zero": true
     }
-  ],
+          ],
 
 
-  "axes": [
+         "axes": [
     {
       "scale": "x",
       "orient": "bottom",
@@ -381,10 +433,10 @@
       "tickCount": {"signal": "ceil(height/50)"},
       "zindex": 0
     }
-  ],
+          ],
 
-  "marks": [
-{
+          "marks": [
+          {
       "name": "marks",
       "type": "line",
       "style": ["line"],
@@ -400,8 +452,8 @@
           "y": {"scale": "y", "field": "__count"}
         }
       }
-    },
-    {
+          },
+          {
       "name": "dots",
       "type": "symbol",
       "sort": {"field": "datum[\"year_date\"]"},
@@ -423,8 +475,52 @@
           }
         }
       }
-    }
-  ]
+          },
+          {
+            "name": "brush",
+            "type": "rect",
+            "encode": {
+              "enter":{
+                "y": {"value": 0},"height": {"signal": "timeHeight"},
+              "fill": {"value": "green"},"fillOpacity": {"value": 0.2}
+              },
+              "update": {
+                "x": {"signal": "brush[0]"},
+                "x2": {"signal": "brush[1]"}
+              }
+            }
+          },
+          {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "enter": {
+              "y": {"value": 0},
+              "height": {"signal": "timeHeight"},
+              "width": {"value": 1},
+              "fill": {"value": "yellow"}
+            },
+            "update": {
+              "x": {"signal": "brush[0]"}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "enter": {
+              "y": {"value": 0},
+              "height": {"signal": "timeHeight"},
+              "width": {"value": 1},
+              "fill": {"value": "firebrick"}
+            },
+            "update": {
+              "x": {"signal": "brush[1]"}
+            }
+          }
+        }
+          ]
         }
       ]
     },
