@@ -157,10 +157,18 @@ def onlyUsa(data):
     goodRows = data[(data['country'] == "United States")]
     return goodRows
 
+def insertIdColumn(data): 
+    data[ID] = list(range(length(data)))
+    return data
+
+def binLongAndLat(data):
+    data['lat_bin'] = pd.qcut(data['latitude'], q=20)
+    data['long_bin'] = pd.qcut(data['longitude'], q=20)
+
 ### Define name of new file
 def writeToNewFile(data):
     print(data.head)
-    data.to_csv("data/smallDataset.csv", sep=",",index=False)
+    data.to_csv("data/binnedSmallDataset.csv", sep=",",index=False)
     
 ### Clean Data 
 def cleanData(data):
@@ -181,8 +189,8 @@ def makeNorthAmericaDataSet(data):
 if __name__ == "__main__":
     #    display(data.head(10))
     # print("iii")
-    update_country_state(data)
-    update_ca_and_uk(data)
+    # update_country_state(data)
+    # update_ca_and_uk(data)
     # dropLatLong(data)
     # findMissingCitiesFromLatLong(data)
     # print(missing_zero_values_table(data))
@@ -193,11 +201,17 @@ if __name__ == "__main__":
     # print(data.head)
     # newData = onlyUsa(data)
     #data = dropComments(data)
-    writeToNewFile(data)
+
     # print("new file should exist")
     #dropRows(data)
 
-    missing(data)
+    # missing(data)
+
+    binLongAndLat(data)
+    writeToNewFile(data)
+
+
+    # insertIdColumn(data)
     # print("")
     # print(missing_zero_values_table(data)) #now countries where fixed but we still have lot of empty states
     # missing(data)
