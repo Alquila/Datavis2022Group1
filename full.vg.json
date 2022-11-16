@@ -47,6 +47,7 @@
       {"type": "filter","expr": "datum.x != null && datum.y != null"}
      ]
     },
+
     {"name": "spots", "source" : ["ufo-sightings"],
     "transform": [
       {"type": "aggregate","groupby": ["country"],"as": ["counts"]}
@@ -77,7 +78,52 @@
             }
           ]
     },
-    {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]}
+    {"name": "europa-sig",
+    "source": ["ufo-sightings"],
+    "transform": [
+      {
+        "type": "geopoint",
+        "projection": "projection",
+        "fields": ["longitude", "latitude"]
+      },
+      {
+          "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
+        } 
+    ]
+    },
+    {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]},
+    {
+      "name": "eu-shapes",
+      "source": ["europa-sig"],
+      "transform": [
+        {"type": "aggregate", "groupby": ["shape"], "as":["shapes"]}
+      ]
+    },
+    {
+        "name": "tree",
+        "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/shapeTree.json",
+        "transform": [
+          {
+            "type": "lookup",
+            "from": "eu-shapes",
+            "key": "shape",
+            "values": ["shapes"],
+            "fields":["name"]
+          },
+          {
+            "type": "stratify",
+            "key": "id",
+            "parentKey": "parent"
+          },
+          {
+            "type": "partition",
+            "field": "shapes",
+            "sort": {"field": "value"},
+            "size": [{"signal": "2 * PI"}, {"signal": "shapeHeight / 3"}],
+            "as": ["a0", "r0", "a1", "r1", "depth", "children"]
+          }
+        ]
+      }
   ],
 
 
@@ -200,23 +246,6 @@
       "clipExtent": [[0, 0], [400, 400]],
       "rotate":[50,30,0]
     }],
-
-    "data": [
-      {
-    "name": "europa-sig",
-    "source": ["ufo-sightings"],
-    "transform": [
-      {
-        "type": "geopoint",
-        "projection": "projection",
-        "fields": ["longitude", "latitude"]
-      },
-      {
-          "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
-        } 
-    ]
-    }
-    ],
 
     "marks": [
         {
@@ -524,9 +553,8 @@
         }
       ]
     },
-    {
+    {"name": "placeholder",
       "type": "group",
-      "name": "pink",
       "description": "placeholder to make space for timeline",
       "encode": {
         "enter":{
@@ -535,14 +563,14 @@
         }
       }
     },
-    {
+    {"name": "shape-charts",
       "type": "group",
-      "name": "mapgroup5",
       "encode": {
         "enter":{
           "width":{"signal": "mapWidth"},
           "height": {"signal": "shapeHeight"},
-          "fill": {"value": "green"}
+          "fill": {"value": "green"},
+          "opacity":{"value": 0.5}
         }
       },
 
@@ -555,27 +583,114 @@
       },
 
       "marks": [
-        {
+        {"name": "us-shape-chart",
           "type": "group",
-          "name": "sub1",
           "encode": {
             "enter":{
               "width":{"signal": "mapWidth"},
               "height": {"signal": "shapeHeight-100"},
-              "fill": {"value": "lightgreen"}
+              "fill": {"value": "lightgreen"},
+          "opacity":{"value": 0.5}
+            }
+          },
+          "scales": [
+      {
+        "name": "color",
+        "type": "ordinal",
+        "domain": {"data": "tree", "field": "depth"},
+        "range": {"scheme": "tableau20"}
+      }
+    ],
+
+    "title":{
+      "text": "Sunburstchart over shapes in North America",
+      "anchor":"start",
+      "orient":"bottom"
+    },
+
+    "marks": [
+      {
+        "type": "arc",
+        "from": {"data": "tree"},
+        "encode": {
+          "enter": {
+            "x": {"signal": "mapWidth / 2"},
+            "y": {"signal": "(shapeHeight-100)/ 2"},
+            "fill": {"scale": "color", "field": "depth"}
+          },
+          "update": {
+            "startAngle": {"field": "a0"},
+            "endAngle": {"field": "a1"},
+            "innerRadius": {"field": "r0"},
+            "outerRadius": {"field": "r1"},
+            "stroke": {"value": "white"},
+            "strokeWidth": {"value": 1},
+            "zindex": {"value": 0},
+            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"}
+          },
+          "hover": {
+            "stroke": {"value": "red"},
+            "strokeWidth": {"value": 2},
+            "zindex": {"value": 1}
+            }
             }
           }
+        ]
         },
-        {
+        {"name": "eu-shape-chart",
           "type": "group",
-          "name": "sub2",
           "encode": {
             "enter":{
               "width":{"signal": "mapWidth"},
           "height": {"signal": "shapeHeight-100"},
-          "fill": {"value": "darkgreen"}
+          "fill": {"value": "darkgreen"},
+          "opacity":{"value": 0.5}
             }
+          },
+
+ "title":{
+      "text": "Sunburstchart over shapes in Europe",
+      "anchor":"start",
+      "orient":"bottom"
+    },
+          
+          "scales": [
+      {
+        "name": "color",
+        "type": "ordinal",
+        "domain": {"data": "tree", "field": "depth"},
+        "range": {"scheme": "tableau20"}
+      }
+    ],
+  
+    "marks": [
+      {
+        "type": "arc",
+        "from": {"data": "tree"},
+        "encode": {
+          "enter": {
+            "x": {"signal": "mapWidth / 2"},
+            "y": {"signal": "(shapeHeight-100)/ 2"},
+            "fill": {"scale": "color", "field": "depth"}
+          },
+          "update": {
+            "startAngle": {"field": "a0"},
+            "endAngle": {"field": "a1"},
+            "innerRadius": {"field": "r0"},
+            "outerRadius": {"field": "r1"},
+            "stroke": {"value": "white"},
+            "strokeWidth": {"value": 1},
+            "zindex": {"value": 0},
+            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"}
+          },
+          "hover": {
+            "stroke": {"value": "red"},
+            "strokeWidth": {"value": 2},
+            "zindex": {"value": 1}
           }
+        }
+      }
+    ]
         }
       ]
     }
