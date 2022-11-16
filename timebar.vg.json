@@ -7,7 +7,7 @@
 
   "signals": [
     {
-      "name": "timeunit", "value": ["day"],
+      "name": "timeunit", "value": ["year"],
       "bind": {"input": "select", "options": [
         ["year"], ["month"], ["date"], ["day"]
       ]}
@@ -263,7 +263,6 @@
     "marks": [
       {
         "type": "line",
-        //"interactive": true,
         "from": {"data": "bro3"},
         "encode": {
           "enter":{"tooltip": {"signal": "{timeunit: (datum.date), count: datum.count }"}},
@@ -272,8 +271,6 @@
             "y":{"scale": "yoverview", "field": "count"},
             "stroke": {"value": "blue"},
             "strokeWidth":{"value": 2}
-            //"y2":{"scale": "yoverview", "value": 0},
-            //"fill":{"value": "steelblue"}            
           },
         "hover": {
           "fill": {"value": "firebrick"}
