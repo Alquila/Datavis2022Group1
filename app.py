@@ -154,7 +154,7 @@ def more_info(data):
     print(states)
 
 def onlyUsa(data):
-    goodRows = data[(data['country'] == "usa")]
+    goodRows = data[(data['country'] == "United States")]
     return goodRows
 
 ### Define name of new file
@@ -168,9 +168,9 @@ def cleanData(data):
     findMissingCitiesFromLatLong(data)
     update_country_state(data)
     update_ca_and_uk(data)
-    split_datetime(data)
+    #split_datetime(data)
     
-    ## Remove everything other than Europe and North-America Country
+## Remove everything other than Europe and North-America Country
     
 ### TODO: Make North-America Data set
 def makeNorthAmericaDataSet(data):
