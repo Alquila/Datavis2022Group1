@@ -24,6 +24,15 @@ stateList = ['AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA',
              'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX',
              'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY']
 
+european_countries = ['Austria', 'Belgium', 'Bulgaria', 'Croatia', 'Cyprus', 'Czechia', 'Denmark',
+                      'Estonia', 'Finland', 'France', 'Germany', 'Greece', 'Hungary', 'Ireland',
+                       'Italy', 'Latvia', 'Lithuania', 'Luxembourg', 'Malta', 'Netherlands',
+                       'Poland', 'Portugal', 'Romania', 'Slovakia', 'Slovenia', 'Spain', 'Sweden']
+
+american_countries = [    "Antigua and Barbuda",    "Bahamas",    "Barbados",    "Belize",    "Canada",    "Costa Rica",    "Cuba",    "Dominica", "Dominican Republic",
+    "El Salvador",     "Grenada",    "Guatemala",    "Haiti",    "Honduras",    "Jamaica",  "Mexico", "Nicaragua",
+    "Panama",    "Saint Kitts and Nevis","Saint Lucia"  ,"Saint Vincent and the Grenadines","Trinidad and Tobago"]
+
 ### Make Country and Statelist to lower case
 pandastates = pd.Series(stateList).str.lower()
 pandasCountries = countryList.str.lower()

@@ -9,7 +9,8 @@
     {"name": "mapHeight", "value": 400},
     {"name": "mapWidth", "value": 400},
     {"name": "timeHeight", "value": 100},
-    {"name": "shapeHeight", "value": 400}
+    {"name": "shapeHeight", "value": 400},
+    {"name": "howto"}
   ],
 "scales": [
     {
@@ -122,9 +123,8 @@
         "fields": ["longitude", "latitude"]
       },
       {
-        "type": "filter",
-        "expr": "datum.x != null && datum.y != null"
-      }
+          "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
+        } 
     ]
     }
     ],
@@ -210,7 +210,10 @@
         "type": "geopoint",
         "projection": "projection",
         "fields": ["longitude", "latitude"]
-      }
+      },
+      {
+          "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
+        } 
     ]
     }
     ],
@@ -276,21 +279,248 @@
       "encode": {
         "enter":{
           "width":{"signal": "mapWidth"},
-          "height": {"signal": "timeHeight"},
-          "fill": {"value": "lightblue"}
+          "height": {"signal": "timeHeight"}
         }
       },
       "marks": [
         {
           "type": "group",
+          "name": "timee",
           "encode": {
-        "enter":{
-          "width":{"signal": "mapWidth*2"},
-          "height": {"signal": "timeHeight"},
-          "fill": {"value": "grey"},
-          "x":{"offset":10}
+          "enter":{
+            "width":{"signal": "mapWidth*2"},
+            "height": {"signal": "timeHeight"},
+            "fill": {"value": "lightgrey"},
+            "opacity": {"value": 0.5},
+            "x":{"offset":10}
+          }
+          },
+          "data": [
+            {
+              "name": "timedata",
+              "source": ["ufo-sightings"],
+              "transform": [
+                {"type": "filter", "expr": "datum.date >= -638326800000"},
+        {
+          "field": "date",
+          "type": "timeunit",
+          "units": ["year"],
+          "as": ["year_date", "year_date_end"]
+        },
+        {
+          "type": "aggregate",
+          "groupby": ["year_date"],
+          "ops": ["count"],
+          "fields": [null],
+          "as": ["__count"]
+        }
+      ]
+            }
+          ],
+
+          "signals": [
+            {
+          "name": "brush", "value": 0,
+          "on": [
+            {
+              "events": "@timee:mousedown",
+              "update": "[x(), x()]"
+            },
+            {
+              "events": "[@timee:mousedown, window:mouseup] > window:mousemove!",
+              "update": "[brush[0], clamp(x(), 0, width)]"
+            },
+            {
+              "events": {"signal": "delta"},
+              "update": "clampRange([anchor[0] + delta, anchor[1] + delta], 0, width)"
+            }
+          ]
+        },
+        {
+          "name": "anchor", "value": null,
+          "on": [{"events": "@brush:mousedown", "update": "slice(brush)"}]
+        },
+        {
+          "name": "xdown", "value": 0,
+          "on": [{"events": "@brush:mousedown", "update": "x()"}]
+        },
+        {
+          "name": "delta", "value": 0,
+          "on": [
+            {
+              "events": "[@brush:mousedown, window:mouseup] > window:mousemove!",
+              "update": "x() - xdown"
+            }
+          ]
+        },
+        {
+          "name": "howto",
+          "push": "outer",
+          "on": [
+            {
+              "events": {"signal": "brush"},
+              "update": "span(brush) ? invert('x', brush) : null"
+            }
+          ]
+        }
+          ],
+
+
+          "scales": [
+    {
+      "name": "x",
+      "type": "time",
+      "domain": {"data": "timedata", "field": "year_date"},
+      "range": [0, {"signal": "mapWidth*2"}]
+    },
+    {
+      "name": "y",
+      "type": "linear",
+      "domain": {"data": "timedata", "field": "__count"},
+      "range": [{"signal": "timeHeight"}, 0],
+      "nice": true,
+      "zero": true
+    }
+          ],
+
+
+         "axes": [
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "gridScale": "y",
+      "grid": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "gridScale": "x",
+      "grid": true,
+      "tickCount": {"signal": "ceil(height/50)"},
+      "domain": false,
+      "labels": false,
+      "aria": false,
+      "maxExtent": 0,
+      "minExtent": 0,
+      "ticks": false,
+      "zindex": 0
+    },
+    {
+      "scale": "x",
+      "orient": "bottom",
+      "grid": false,
+      "title": "date (year)",
+      "format": "%Y",
+      "labelFlush": true,
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(width/40)"},
+      "zindex": 0
+    },
+    {
+      "scale": "y",
+      "orient": "left",
+      "grid": false,
+      "title": "count",
+      "labelOverlap": true,
+      "tickCount": {"signal": "ceil(height/50)"},
+      "zindex": 0
+    }
+          ],
+
+          "marks": [
+          {
+      "name": "marks",
+      "type": "line",
+      "style": ["line"],
+      "sort": {"field": "datum[\"year_date\"]"},
+      "from": {"data": "timedata"},
+      "encode": {
+        "update": {
+          "stroke": {"value": "#4c78a8"},
+          "tooltip": {
+            "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
+          },
+          "x": {"scale": "x", "field": "year_date"},
+          "y": {"scale": "y", "field": "__count"}
         }
       }
+          },
+          {
+      "name": "dots",
+      "type": "symbol",
+      "sort": {"field": "datum[\"year_date\"]"},
+      "from": {"data": "timedata"},
+      "encode": {
+        "update": {
+          "size": {"value": 20},
+      "fill": {"value": "steelblue"},
+      "fillOpacity": {"value": 0.5},
+      "stroke": {"value": "black"},
+      "strokeWidth": {"value": 1.5},
+          "tooltip": {
+            "signal": "\" \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
+          },
+          "x": {"scale": "x", "field": "year_date"},
+          "y": {"scale": "y", "field": "__count"},
+          "defined": {
+            "signal": "isValid(datum[\"year_date\"]) && isFinite(+datum[\"year_date\"]) && isValid(datum[\"__count\"]) && isFinite(+datum[\"__count\"])"
+          }
+        }
+      }
+          },
+          {
+            "name": "brush",
+            "type": "rect",
+            "encode": {
+              "enter":{
+                "y": {"value": 0},"height": {"signal": "timeHeight"},
+              "fill": {"value": "green"},"fillOpacity": {"value": 0.2}
+              },
+              "update": {
+                "x": {"signal": "brush[0]"},
+                "x2": {"signal": "brush[1]"}
+              }
+            }
+          },
+          {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "enter": {
+              "y": {"value": 0},
+              "height": {"signal": "timeHeight"},
+              "width": {"value": 1},
+              "fill": {"value": "yellow"}
+            },
+            "update": {
+              "x": {"signal": "brush[0]"}
+            }
+          }
+        },
+        {
+          "type": "rect",
+          "interactive": false,
+          "encode": {
+            "enter": {
+              "y": {"value": 0},
+              "height": {"signal": "timeHeight"},
+              "width": {"value": 1},
+              "fill": {"value": "firebrick"}
+            },
+            "update": {
+              "x": {"signal": "brush[1]"}
+            }
+          }
+        }
+          ]
         }
       ]
     },
