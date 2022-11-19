@@ -1,0 +1,355 @@
+city,state,country,shape,duration (seconds),duration (hours/min),date posted,latitude,longitude,date,time
+chester (uk/england),,United Kingdom,circle,20.0,20 seconds,1/21/2008,53.2,-2.916667,10/10/1955,17:00
+penarth (uk/wales),,United Kingdom,circle,180.0,about 3 mins,2/14/2006,51.434722,-3.18,10/10/1965,21:00
+cardiff (uk/wales),,United Kingdom,disk,1200.0,20 minutes,2/1/2007,51.5,-3.2,10/10/1974,21:30
+stoke mandeville (uk/england),,United Kingdom,cigar,3.0,3 seconds,12/12/2009,51.783333,-0.783333,10/10/1976,22:00
+leeds (uk/england),,United Kingdom,triangle,600.0,10min,3/4/2003,53.8,-1.583333,10/10/1985,20:25
+bickerton (near wetherby) (uk/england),,United Kingdom,unknown,2700.0,45minutes,10/15/2003,53.070884,-2.736506,10/10/2003,23:00
+kedainiai (lithuania),,Lithuania,oval,240.0,4min,10/27/2004,55.288131,23.957728,10/10/2004,15:20
+newtown (uk/wales),,United Kingdom,formation,360.0,5/6 minutes,5/15/2006,52.516667,-3.3,10/10/2005,20:00
+plymouth (devonshire) (uk/england),,United Kingdom,formation,120.0,1-2 mins,10/30/2006,50.396389,-4.138611,10/10/2006,21:47
+stord (norway),,Norway,light,600.0,10 min,1/21/2008,59.900209,5.282347,10/10/2007,23:20
+epsom (surrey) (uk/england),,United Kingdom,oval,300.0,5 mins,12/12/2011,51.316667,-0.266667,10/10/2011,14:00
+hafnarfjordur (iceland),,Iceland,sphere,300.0,5 min,6/12/2008,64.066667,-21.95,10/11/1997,22:00
+london (uk/england),,United Kingdom,diamond,3.0,3 seconds,12/2/2000,51.514125,-0.093689,10/11/2000,19:30
+dolgellau (uk/wales),,United Kingdom,changing,240.0,3 or 4 minutes,12/20/2000,52.75,-3.883333,10/11/2000,22:09
+cannock (uk/england),,United Kingdom,formation,180.0,3 minutes,10/20/2005,52.683333,-2.016667,10/11/2005,00:00
+rotherham (south yorkshire) (uk/england),,United Kingdom,oval,3600.0,1hr,12/16/2005,53.433333,-1.35,10/11/2005,21:50
+kidlington (uk/england),,United Kingdom,formation,5.0,5 sec,10/30/2006,51.816667,-1.283333,10/11/2006,21:20
+london (uk/england),,United Kingdom,unknown,300.0,5 minutes,3/4/2008,51.514125,-0.093689,10/11/2007,23:00
+klagenfurt (austria),,Austria,chevron,60.0,1 minute,3/19/2009,46.62794,14.30899,10/11/2008,00:00
+ankara (turkey),,Turkey,changing,300.0,5 min.,8/7/2007,39.92077,32.85411,10/1/1974,20:00
+birmingham (uk/england),,United Kingdom,sphere,97836000.0,31 years,4/12/2013,52.466667,-1.916667,10/1/1983,17:00
+taunton (near) (uk/england),,United Kingdom,light,60.0,1 minute,1/29/2002,51.021111,-3.104722,10/1/1995,21:00
+warrington (uk/england),,United Kingdom,fireball,8.0,8 seconds,7/26/2002,53.383333,-2.6,10/1/1998,21:00
+blankenberge (belgium),,Belgium,formation,10.0,10 seconds,4/8/2002,51.312374,3.132768,10/1/1999,23:00
+tillicoultry (central scotland) (uk/scotland),,United Kingdom,triangle,60.0,1 min,5/24/2005,56.15,-3.75,10/1/2000,20:00
+karavostasi (greece),,Greece,cross,60.0,1 minute,12/14/2004,39.337515,20.289964,10/1/2002,13:35
+dunstable (uk/england),,United Kingdom,fireball,300.0,5 mins,10/27/2004,51.883333,-0.516667,10/1/2004,23:00
+buxton (uk/england),,United Kingdom,light,240.0,4 mins?,10/11/2005,52.75,1.3,10/1/2005,21:35
+bursa (turkey),,Turkey,teardrop,3.0,3 seconds,10/30/2006,40.182846,29.067084,10/1/2006,01:20
+carrieres sous poissy (france),,France,cigar,180.0,3 minutes,12/12/2011,48.945484,2.037356,10/1/2011,17:00
+london (uk/england),,United Kingdom,fireball,30.0,30 seconds,10/3/2013,51.514125,-0.093689,10/1/2013,23:00
+poole (uk/england),,United Kingdom,other,60.0,1 minute,3/19/2009,50.716667,-2.0,10/12/1997,10:30
+jersey,nj,United States,disk,180.0,3 min,7/5/2008,49.214439,-2.13125,10/12/1999,10:30
+brixham&#44 devon (uk/england),,United Kingdom,light,600.0,10 minutes,12/2/2000,50.39514,-3.513924,10/12/2000,20:08
+sainte-suzanne (near switzerland) (france),,France,other,2.0,2 secondes,10/12/2001,48.097456,-0.349277,10/12/2001,19:40
+cannock (uk/england),,United Kingdom,triangle,10.0,5-10 seconds,11/20/2001,52.683333,-2.016667,10/12/2001,20:30
+rotherham (uk/england),,United Kingdom,light,120.0,2 minutes,10/15/2002,53.433333,-1.35,10/12/2002,19:45
+antibes (france),,France,sphere,2700.0,45 minutes,5/15/2013,43.580418,7.125102,10/12/2004,15:00
+&iacute;safj&ouml;r&eth;ur (iceland),,Iceland,cylinder,900.0,15 min,10/27/2004,66.075833,-23.126667,10/12/2004,16:00
+stafford (uk/england),,United Kingdom,light,60.0,1 minute,1/10/2009,52.833333,-2.0,10/12/2008,21:00
+east kilbride (south lanarkshire) (uk/scotland),,United Kingdom,unknown,3600.0,1 hour at least,11/2/1999,55.766667,-4.166667,10/13/1999,04:28
+budapest (hungary),,Hungary,oval,600.0,10 minutes approx,7/23/2003,47.497912,19.040235,10/13/2002,22:00
+runcorn (uk/england),,United Kingdom,unknown,90.0,90 seconds,1/17/2004,53.333333,-2.75,10/13/2003,19:15
+manchester (uk/england),,United Kingdom,fireball,30.0,30sec,10/27/2004,53.5,-2.216667,10/13/2004,07:19
+shropshire (uk/england),,United Kingdom,light,1200.0,20 minutes,10/20/2005,52.666667,-2.75,10/13/2005,19:10
+berlin (germany),,De,fireball,120.0,1-2 minutes,10/30/2006,52.516667,13.4,10/13/2006,00:02
+kirkcaldy (uk/scotland),,United Kingdom,circle,600.0,10 mins +,11/28/2007,56.116667,-3.166667,10/13/2007,22:30
+oldham (uk/england),,United Kingdom,oval,60.0,1 minute,10/19/2011,53.55,-2.116667,10/13/2011,19:47
+benidorm (spain),,Spain,changing,660.0,11 minutes,11/4/2012,38.541057,-0.122494,10/13/2012,02:00
+glasgow (uk/scotland),,United Kingdom,circle,300.0,5 minutes,10/30/2012,55.833333,-4.25,10/13/2012,20:30
+seaford (uk/england),,United Kingdom,light,600.0,10 minutes,10/30/2012,50.766667,0.1,10/13/2012,22:30
+tonbridge (uk/england),,United Kingdom,fireball,2.0,2 seconds,10/30/2012,51.183333,0.283333,10/13/2012,22:30
+newcastle-upon-tyne (uk/england),,United Kingdom,oval,4200.0,1 hour and 10 minutes,10/15/2002,54.978252,-1.61778,10/14/2002,20:00
+llanelli (uk/england),,United Kingdom,triangle,30.0,30seconds,10/20/2005,51.676111,-4.156667,10/14/2005,03:36
+argostoli (greece),,Greece,sphere,5.0,5 sec,10/30/2006,38.173168,20.489973,10/14/2006,07:25
+northwich (uk/england),,United Kingdom,other,180.0,2-3 min&#39s,11/21/2010,53.266667,-2.5,10/14/2010,22:30
+castleside (uk/england),,United Kingdom,cigar,300.0,5 minutes,3/11/2006,54.833333,-1.866667,10/15/1967,16:00
+knott - end. fleetwood (uk/england),,United Kingdom,light,600.0,5 - 10 mins,2/18/2001,53.92766,-3.00585,10/15/1967,19:30
+london (uk/england),,United Kingdom,unknown,1800.0,30 minutes,8/24/2010,51.514125,-0.093689,10/15/1970,19:00
+germany (czech border),,Fuck,flash,60.0,1 minute,8/1/2003,51.165691,10.451526,10/15/1973,23:00
+london (uk/england),,United Kingdom,circle,240.0,4 minutes,8/5/2001,51.514125,-0.093689,10/15/1988,19:30
+bry sur marne  (near paris) (france),,France,,120.0,some minuts,10/28/2002,48.834913,2.523649,10/15/1994,22:00
+split (in former yugoslavia),,Fuck,fireball,15.0,15 seconds,2/1/2007,43.508132,16.440193,10/15/1995,23:00
+fort william (uk/scotland),,United Kingdom,unknown,30.0,-30sec,2/18/2001,56.819817,-5.105218,10/15/1997,23:30
+inverness (uk/scotland),,United Kingdom,formation,180.0,3 minutes,12/12/2009,57.466667,-4.233333,10/15/1999,02:00
+sheffield (uk/england),,United Kingdom,triangle,120.0,only a few minutes,4/1/2001,53.366667,-1.5,10/15/1999,24:00
+london (uk/england),,United Kingdom,light,60.0,1 minute,12/2/2000,51.514125,-0.093689,10/15/2000,18:30
+swadlincote&#44 derbyshire (uk/england),,United Kingdom,circle,20.0,10-20 seconds,3/19/2002,52.771318,-1.554997,10/15/2001,16:30
+hull (uk/england),,United Kingdom,disk,420.0,7 mins,3/19/2009,53.716667,-0.333333,10/15/2008,24:00
+moss (norway),,Norway,formation,60.0,1 minute,10/19/2011,59.434091,10.658383,10/15/2011,20:05
+glasgow (uk/scotland),,United Kingdom,other,300.0,5 minutes,10/28/2002,55.833333,-4.25,10/16/2002,15:00
+northampton (uk/england),,United Kingdom,light,1800.0,30 mins(approx),4/27/2007,52.25,-0.883333,10/16/2004,00:10
+leeds (uk/england),,United Kingdom,fireball,300.0,5 minutes,11/28/2007,53.8,-1.583333,10/16/2007,19:55
+selby (uk/england),,United Kingdom,changing,240.0,4 minutes,12/12/2009,53.783333,-1.066667,10/16/2009,19:30
+melksham&#44 wiltshire (uk/england),,United Kingdom,circle,120.0,2 mins,12/12/2009,51.370447,-2.137629,10/16/2009,21:30
+oakham&#44 rutland (uk/england),,United Kingdom,light,40.0,40 seconds,12/12/2009,52.669563,-0.726625,10/16/2009,22:35
+ditcot&#44 oxordshire (uk/england),,United Kingdom,circle,2700.0,45 minutes,10/28/2002,51.608044,-1.24484,10/17/2002,01:45
+south stoke&#44 goring (uk/england),,United Kingdom,circle,7200.0,2 hrs,10/28/2002,51.543102,-1.097742,10/17/2002,01:45
+kracow (poland),,Poland,egg,180.0,3 mins,10/28/2002,50.06465,19.94498,10/17/2002,19:42
+vrsac (yugoslavia),,Fuck,diamond,7.0,7 sec.,10/28/2002,45.116667,21.3,10/17/2002,22:30
+leeds (west yorkshire) (uk/england),,United Kingdom,triangle,15.0,about 15 seconds,3/4/2008,53.8,-1.583333,10/17/2007,20:15
+kristiansand (norway),,Norway,disk,120.0,60-120 sec maybe more,11/28/2007,58.147578,7.996627,10/17/2007,22:00
+dundalk (ireland),,Ireland,other,25.0,20 - 25 seconds,10/31/2008,53.997945,-6.405957,10/17/2008,21:30
+bracknell (uk/england),,United Kingdom,circle,5.0,5 seconds,1/10/2009,51.416667,-0.75,10/17/2008,22:00
+plymouth (uk/england),,United Kingdom,light,6.0,00:06,12/12/2009,50.396389,-4.138611,10/17/2009,00:00
+toton&#44 nottingham (uk/england),,United Kingdom,sphere,480.0,8 minutes,10/30/2012,52.906367,-1.257422,10/17/2012,21:30
+wymondham (norfolk)(uk/england),,United Kingdom,other,60.0,1 minute,10/23/2013,52.566667,1.116667,10/17/2013,18:50
+manchester (uk/england),,United Kingdom,triangle,5.0,5 seconds,10/28/2002,53.5,-2.216667,10/18/2002,20:35
+tattonhall (uk/england),,United Kingdom,teardrop,900.0,10-15 minutes,1/19/2005,53.120933,-2.771825,10/18/2004,01:00
+uk/england,,Fuck,cylinder,60.0,1 min,12/3/2004,52.355518,-1.17432,10/18/2004,20:00
+gillingham (uk/england),,United Kingdom,light,180.0,3 mins,11/28/2007,51.4,0.566667,10/18/2007,21:10
+manchester (uk/england),,United Kingdom,sphere,60.0,1min,11/28/2007,53.5,-2.216667,10/18/2007,23:45
+leuven (belgium),,Belgium,circle,4.0,about 4 seconds,10/31/2008,50.866667,4.7,10/18/2008,23:45
+ackworth (uk/england),,United Kingdom,rectangle,120.0,2 minutes,10/10/2011,53.65,-1.333333,10/18/2010,15:00
+cardiff (south wales) (uk/wales),,United Kingdom,light,3600.0,1.00 hour,10/30/2012,51.5,-3.2,10/18/2012,05:50
+heer (belgium),,Belgium,unknown,30.0,30 seconds,10/23/2013,50.75368,5.30209,10/18/2013,19:19
+reykjavik (iceland),,Iceland,disk,5.0,5 seconds,6/12/2008,64.133333,-21.933333,10/19/1983,04:55
+wicklow (republic of ireland),,Ireland,egg,180.0,3 minutes,11/20/2001,52.980821,-6.044589,10/19/2001,00:30
+fareham (uk/england),,United Kingdom,other,1.0,second,10/31/2003,50.85,-1.183333,10/19/2003,19:00
+colwyn bay (uk/wales&#44 north country),,United Kingdom,other,18000.0,5 hrs,11/3/2005,53.3,-3.75,10/19/2005,01:30
+london (uk/england),,United Kingdom,light,180.0,3 minutes,10/30/2006,51.514125,-0.093689,10/19/2006,11:50
+leamington spa (uk/england),,United Kingdom,diamond,1200.0,20 minutes,11/28/2007,52.3,-1.533333,10/19/2007,17:30
+blandford forum (uk/england),,United Kingdom,unknown,300.0,5 minutes,10/30/2012,50.866667,-2.166667,10/19/2012,06:20
+fleetwood (uk/england),,United Kingdom,formation,1200.0,20 minutes,2/8/2005,53.916667,-3.0,10/20/1968,19:30
+kaunas (lithuania),,Lithuania,unknown,3600.0,1 hour,3/17/2004,54.898521,23.903597,10/20/1992,02:00
+grimsby (uk/england),,United Kingdom,egg,120.0,2 minutes,8/16/2002,53.533333,-0.05,10/20/1997,22:00
+scunthorpe (uk/england),,United Kingdom,triangle,10.0,10 seconds,12/2/2000,53.583333,-0.65,10/20/2000,20:20
+newport (uk/england),,United Kingdom,diamond,3.0,3 seconds,12/9/2000,52.016667,-4.833333,10/20/2000,23:00
+swanley (uk/england),,United Kingdom,light,60.0,approx one minute,11/11/2003,51.396531,0.177326,10/20/2003,22:30
+castleford (uk/england),,United Kingdom,light,15.0,15 seconds,10/27/2004,53.716667,-1.35,10/20/2004,06:30
+essex (uk/england),,United Kingdom,other,120.0,few mins,11/3/2005,51.833333,0.583333,10/20/2005,20:51
+varberg (sweden),,Sweden,other,35.0,25-35 seconds,11/21/2010,57.107118,12.252091,10/20/2010,18:05
+berlin (germany),,De,unknown,1500.0,25 minutes,10/30/2012,52.516667,13.4,10/20/2012,18:00
+szczecinek (poland),,Poland,other,3600.0,1 hour,1/16/2014,53.710071,16.69936,10/20/2013,21:30
+swansea (uk/england),,United Kingdom,triangle,1800.0,30 minutes,5/15/2006,51.633333,-3.966667,10/21/1987,21:30
+swansea (uk/england),,United Kingdom,triangle,600.0,10 minutes,12/16/2005,51.633333,-3.966667,10/21/1987,21:30
+cesena (italy),,Italy,disk,1800.0,30 min,10/28/2002,44.139644,12.246429,10/21/2002,19:40
+canvey island&#44 essex (uk/england),,United Kingdom,chevron,10.0,10 seconds,10/27/2004,51.517083,0.578411,10/21/2004,21:00
+weert (netherlands),,Netherlands,cigar,60.0,1 minute,11/2/2004,51.243942,5.714222,10/21/2004,21:10
+bristol (uk/england),,United Kingdom,light,900.0,15 min,11/3/2005,51.45,-2.583333,10/21/2005,13:00
+hereford (uk/england),,United Kingdom,disk,900.0,15 minutes,11/28/2007,52.05,-2.716667,10/21/2007,03:20
+durham county (uk/england),,United Kingdom,light,600.0,10 minutes,10/30/2012,54.766667,-1.566667,10/21/2012,03:20
+mitchelstown (republic of ireland),,Ireland,unknown,300.0,5 minutes,12/2/2000,52.266213,-8.269886,10/2/2000,20:30
+bridlington (uk/england),,United Kingdom,oval,900.0,15mins,10/27/2004,54.095,-0.208056,10/2/2004,21:20
+cheshire&#44 lymm (uk/england),,United Kingdom,light,300.0,around 5 minutes,2/14/2010,53.381724,-2.480044,10/2/2009,02:00
+bridlington (uk/england),,United Kingdom,triangle,30.0,30seconds,12/2/2000,54.095,-0.208056,10/22/2000,20:50
+asker (norway),,Norway,unknown,30.0,30 seconds,10/31/2003,59.833335,10.437209,10/22/2003,06:30
+cheltenham (uk/england),,United Kingdom,fireball,1800.0,30mins,10/31/2003,51.9,-2.083333,10/22/2003,21:00
+bassevelde (belgium),,Belgium,circle,3600.0,1 hour,3/19/2009,51.230556,3.6775,10/22/2005,22:20
+dundee (uk/scotland),,United Kingdom,teardrop,8.0,8 seconds,11/28/2007,56.5,-2.966667,10/22/2007,24:00
+kirkby in ashfield (uk/england),,United Kingdom,fireball,300.0,5 mins,10/31/2008,53.083333,-1.266667,10/22/2008,19:25
+morden&#44 surrey (uk/england),,United Kingdom,triangle,1200.0,20 minutes,12/12/2009,51.394943,-0.19446,10/22/2009,21:30
+stockholm (sweden),,Sweden,triangle,600.0,10min,4/30/2004,59.329323,18.068581,10/23/2000,00:30
+prespa region (macedonia),,Fuck,other,180.0,2-3 min,12/2/2000,40.883316,21.022196,10/23/2000,24:00
+cyprus (mediterranean sea),,United States,formation,60.0,60 seconds,11/3/2005,35.126413,33.429859,10/23/2005,21:00
+wimborne&#44 dorset (uk/england),,United Kingdom,sphere,240.0,4 mins,10/30/2006,50.800657,-1.984495,10/23/2006,14:15
+burnley  (lancashire) (uk/england),,United Kingdom,fireball,180.0,3 mins,11/28/2007,53.8,-2.233333,10/23/2007,20:30
+tyrrhenian sea,,Fuck,sphere,30.0,30sec,7/16/2006,40.076986,11.343106,10/24/1995,02:00
+rotherham (uk/england),,United Kingdom,circle,2400.0,40 minutes,11/20/2002,53.433333,-1.35,10/24/2002,11:00
+cheltenham (uk/england),,United Kingdom,light,600.0,10 minutes,10/28/2002,51.9,-2.083333,10/24/2002,21:00
+lancaster (uk/england),,United Kingdom,sphere,120.0,2 minutes,11/26/2003,54.066667,-2.833333,10/24/2003,22:16
+wald (switzerland),,Switzerland,other,600.0,10min.,10/27/2004,47.379988,10.218726,10/24/2004,18:25
+manchester (uk/england),,United Kingdom,formation,900.0,15 minutes,11/3/2005,53.5,-2.216667,10/24/2005,22:00
+rugby warks (uk/england),,United Kingdom,light,20.0,20 seconds,12/7/2006,52.370878,-1.265032,10/24/2006,17:34
+hull (uk/england),,United Kingdom,triangle,30.0,30 seconds,10/30/2006,53.716667,-0.333333,10/24/2006,21:55
+stevenage (uk/england),,United Kingdom,disk,120.0,2 minutes,11/28/2007,51.916667,-0.216667,10/24/2007,17:40
+aldershot (uk/england),,United Kingdom,fireball,60.0,1 min,11/28/2007,51.25,-0.766667,10/24/2007,18:03
+salford (manchester) (uk/england),,United Kingdom,circle,60.0,1 min,10/31/2008,52.033333,-0.633333,10/24/2008,24:00
+morden&#44 surrey (uk/england),,United Kingdom,disk,600.0,ten minutes,12/12/2009,51.394943,-0.19446,10/24/2009,16:00
+hayward&#39s heath (uk/england),,United Kingdom,unknown,120.0,2 minutes,10/30/2012,50.999041,-0.106333,10/24/2012,00:02
+sion mills (northern ireland),,Ireland,fireball,45.0,3/4 seconds,8/14/2007,54.78535,-7.47427,10/25/1995,20:45
+hamilton (uk/scotland),,United Kingdom,cigar,120.0,2 mins.,9/2/2005,55.766667,-4.033333,10/25/2001,23:00
+bridgend (uk/england),,United Kingdom,sphere,3600.0,ongoing more than an hour,10/25/2011,51.505833,-3.577222,10/25/2011,00:30
+brixham.devon (at sea.fishing) (uk/england),,United Kingdom,sphere,1200.0,20 minets,11/4/2002,50.39514,-3.513924,10/26/1994,02:30
+newport (uk/england),,United Kingdom,oval,1295.0,21:35,11/2/1999,52.016667,-4.833333,10/26/1999,21:15
+birmingham (uk/england),,United Kingdom,sphere,10.0,10 seconds,10/31/2003,52.466667,-1.916667,10/26/2003,10:00
+bristol (uk/england),,United Kingdom,other,3.0,3 seconds,12/19/2003,51.45,-2.583333,10/26/2003,21:30
+stoke-on-trent (uk/england),,United Kingdom,sphere,1500.0,25minutes,10/30/2006,53.0,-2.183333,10/26/2006,06:30
+northampton (uk/england),,United Kingdom,fireball,40.0,40 seconds,10/30/2006,52.25,-0.883333,10/26/2006,19:45
+stoke-on-trent (uk/england),,United Kingdom,cylinder,30.0,30 seconds,1/27/2005,53.0,-2.183333,10/27/1997,19:30
+ripon&#44 north yorkshire (uk/england),,United Kingdom,circle,10.0,00:00:10,11/9/1999,54.13564,-1.527334,10/27/1999,21:00
+dundee (uk/scotland),,United Kingdom,cigar,180.0,3 min,10/28/2002,56.5,-2.966667,10/27/2002,17:00
+oslo (norway),,Norway,unknown,10.0,10 second,12/12/2009,59.913869,10.752245,10/27/2008,01:00
+bagheria (italy),,Italy,changing,1800.0,30 minutes,11/11/2013,38.078918,13.512365,10/27/2013,04:26
+brandon (county durham)(uk/england),,United Kingdom,teardrop,1080.0,18 mins,12/9/2003,52.366667,-1.4,10/28/2000,20:05
+gusum (sweden),,Sweden,circle,1200.0,20 min,11/2/2004,58.266667,16.483333,10/28/2004,20:00
+glasgow (uk/scotland),,United Kingdom,other,10.0,10 seconds,11/28/2007,55.833333,-4.25,10/28/2007,12:10
+bedford (uk/england),,United Kingdom,diamond,150.0,2.5 minutes +,11/21/2010,52.133333,-0.45,10/28/2010,19:25
+wevershoof (netherlands),,Netherlands,circle,1800.0,30 min.,11/2/2004,52.730854,5.152193,10/29/2004,03:45
+heule/kuurne (belgium),,Belgium,light,120.0,2 min,11/2/2004,50.843196,3.23472,10/29/2004,24:00
+herefordshire (uk/england),,United Kingdom,sphere,10.0,10 secs,12/12/2011,52.083333,-2.75,10/29/2011,18:30
+slobozia (romania),,Oman,light,300.0,5 minutes,10/30/2012,44.563889,27.366111,10/29/2012,00:00
+darwen&#44 lancashire (uk/england),,United Kingdom,circle,1200.0,20min,11/2/1999,53.829579,-2.597118,10/30/1999,01:10
+l&#180;arbo&ccedil; (catalunya) (spain),,Spain,disk,2220.0,37 min,11/3/2005,41.265988,1.602034,10/30/2005,04:31
+aberdeen (uk/scotland),,United Kingdom,circle,300.0,5mins,1/10/2009,57.166667,-2.666667,10/30/2008,19:40
+heswall (uk/england),,United Kingdom,circle,60.0,1 min,12/12/2009,53.316667,-3.1,10/30/2009,20:59
+london (uk/england),,United Kingdom,circle,180.0,3mins,12/12/2011,51.514125,-0.093689,10/30/2011,18:47
+warrington (uk/england),,United Kingdom,other,60.0,1 minute,4/18/2012,53.383333,-2.6,10/30/2011,20:00
+chirpan (bulgaria),,Bulgaria,light,180.0,3 minutes,10/30/2012,42.20207,25.324854,10/30/2012,19:15
+uk/england,,Fuck,light,3600.0,1 hour,11/4/2012,52.355518,-1.17432,10/30/2012,22:45
+grimsby (uk/england) ?,,United Kingdom,other,600.0,10 mins,11/20/2001,53.567471,-0.080784,10/31/2001,20:00
+manchester (uk/england),,United Kingdom,triangle,180.0,3 mins,11/2/2004,53.5,-2.216667,10/31/2004,00:04
+ivanka pri dunaji (slovakia),,Slovakia,light,20.0,20s,12/7/2006,48.188188,17.257228,10/31/2006,20:00
+manchester (uk/england),,United Kingdom,diamond,600.0,10-mins,3/8/2007,53.5,-2.216667,10/31/2006,21:59
+colchester (uk/england),,United Kingdom,light,600.0,10 mins,1/21/2008,51.883333,0.9,10/31/2007,21:30
+london (uk/england),,United Kingdom,unknown,30.0,30 seconds,1/10/2009,51.514125,-0.093689,10/31/2008,09:25
+hereford (uk/england),,United Kingdom,light,600.0,10 mins,1/10/2009,52.05,-2.716667,10/31/2008,21:50
+birmingham (uk/england),,United Kingdom,sphere,600.0,10 min,12/12/2009,52.466667,-1.916667,10/31/2009,23:00
+glasgow (uk/scotland),,United Kingdom,fireball,2.0,few seconds,10/30/2006,55.833333,-4.25,10/3/2006,22:00
+chawton&#44 hampshire (uk/england),,United Kingdom,light,12.0,12 seconds,10/31/2008,51.131258,-0.987425,10/3/2008,10:30
+setif (algeria),,Algeria,light,60.0,1 minute,10/30/2012,36.183333,5.4,10/3/2012,05:00
+london (uk/england),,United Kingdom,disk,30.0,30 sec,10/12/2001,51.514125,-0.093689,10/4/2001,09:45
+glasgow (uk/scotland),,United Kingdom,diamond,10.0,<10 secs,12/23/2002,55.833333,-4.25,10/4/2002,07:20
+hyvink&auml;&auml; (finland),,Finland,other,90.0,90 seconds,10/11/2005,60.631811,24.857883,10/4/2005,21:30
+sunderland (uk/england),,United Kingdom,circle,40.0,40 seconds,10/30/2006,54.911944,-1.383333,10/4/2006,18:30
+grays (uk/england),,United Kingdom,fireball,240.0,4 minutes,12/12/2009,51.483333,0.333333,10/4/2009,19:25
+pitesti (romania),,Oman,light,480.0,5-8 minutes,11/4/2012,44.860556,24.867778,10/4/2012,21:00
+ryde (uk/england),,United Kingdom,triangle,7.0,7 seconds,10/14/2013,50.716667,-1.166667,10/4/2013,20:00
+newcastle (northumberland) (uk/england),,United Kingdom,triangle,90.0,about 1 min30 secs,3/17/2004,54.2,-5.883333,10/5/1999,22:00
+st. helier (jersey channel islands) (uk/england),,Jersey,light,20.0,20 seconds,10/8/2007,49.186823,-2.106568,10/5/2007,09:36
+aberdeen (uk/scotland),,United Kingdom,circle,120.0,2 minutes,1/10/2009,57.166667,-2.666667,10/5/2008,18:24
+clogher (uk/england),,United Kingdom,fireball,180.0,1-3 minutes,10/14/2013,54.416667,-7.2,10/5/2013,22:00
+prishtina,,Fuck,circle,20.0,20 seconds,2/14/2006,42.657798,21.153346,10/6/1992,13:00
+birmingham (uk/england),,United Kingdom,oval,60.0,1 minute,11/3/2005,52.466667,-1.916667,10/6/1999,14:00
+almelo (netherlands),,Netherlands,triangle,10.0,10 seconds,10/12/2001,52.355085,6.659865,10/6/2000,03:45
+uk/england,,Fuck,triangle,60.0,about 1 minute,7/5/2005,52.355518,-1.17432,10/6/2000,22:00
+bladel (brabant) (netherlands),,Netherlands,light,2700.0,45 minutes,10/28/2002,51.362963,5.213639,10/6/2002,24:00
+ticknall (near derby) (uk/england),,United Kingdom,cone,40.0,40 secs,11/9/2004,52.8,-1.483333,10/6/2004,17:57
+uckfield (uk/england),,United Kingdom,circle,600.0,10 minutes,10/8/2007,50.966667,0.1,10/6/2007,21:30
+leamington spa (uk/england),,United Kingdom,light,2.0,a few seconds,12/12/2011,52.3,-1.533333,10/6/2007,22:00
+worthing (west sussex) (uk/england),,United Kingdom,,240.0,3-4 mins,4/18/2012,50.8,-0.366667,10/6/2007,22:40
+chigwell essex (uk/england),,United Kingdom,other,15.0,15 seconds,10/27/2004,51.626281,0.080647,10/7/1984,19:00
+liverpool (uk/england),,United Kingdom,light,10.0,10 seconds,6/12/2008,53.416667,-3.0,10/7/1987,22:00
+huddersfield (uk/england),,United Kingdom,circle,120.0,around 2 mins,10/15/2002,53.65,-1.783333,10/7/2002,16:53
+harlow&#44 essex (uk/england),,United Kingdom,sphere,30.0,30seconds,10/27/2004,51.767787,0.087806,10/7/2004,11:30
+malmesbury,,Fuck,oval,60.0,1 min,10/27/2004,51.586357,-2.102834,10/7/2004,12:45
+kirby bellars (leicstershire) (uk/england),,United Kingdom,other,20.0,20 seconds,10/11/2005,52.755637,-0.947553,10/7/2005,09:00
+derbyshire (uk/england),,United Kingdom,fireball,300.0,3-5 mins,10/30/2006,53.166667,-1.583333,10/7/2006,19:10
+haren (netherlands),,Netherlands,light,1200.0,20 minutes,11/28/2007,52.794171,7.236837,10/7/2007,21:00
+sheffield (uk/england),,United Kingdom,disk,180.0,3 minutes,10/31/2008,53.366667,-1.5,10/7/2008,19:15
+meath (ireland),,Ireland,circle,1800.0,30 minutes,10/30/2012,53.605548,-6.656417,10/7/2012,22:30
+kalletal (germany),,Germany,light,600.0,10 min,9/4/2003,52.111,8.9497,10/8/1994,11:30
+wigan (uk/england),,United Kingdom,triangle,180.0,3 mins,1/17/2004,53.533333,-2.616667,10/8/2001,00:00
+sarajevo (bosnia),,Fuck,disk,3040.0,30 40 seconds,10/11/2005,43.856259,18.413076,10/8/2005,13:00
+sigulda (latvia),,Latvia,triangle,1.0,1 sec,10/11/2005,57.149563,24.860333,10/8/2005,23:50
+split (croatia),,Croatia,disk,1.0,second,1/10/2009,43.508132,16.440193,10/8/2006,21:03
+obernheim (germany),,De,triangle,2.0,seconds,11/19/2012,49.366667,7.583333,10/8/2012,17:10
+bridgend,,Fuck,disk,900.0,15 mins,2/18/2001,51.504286,-3.576945,10/9/1988,21:00
+stirling (uk/scotland),,United Kingdom,other,240.0,4 mins,2/18/2001,56.116667,-3.95,10/9/1995,02:00
+reading (uk/england),,United Kingdom,sphere,120.0,2 minutes,1/11/2002,51.433333,-1.0,10/9/1998,19:30
+london (uk/england),,United Kingdom,other,7200.0,1-2hrs,10/28/2002,51.514125,-0.093689,10/9/1998,21:00
+kista (sweden),,Sweden,circle,3.0,1-3 sek,10/15/2003,59.402434,17.946482,10/9/2003,02:15
+toulouse (france),,France,light,900.0,15mins,10/15/2003,43.604652,1.444209,10/9/2003,19:10
+stoke-on-trent (uk/england),,United Kingdom,light,7200.0,2 hours,10/30/2006,53.0,-2.183333,10/9/2006,20:30
+canvey island (uk/england),,United Kingdom,other,73800.0,2 1/2 hours or more,3/4/2008,51.517083,0.578411,10/9/2007,02:30
+oltenita (calarasi) (romania),,Oman,circle,7200.0,2 hours,10/14/2013,44.086667,26.636667,10/9/2013,05:35
+gillingham,,Fuck,diamond,900.0,15 minutes,10/14/2013,51.386322,0.551438,10/9/2013,21:15
+gillingham,,Fuck,diamond,900.0,15 minutes,10/14/2013,51.386322,0.551438,10/9/2013,21:15
+preston (uk/england),,United Kingdom,disk,180.0,2 to 3 mins,12/19/2003,50.783333,-0.466667,1/10/1971,21:00
+gateshead&#44tyne &amp; wear (uk/england),,United Kingdom,other,120.0,2 mins,4/16/2005,54.95268,-1.603411,1/10/1978,16:00
+walberswick suffolk (uk/england),,United Kingdom,disk,7200.0,1-2 hours,10/27/2004,52.314994,1.661398,1/10/1978,20:00
+bellside/wishaw (uk/scotland),,United Kingdom,sphere,120.0,2 min.,8/5/2001,55.838323,-3.935489,1/10/1988,21:30
+london (uk/england),,United Kingdom,circle,240.0,4 mins,9/29/2004,51.514125,-0.093689,1/10/1998,18:00
+nottingham (uk/england),,United Kingdom,circle,3.0,3 seconds,1/29/2002,52.966667,-1.166667,1/10/2002,17:25
+dunstable (uk/england),,United Kingdom,changing,1800.0,30 mins,1/17/2004,51.883333,-0.516667,1/10/2004,00:00
+exeter (uk/england),,United Kingdom,teardrop,30.0,30 seconds,2/14/2006,50.7,-3.533333,1/10/2006,01:00
+helsby&#44 cheshire (uk/england),,United Kingdom,formation,20.0,20 sec,10/8/2007,53.273014,-2.769426,1/10/2007,18:12
+rishton/blackburn&#44 lancashire (uk/england),,United Kingdom,unknown,2.0,2 seconds,1/21/2008,53.768509,-2.42362,1/10/2008,21:50
+grimsby (uk/england),,United Kingdom,changing,240.0,4 min,12/12/2009,53.533333,-0.05,1/10/2009,19:00
+bath (uk/england),,United Kingdom,circle,2.0,seconds,1/10/2009,51.379444,-2.365556,1/10/2009,22:00
+kilmartin (uk/scotland),,United Kingdom,triangle,720.0,12 mins,2/14/2010,56.116667,-5.483333,1/10/2010,07:23
+uk/england,,Fuck,circle,900.0,15min,7/17/2011,52.355518,-1.17432,1/10/2010,21:05
+kent (uk/england),,United Kingdom,disk,300.0,5 minutes,10/10/2011,51.25,0.75,1/10/2011,11:10
+ottersberg (germany),,De,triangle,240.0,4 minutes,1/31/2011,53.1,9.15,1/10/2011,18:38
+swansea (uk/wales),,United Kingdom,other,600.0,10 mins,10/10/2011,51.633333,-3.966667,1/10/2011,19:30
+pendle (uk/england),,United Kingdom,light,900.0,15 minutes,1/16/2014,53.845,-2.204,1/10/2014,16:30
+liverpool (uk/england),,United Kingdom,cylinder,300.0,5mins,2/18/2001,53.416667,-3.0,11/10/1967,08:30
+walton on thames surrey (uk/england),,United Kingdom,unknown,300.0,5 mins,12/2/2000,51.38847,-0.416969,11/10/2000,00:05
+vilnius (lithuania),,Lithuania,unknown,1200.0,20 minutes,11/20/2002,54.687156,25.279651,11/10/2002,01:00
+southmore&#44 oxforshire (uk/england),,United Kingdom,light,1.0,0ne second,11/20/2002,51.683525,-1.424906,11/10/2002,22:55
+handforth&#44 wilmslow&#44 cheshire (uk/england),,United Kingdom,fireball,60.0,1 minute,1/10/2009,53.356083,-2.212708,11/10/2008,19:05
+wien (austria),,Austria,other,10800.0,3 h,12/23/2002,48.208174,16.373819,11/11/1906,00:00
+dun laoghaire (republic of ireland),,Ireland,disk,60.0,1 minute,1/11/2002,53.29279,-6.141937,11/11/1989,20:00
+york (uk/england),,United Kingdom,light,300.0,5 minutes,9/2/2005,53.954115,-1.064262,11/11/1996,23:00
+grimsby (uk/england),,United Kingdom,light,1800.0,30min,3/19/2002,53.533333,-0.05,11/11/2001,23:30
+wolverhampton (uk/england),,United Kingdom,formation,300.0,5mins,11/16/2002,52.583333,-2.133333,11/11/2002,18:40
+chesterfield (uk/england),,United Kingdom,fireball,20.0,20 seconds,11/26/2003,53.25,-1.416667,11/11/2003,21:00
+uk/england,,Fuck,circle,10.0,10 secs,12/3/2004,52.355518,-1.17432,11/11/2004,19:40
+labarthe sur l&egrave;ze (france),,France,cigar,2.0,2 seconds,12/16/2005,43.458858,1.399356,11/11/2005,04:15
+mires (greece),,Greece,other,300.0,5 minutes,12/7/2006,35.051532,24.873037,11/11/2006,23:00
+southport (uk/england),,United Kingdom,formation,300.0,5 min,11/28/2007,53.666667,-3.0,11/11/2007,18:40
+macclesfield (uk/england),,United Kingdom,circle,60.0,60 seconds,11/19/2012,53.25,-2.116667,11/11/2012,19:30
+vaucouleurs (lorfrance,,France,light,120.0,2 min.,12/19/2003,48.601914,5.66551,11/1/1967,21:00
+cambridge (uk/england),,United Kingdom,sphere,900.0,15 minutes,2/18/2001,51.733333,-2.366667,1/11/1974,03:00
+east london (south africa),,South africa,sphere,5.0,5 seconds,5/29/2012,51.508515,-0.125487,11/1/1985,18:00
+stoke-on-trent (uk/england),,United Kingdom,light,900.0,15 min,10/30/2006,53.0,-2.183333,11/1/1986,03:00
+shotts (uk/scotland),,United Kingdom,rectangle,60.0,1 minute,10/8/2007,55.833333,-3.85,1/11/1989,20:30
+newtown (uk/wales),,United Kingdom,other,600.0,10 minutes,1/17/2004,52.516667,-3.3,1/11/1992,24:00
+sandy (uk/england),,United Kingdom,cigar,600.0,10 mins,2/18/2001,52.116667,-0.283333,11/1/1993,20:00
+oirsbeek (netherlands),,Netherlands,light,23.0,2 maybe 3 seconds,3/4/2003,50.950111,5.907947,11/1/1996,22:00
+kilkenny (republic of ireland),,Ireland,sphere,300.0,5 mins,2/18/2001,52.654145,-7.244788,1/11/2001,09:06
+london (uk/england),,United Kingdom,oval,600.0,10 minutes,11/20/2001,51.514125,-0.093689,11/1/2001,13:00
+norwich (uk/england),,United Kingdom,changing,360.0,6 minutes,1/29/2002,52.633333,1.3,1/11/2001,18:00
+nottingham (uk/england),,United Kingdom,light,120.0,2 minutes,2/18/2001,52.966667,-1.166667,1/11/2001,20:45
+lousa (portugal),,Portugal,circle,7.0,7seconds,11/16/2002,40.114719,-8.244004,1/11/2002,24:00
+leicester (uk/england),,United Kingdom,circle,10.0,10 seconds,11/3/2005,52.664913,-1.034894,11/1/2005,22:20
+hyvink&auml;&auml; (finland),,Finland,light,120.0,2 minutes,1/10/2009,60.631811,24.857883,11/1/2008,20:00
+glenrothes (uk/scotland),,United Kingdom,circle,240.0,4 minutes,1/10/2009,56.2,-3.183333,11/1/2008,21:20
+t&oslash;nsberg (norway),,Norway,fireball,300.0,5 minutes,8/30/2013,59.26757,10.407561,1/11/2008,22:00
+london (southwest) (uk/england),,United Kingdom,light,120.0,2 minutes,1/10/2009,51.514125,-0.093689,1/11/2008,23:25
+pla (philippines),,Philippines,triangle,60.0,30-60 seconds,5/15/2013,42.70891,1.864656,11/1/2011,03:00
+leighton buzzard (uk/england),,United Kingdom,sphere,300.0,5 minutes,11/19/2012,51.916667,-0.65,11/1/2012,22:10
+ihtiman (bulgaria),,Bulgaria,fireball,120.0,2 minutes,1/16/2014,42.438242,23.816172,1/11/2014,19:11
+middlesbrough (uk/england) ??,,United Kingdom,disk,300.0,5 min,2/24/2001,54.574227,-1.234956,11/12/2000,07:00
+kent (uk/england),,United Kingdom,triangle,600.0,10min,12/2/2000,51.25,0.75,11/12/2000,17:00
+london (uk/england),,United Kingdom,unknown,2.0,few seconds,11/20/2001,51.514125,-0.093689,11/12/2001,24:00
+lincolnshire (uk/england),,United Kingdom,circle,900.0,15 minutes,12/23/2002,53.166667,-0.25,11/12/2002,23:00
+glasgow (uk/scotland),,United Kingdom,light,300.0,5minutes,12/16/2005,55.833333,-4.25,11/12/2005,24:00
+riorges (france),,France,fireball,2.0,2 seconds,11/28/2007,46.043248,4.044545,11/12/2007,19:09
+east london (south africa),,South africa,oval,60.0,=- 1 minute,11/28/2007,51.508515,-0.125487,11/12/2007,21:00
+solihull (uk/england),,United Kingdom,formation,2.0,00:02,3/4/2008,52.416667,-1.783333,11/12/2007,22:57
+st helens&#44 merseyside (uk/england),,United Kingdom,triangle,180.0,3 minutes,1/10/2009,53.456307,-2.737095,11/12/2008,20:20
+tamworth (uk/england),,United Kingdom,unknown,300.0,5 mins,11/21/2010,52.616667,-1.683333,11/12/2010,19:05
+pristina (kosovo),,Fuck,fireball,23.0,2&#443 seconds,11/21/2010,42.657798,21.153346,11/12/2010,19:15
+alton (hampshire) (uk/england),,United Kingdom,light,20.0,15-20 seconds,12/12/2011,52.966667,-1.883333,11/12/2011,22:45
+vila nova de gaia (portugal),,Portugal,oval,30.0,30 seconds,12/3/2004,41.123876,-8.611785,11/13/2004,21:10
+thorne&#44 doncaster (uk/england),,United Kingdom,chevron,1800.0,30 minutes,12/16/2005,53.610421,-0.96144,11/13/2005,06:20
+dover&#44 kent (uk/england),,United Kingdom,circle,90.0,1.5 minutes,1/10/2009,51.127876,1.313403,11/13/2008,19:20
+birmingham (uk/england),,United Kingdom,light,60.0,1 min,11/21/2010,52.466667,-1.916667,11/13/2010,19:50
+birmingham (uk/england),,United Kingdom,sphere,159.0,2:39,12/12/2011,52.466667,-1.916667,11/13/2011,19:39
+sofia (bulgaria),,Bulgaria,oval,1.0,<1 second,11/20/2013,42.697708,23.321868,11/13/2013,01:30
+ilford/harwich (uk/england),,United Kingdom,triangle,60.0,1 minute,12/9/2000,51.934731,1.260297,11/14/2000,15:45
+burnley (uk/england),,United Kingdom,triangle,8.0,6-8 secs,11/20/2001,53.8,-2.233333,11/14/2001,19:20
+haslingden (uk/england),,United Kingdom,rectangle,20.0,20 seconds,11/26/2003,53.7,-2.333333,11/14/2003,18:00
+boston&#44 lincolnshire (uk/england),,United Kingdom,other,60.0,1 minute,1/10/2009,52.97894,-0.026577,11/14/2008,17:00
+warwickshire (uk/england),,United Kingdom,fireball,30.0,20-30 secs,1/10/2009,52.333333,-1.583333,11/14/2008,18:23
+aland islands (forty miles south of) (finland),,Finland,fireball,10.0,ten seconds,3/19/2009,60.178525,19.91561,11/14/2008,19:30
+lincoln (uk/england),,United Kingdom,sphere,2.0,<2 seconds,1/10/2009,53.233333,-0.533333,11/14/2008,20:00
+manchester (glossup) uk/england,,United Kingdom,circle,7200.0,2 hours,1/10/2009,53.479324,-2.248485,11/14/2008,21:00
+birmingham (uk/england),,United Kingdom,circle,180.0,3 minutes,8/5/2009,52.466667,-1.916667,11/14/2008,22:00
+leicester (uk/england),,United Kingdom,fireball,60.0,1 minute,12/12/2009,52.664913,-1.034894,11/14/2009,23:00
+cardiff (uk/wales),,United Kingdom,disk,300.0,5 mins,6/12/2008,51.5,-3.2,11/15/1962,23:00
+finland,,Fuck,changing,10.0,10 seconds,5/11/2005,61.92411,25.748151,11/15/1979,21:30
+iver heath (xbridge.nwl ondon (thames) (uk/england),,United Kingdom,other,3600.0,1hr1/2,7/5/2008,51.550908,-0.521463,11/15/1989,10:00
+bremen (30 km south of) (germany),,De,unknown,30.0,30 sec,8/5/2001,50.716667,10.0,11/15/1990,22:30
+wednesbury&#44 west midlands (uk/england),,United Kingdom,triangle,1200.0,20mins,11/20/2001,52.552888,-2.02208,11/15/1995,17:30
+thornton cleveleys&#44 lancashire (uk/england),,United Kingdom,triangle,2.0,seconds,3/7/1998,53.873712,-3.021371,11/15/1996,22:30
+northampton (uk/england),,United Kingdom,unknown,5.0,5 seconds,9/2/2005,52.25,-0.883333,11/15/1997,19:00
+london (eastham) (uk/england),,United Kingdom,rectangle,240.0,4 minutes,1/11/2002,51.514125,-0.093689,11/15/1998,13:00
+newborough (vic&#44 australia),,Australia,oval,60.0,half and hour,8/10/1999,53.164868,-4.359065,11/15/1998,19:50
+elgin (uk/scotland),,United Kingdom,light,30.0,20-30 seconds,2/18/2001,57.65,-3.333333,11/15/1999,02:00
+lincoln&#44 lincolnshire (uk/england),,United Kingdom,other,7200.0,2 hours,8/7/2007,53.230688,-0.540579,11/15/1999,11:45
+newmarket (uk/england),,United Kingdom,diamond,1200.0,20 mins,8/20/2001,53.3,-3.383333,11/15/2000,23:48
+london (uk/england),,United Kingdom,triangle,480.0,5-8 minutes,12/5/2001,51.514125,-0.093689,11/15/2001,01:15
+bristol (uk/england),,United Kingdom,rectangle,180.0,3 minutes,11/20/2001,51.45,-2.583333,11/15/2001,22:00
+darlington (uk/england),,United Kingdom,light,10.0,10 seconds,10/7/2003,50.45,-3.716667,11/15/2001,22:00
+walsall (uk/england),,United Kingdom,light,2.0,1-2s,11/16/2002,52.6,-2.0,11/15/2002,00:02
+swadlincote derby&#44 uk (near),,United Kingdom,flash,180.0,3 mins,11/20/2002,52.771318,-1.554997,11/15/2002,00:45
+coventry (uk/england),,United Kingdom,light,1.0,00.01,11/16/2002,52.416667,-1.55,11/15/2002,01:03
+bournemouth (uk/england),,United Kingdom,egg,90.0,30 seconds-1 min,7/5/2005,50.716667,-1.883333,11/15/2003,21:00
+selcuk (turkey),,Turkey,diamond,7200.0,2 hours,11/26/2003,37.949888,27.370142,11/15/2003,24:00
+nybro (sweden),,Sweden,diamond,600.0,10min,12/3/2004,56.7438,15.908681,11/15/2004,00:02
+london (uk/england),,United Kingdom,circle,180.0,3 mins,9/2/2005,51.514125,-0.093689,11/15/2004,22:00
+sembach (germany),,De,egg,120.0,2 minutes,5/15/2006,49.516667,7.85,11/15/2005,15:00
+swansea (uk/wales),,United Kingdom,sphere,600.0,10 minutes,12/16/2005,51.633333,-3.966667,11/15/2005,17:30
+cork (republic of ireland),,Ireland,circle,240.0,3 -4 mins,11/28/2007,51.896892,-8.486316,11/15/2007,21:00
+meppel (netherlands),,Netherlands,chevron,5.0,4-5 sec,11/21/2010,52.692123,6.193719,11/15/2010,22:19
+sheffield city (just outside)(south yorkshire) (uk/england),,United Kingdom,egg,600.0,10 mins est.,4/28/2001,53.381129,-1.470085,11/16/1998,22:30
+&ccedil;anakkale (turkey),,Turkey,triangle,600.0,10 mins,11/20/2002,40.155312,26.41416,11/16/2002,06:55
+santa bonifacio (corsica),,Fuck,disk,600.0,10 minutes approx,12/19/2003,41.481793,9.06108,11/16/2003,06:30
+uk/england,,Fuck,oval,2700.0,45 minutes,11/26/2003,52.355518,-1.17432,11/16/2003,16:15
+wakefield (uk/england),,United Kingdom,light,600.0,10 mins,12/9/2003,53.7,-1.483333,11/16/2003,18:00
+balerma (spain),,Spain,disk,1800.0,30 minutes,12/16/2005,36.732719,-2.886194,11/16/2005,24:00
+skelmersdale (uk/england),,United Kingdom,light,180.0,3 minutes,11/28/2007,53.533333,-2.8,11/16/2007,19:35

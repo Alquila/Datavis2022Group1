@@ -27,17 +27,35 @@
 }
   ],
 
-"projections": [
-  {
-    "name": "projection",
-    "type": "mercator",
-    "size":{"signal": "[mapWidth,mapHeight]"},
-    "fit": {"signal": "data('europe')"},
-    "clipExtent": [[0, 0], [400, 400]]
-  }
-],
+  "projections": [
+    {
+      "name": "eu-projection",
+      "type": "conicEquidistant",
+      "size":{"signal": "[mapWidth,mapHeight]"},
+      "fit": {"signal": "data('europe')"},
+      "clipExtent": [[0, 0], [400, 400]],
+      "rotate":[50,30,0]
+    },
+    {
+      "name": "us-projection",
+      "type": "conicEquidistant",
+      "size":{"signal": "[mapWidth,mapHeight]"},
+      "fit": {"signal": "data('north-america')"},
+      "clipExtent": [[0, 0], [400, 400]],
+      "rotate":[80,0,0]
+    },
+    {
+      "name": "projection",
+      "type": "conicEquidistant",
+      "size":{"signal": "[mapWidth,mapHeight]"},
+      "fit": {"signal": "data('europe')"},
+      "clipExtent": [[0, 0], [400, 400]],
+      "rotate":[50,30,0]
+    }
+  ],
 
 "data": [
+    {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]},
     {"name": "ufo-sightings",
     "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
     "format": {"type": "csv", "parse": "auto", "delimiter": ","},
@@ -47,11 +65,18 @@
       {"type": "filter","expr": "datum.x != null && datum.y != null"}
      ]
     },
-
     {"name": "spots", "source" : ["ufo-sightings"],
     "transform": [
       {"type": "aggregate","groupby": ["country"],"as": ["counts"]}
     ]
+    },
+    {"name": "eudata",
+      "url": "data/coordEu.csv",
+      "format": {"type": "csv", "parse": "auto", "delimiter": ","}
+    },
+    {"name": "usdata",
+      "url": "data/coordUs.csv",
+      "format":{"type": "csv", "parse":"auto", "delimiter": ","}
     },
     {"name": "europe",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/europe.json",
@@ -79,11 +104,11 @@
           ]
     },
     {"name": "europa-sig",
-    "source": ["ufo-sightings"],
+    "source": ["eudata"],
     "transform": [
       {
         "type": "geopoint",
-        "projection": "projection",
+        "projection": "eu-projection",
         "fields": ["longitude", "latitude"]
       },
       {
@@ -91,16 +116,30 @@
         } 
     ]
     },
-    {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]},
-    {
-      "name": "eu-shapes",
+    {"name": "usa-sig",
+      "source": ["usdata"],
+      "transform": [
+        {
+          "type": "geopoint",
+          "projection": "us-projection",
+          "fields": ["longitude", "latitude"]
+        },
+        {
+            "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
+          } 
+      ]
+      },
+    {"name": "eu-shapes",
       "source": ["europa-sig"],
       "transform": [
         {"type": "aggregate", "groupby": ["shape"], "as":["shapes"]}
       ]
     },
-    {
-        "name": "tree",
+    {"name": "us-shapes",
+      "source": ["usa-sig"],
+      "transform": [{"type": "aggregate","groupby":["shape"], "as":["shapes"]}]
+    },
+    { "name": "eu-tree",
         "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/shapeTree.json",
         "transform": [
           {
@@ -123,7 +162,31 @@
             "as": ["a0", "r0", "a1", "r1", "depth", "children"]
           }
         ]
-      }
+      },
+      { "name": "us-tree",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/shapeTree.json",
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "us-shapes",
+          "key": "shape",
+          "values": ["shapes"],
+          "fields":["name"]
+        },
+        {
+          "type": "stratify",
+          "key": "id",
+          "parentKey": "parent"
+        },
+        {
+          "type": "partition",
+          "field": "shapes",
+          "sort": {"field": "value"},
+          "size": [{"signal": "2 * PI"}, {"signal": "shapeHeight / 3"}],
+          "as": ["a0", "r0", "a1", "r1", "depth", "children"]
+        }
+      ]
+    }
   ],
 
 
@@ -148,38 +211,11 @@
         }
       },
 
-    "projections": [
-    {
-      "name": "projection",
-      "type": "conicEquidistant",
-      "size":{"signal": "[mapWidth,mapHeight]"},
-      "fit": {"signal": "data('north-america')"},
-      "clipExtent": [[0, 0], [400, 400]],
-      "rotate":[80,0,0]
-    }],
-
-    "data": [
-      {
-    "name": "usa-sig",
-    "source": ["ufo-sightings"],
-    "transform": [
-      {
-        "type": "geopoint",
-        "projection": "projection",
-        "fields": ["longitude", "latitude"]
-      },
-      {
-          "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
-        } 
-    ]
-    }
-    ],
-
     "marks": [
     {
       "type": "shape",
       "from": {"data": "graticule"},
-      "transform": [{ "type": "geoshape", "projection": "projection" }]},
+      "transform": [{ "type": "geoshape", "projection": "us-projection" }]},
     {
       "type": "shape",
       "from": {"data": "north-america"},
@@ -198,7 +234,7 @@
      
       },
       "transform": [
-        { "type": "geoshape", "projection": "projection" }
+        { "type": "geoshape", "projection": "us-projection" }
       ]
     },
     {
@@ -237,22 +273,12 @@
         }
       },
 
-      "projections": [
-    {
-      "name": "projection",
-      "type": "conicEquidistant",
-      "size":{"signal": "[mapWidth,mapHeight]"},
-      "fit": {"signal": "data('europe')"},
-      "clipExtent": [[0, 0], [400, 400]],
-      "rotate":[50,30,0]
-    }],
-
     "marks": [
         {
     "type": "shape",
     "from": {"data": "graticule"},
     "transform": [
-      { "type": "geoshape", "projection": "projection" }
+      { "type": "geoshape", "projection": "eu-projection" }
     ]
   },
   {
@@ -276,7 +302,7 @@
      
     },
     "transform": [
-      { "type": "geoshape", "projection": "projection" }
+      { "type": "geoshape", "projection": "eu-projection" }
     ]
   },
 {
@@ -330,20 +356,36 @@
               "source": ["ufo-sightings"],
               "transform": [
                 {"type": "filter", "expr": "datum.date >= -638326800000"},
-        {
-          "field": "date",
-          "type": "timeunit",
-          "units": ["year"],
-          "as": ["year_date", "year_date_end"]
-        },
-        {
-          "type": "aggregate",
-          "groupby": ["year_date"],
-          "ops": ["count"],
-          "fields": [null],
-          "as": ["__count"]
-        }
-      ]
+                {
+                  "field": "date",
+                  "type": "timeunit",
+                  "units": ["year"],
+                  "as": ["year_date", "year_date_end"]
+                },
+                {
+                  "type": "aggregate",
+                  "groupby": ["year_date"],
+                  "ops": ["count"],
+                  "fields": [null],
+                  "as": ["__count"]
+                }
+              ]
+            },
+            {"name": "ustime",
+            "source": ["usa-sig"],
+            "transform": [
+              {"type": "filter", "expr": "datum.date >= -638326800000"},
+              {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
+              {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
+              ]
+            },
+            {"name": "eutime",
+            "source": ["europa-sig"],
+            "transform": [
+              {"type": "filter", "expr": "datum.date >= -638326800000"},
+              {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
+              {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
+              ]
             }
           ],
 
@@ -396,115 +438,186 @@
 
 
           "scales": [
-    {
-      "name": "x",
-      "type": "time",
-      "domain": {"data": "timedata", "field": "year_date"},
-      "range": [0, {"signal": "mapWidth*2"}]
-    },
-    {
-      "name": "y",
-      "type": "linear",
-      "domain": {"data": "timedata", "field": "__count"},
-      "range": [{"signal": "timeHeight"}, 0],
-      "nice": true,
-      "zero": true
-    }
+            {
+              "name": "x",
+              "type": "time",
+              "domain": {"data": "timedata", "field": "year_date"},
+              "range": [0, {"signal": "mapWidth*2"}]
+            },
+            {
+              "name": "y",
+              "type": "linear",
+              "domain": {"data": "timedata", "field": "__count"},
+              "range": [{"signal": "timeHeight"}, 0],
+              "nice": true,
+              "zero": true
+            }
           ],
 
 
          "axes": [
-    {
-      "scale": "x",
-      "orient": "bottom",
-      "gridScale": "y",
-      "grid": true,
-      "tickCount": {"signal": "ceil(width/40)"},
-      "domain": false,
-      "labels": false,
-      "aria": false,
-      "maxExtent": 0,
-      "minExtent": 0,
-      "ticks": false,
-      "zindex": 0
-    },
-    {
-      "scale": "y",
-      "orient": "left",
-      "gridScale": "x",
-      "grid": true,
-      "tickCount": {"signal": "ceil(height/50)"},
-      "domain": false,
-      "labels": false,
-      "aria": false,
-      "maxExtent": 0,
-      "minExtent": 0,
-      "ticks": false,
-      "zindex": 0
-    },
-    {
-      "scale": "x",
-      "orient": "bottom",
-      "grid": false,
-      "title": "date (year)",
-      "format": "%Y",
-      "labelFlush": true,
-      "labelOverlap": true,
-      "tickCount": {"signal": "ceil(width/40)"},
-      "zindex": 0
-    },
-    {
-      "scale": "y",
-      "orient": "left",
-      "grid": false,
-      "title": "count",
-      "labelOverlap": true,
-      "tickCount": {"signal": "ceil(height/50)"},
-      "zindex": 0
-    }
+          {
+            "scale": "x",
+            "orient": "bottom",
+            "gridScale": "y",
+            "grid": true,
+            "tickCount": {"signal": "ceil(width/40)"},
+            "domain": false,
+            "labels": false,
+            "aria": false,
+            "maxExtent": 0,
+            "minExtent": 0,
+            "ticks": false,
+            "zindex": 0
+          },
+          {
+            "scale": "y",
+            "orient": "left",
+            "gridScale": "x",
+            "grid": true,
+            "tickCount": {"signal": "ceil(height/50)"},
+            "domain": false,
+            "labels": false,
+            "aria": false,
+            "maxExtent": 0,
+            "minExtent": 0,
+            "ticks": false,
+            "zindex": 0
+          },
+            {
+              "scale": "x",
+              "orient": "bottom",
+              "grid": false,
+              "title": "Year",
+              "format": "%Y",
+              "labelFlush": true,
+              "labelOverlap": true,
+              "tickCount": {"signal": "ceil(width/40)"},
+              "zindex": 0
+            },
+            {
+              "scale": "y","orient": "left",
+              "grid": false,"title": "Sightings",
+              "labelOverlap": true,"tickCount": {"signal": "ceil(height/50)"},
+              "zindex": 0
+            }
           ],
 
           "marks": [
-          {
-      "name": "marks",
-      "type": "line",
-      "style": ["line"],
-      "sort": {"field": "datum[\"year_date\"]"},
-      "from": {"data": "timedata"},
-      "encode": {
-        "update": {
-          "stroke": {"value": "#4c78a8"},
-          "tooltip": {
-            "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
-          },
-          "x": {"scale": "x", "field": "year_date"},
-          "y": {"scale": "y", "field": "__count"}
-        }
-      }
-          },
-          {
-      "name": "dots",
-      "type": "symbol",
-      "sort": {"field": "datum[\"year_date\"]"},
-      "from": {"data": "timedata"},
-      "encode": {
-        "update": {
-          "size": {"value": 20},
-      "fill": {"value": "steelblue"},
-      "fillOpacity": {"value": 0.5},
-      "stroke": {"value": "black"},
-      "strokeWidth": {"value": 1.5},
-          "tooltip": {
-            "signal": "\" \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
-          },
-          "x": {"scale": "x", "field": "year_date"},
-          "y": {"scale": "y", "field": "__count"},
-          "defined": {
-            "signal": "isValid(datum[\"year_date\"]) && isFinite(+datum[\"year_date\"]) && isValid(datum[\"__count\"]) && isFinite(+datum[\"__count\"])"
+          {"name": "totalmarks",
+          "type": "line",
+          "style": ["line"],
+          "sort": {"field": "datum[\"year_date\"]"},
+          "from": {"data": "timedata"},
+          "encode": {
+            "update": {
+              "stroke": {"value": "red"},
+              "tooltip": {
+                "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
+              },
+              "x": {"scale": "x", "field": "year_date"},
+              "y": {"scale": "y", "field": "__count"}
+            }
           }
-        }
-      }
           },
+          {"name": "totaldots",
+          "type": "symbol",
+          "sort": {"field": "datum[\"year_date\"]"},
+          "from": {"data": "timedata"},
+          "encode": {
+            "update": {
+              "size": {"value": 20},
+          "fill": {"value": "steelblue"},
+          "fillOpacity": {"value": 0.5},
+          "stroke": {"value": "black"},
+          "strokeWidth": {"value": 1.5},
+              "tooltip": {
+                "signal": "\"Total \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
+              },
+              "x": {"scale": "x", "field": "year_date"},
+              "y": {"scale": "y", "field": "__count"},
+              "defined": {
+                "signal": "isValid(datum[\"year_date\"]) && isFinite(+datum[\"year_date\"]) && isValid(datum[\"__count\"]) && isFinite(+datum[\"__count\"])"
+              }
+            }
+          }
+          },
+          {"name": "eumarks",
+            "type": "line",
+            "style": ["line"],
+            "sort": {"field": "datum[\"year_date\"]"},
+            "from": {"data": "eutime"},
+            "encode": {
+              "update": {
+                "stroke": {"value": "blue"},
+                "tooltip": {
+                  "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
+                },
+                "x": {"scale": "x", "field": "year_date"},
+                "y": {"scale": "y", "field": "__count"}
+              }
+            }
+            },
+            {"name": "eudots",
+            "type": "symbol",
+            "sort": {"field": "datum[\"year_date\"]"},
+            "from": {"data": "eutime"},
+            "encode": {
+              "update": {
+                "size": {"value": 10},
+            "fill": {"value": "steelblue"},
+            "fillOpacity": {"value": 0.5},
+            "stroke": {"value": "black"},
+            "strokeWidth": {"value": 1.5},
+                "tooltip": {
+                  "signal": "\"Europe \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
+                },
+                "x": {"scale": "x", "field": "year_date"},
+                "y": {"scale": "y", "field": "__count"},
+                "defined": {
+                  "signal": "isValid(datum[\"year_date\"]) && isFinite(+datum[\"year_date\"]) && isValid(datum[\"__count\"]) && isFinite(+datum[\"__count\"])"
+                }
+              }
+            }
+            },
+            {"name": "usmarks",
+              "type": "line",
+              "style": ["line"],
+              "sort": {"field": "datum[\"year_date\"]"},
+              "from": {"data": "ustime"},
+              "encode": {
+                "update": {
+                  "stroke": {"value": "green"},
+                  "tooltip": {
+                    "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
+                  },
+                  "x": {"scale": "x", "field": "year_date"},
+                  "y": {"scale": "y", "field": "__count"}
+                }
+              }
+              },
+              {"name": "usdots",
+              "type": "symbol",
+              "sort": {"field": "datum[\"year_date\"]"},
+              "from": {"data": "ustime"},
+              "encode": {
+                "update": {
+                  "size": {"value": 10},
+              "fill": {"value": "steelblue"},
+              "fillOpacity": {"value": 0.5},
+              "stroke": {"value": "black"},
+              "strokeWidth": {"value": 1.5},
+                  "tooltip": {
+                    "signal": "\"North America \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
+                  },
+                  "x": {"scale": "x", "field": "year_date"},
+                  "y": {"scale": "y", "field": "__count"},
+                  "defined": {
+                    "signal": "isValid(datum[\"year_date\"]) && isFinite(+datum[\"year_date\"]) && isValid(datum[\"__count\"]) && isFinite(+datum[\"__count\"])"
+                  }
+                }
+              }
+              },
           {
             "name": "brush",
             "type": "rect",
@@ -569,7 +682,6 @@
         "enter":{
           "width":{"signal": "mapWidth"},
           "height": {"signal": "shapeHeight"},
-          "fill": {"value": "green"},
           "opacity":{"value": 0.5}
         }
       },
@@ -588,22 +700,20 @@
           "encode": {
             "enter":{
               "width":{"signal": "mapWidth"},
-              "height": {"signal": "shapeHeight-100"},
-              "fill": {"value": "lightgreen"},
-          "opacity":{"value": 0.5}
+              "height": {"signal": "shapeHeight-100"}
             }
           },
           "scales": [
       {
         "name": "color",
         "type": "ordinal",
-        "domain": {"data": "tree", "field": "depth"},
+        "domain": {"data": "us-tree", "field": "depth"},
         "range": {"scheme": "tableau20"}
       }
     ],
 
     "title":{
-      "text": "Sunburstchart over shapes in North America",
+      "text": "Shapes in North America",
       "anchor":"start",
       "orient":"bottom"
     },
@@ -611,11 +721,11 @@
     "marks": [
       {
         "type": "arc",
-        "from": {"data": "tree"},
+        "from": {"data": "us-tree"},
         "encode": {
           "enter": {
             "x": {"signal": "mapWidth / 2"},
-            "y": {"signal": "(shapeHeight-100)/ 2"},
+            "y": {"signal": "(shapeHeight-50)/ 2"},
             "fill": {"scale": "color", "field": "depth"}
           },
           "update": {
@@ -642,14 +752,12 @@
           "encode": {
             "enter":{
               "width":{"signal": "mapWidth"},
-          "height": {"signal": "shapeHeight-100"},
-          "fill": {"value": "darkgreen"},
-          "opacity":{"value": 0.5}
+          "height": {"signal": "shapeHeight-100"}
             }
           },
 
  "title":{
-      "text": "Sunburstchart over shapes in Europe",
+      "text": "Shapes in Europe",
       "anchor":"start",
       "orient":"bottom"
     },
@@ -658,7 +766,7 @@
       {
         "name": "color",
         "type": "ordinal",
-        "domain": {"data": "tree", "field": "depth"},
+        "domain": {"data": "eu-tree", "field": "depth"},
         "range": {"scheme": "tableau20"}
       }
     ],
@@ -666,11 +774,11 @@
     "marks": [
       {
         "type": "arc",
-        "from": {"data": "tree"},
+        "from": {"data": "eu-tree"},
         "encode": {
           "enter": {
             "x": {"signal": "mapWidth / 2"},
-            "y": {"signal": "(shapeHeight-100)/ 2"},
+            "y": {"signal": "(shapeHeight-50)/ 2"},
             "fill": {"scale": "color", "field": "depth"}
           },
           "update": {

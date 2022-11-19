@@ -121,12 +121,22 @@ def findMissingCitiesFromLatLong(data):
 # 35.9746770601455, 34.58455316767233     lower right
 # 72.55041125948188, -27.836428606303063  upper left
 # 73.59254794915556, 35.890174093751114   upper right
+def lonlatEu(data):
+    goodrows = data[(data["longitude"] < 36.0) & (data["longitude"] > -27 )]
+    goodrows = goodrows[goodrows["latitude"] > 35]
+    goodrows.to_csv("data/coordEu.csv", index=False)
+
 
 #American
 # 9.675998972033664, -34.85351656453326 lower right 
 # 9.81713780335435, -174.33601411632287 lower left
 # 70.88956610311078, -167.74854515121604 upper left
 # 73.22453676932042, -23.397049596935993 upper right
+def bylonlatUs(data):
+    goodrows = data[(data["longitude"] < -30.0) & (data["longitude"] > -180.0 )]
+    goodrows = goodrows[goodrows["latitude"] > 10]
+    goodrows.to_csv("data/coordUs.csv", index=False)
+
 
 # Removes rows with no longitude or latitude or city
 def dropLatLong(data):
@@ -251,8 +261,8 @@ if __name__ == "__main__":
     # makeEuropeanDataSet(data)
     # makeNorthAmericaDataSet(data)
     # badData(data)
-    # missing(data)
-
+    missing(data)
+    lonlatEu(data)
     # binLongAndLat(data)
     # writeToNewFile(data)
 
