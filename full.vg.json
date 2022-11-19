@@ -71,11 +71,11 @@
     ]
     },
     {"name": "eudata",
-      "url": "data/coordEu.csv",
+      "url": "data/european.csv",
       "format": {"type": "csv", "parse": "auto", "delimiter": ","}
     },
     {"name": "usdata",
-      "url": "data/coordUs.csv",
+      "url": "data/american.csv",
       "format":{"type": "csv", "parse":"auto", "delimiter": ","}
     },
     {"name": "europe",
@@ -158,12 +158,12 @@
             "type": "partition",
             "field": "shapes",
             "sort": {"field": "value"},
-            "size": [{"signal": "2 * PI"}, {"signal": "shapeHeight / 3"}],
+            "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) /2"}],
             "as": ["a0", "r0", "a1", "r1", "depth", "children"]
           }
         ]
       },
-      { "name": "us-tree",
+    { "name": "us-tree",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/shapeTree.json",
       "transform": [
         {
@@ -182,7 +182,7 @@
           "type": "partition",
           "field": "shapes",
           "sort": {"field": "value"},
-          "size": [{"signal": "2 * PI"}, {"signal": "shapeHeight / 3"}],
+          "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) / 2"}],
           "as": ["a0", "r0", "a1", "r1", "depth", "children"]
         }
       ]
@@ -672,7 +672,8 @@
       "encode": {
         "enter":{
           "width":{"signal": "mapWidth/2"},
-          "height": {"signal": "timeHeight"}
+          "height": {"signal": "timeHeight+50"}
+
         }
       }
     },
@@ -713,7 +714,7 @@
     ],
 
     "title":{
-      "text": "Shapes in North America",
+      "text": "Shape distribution in North America",
       "anchor":"start",
       "orient":"bottom"
     },
@@ -744,6 +745,24 @@
             "zindex": {"value": 1}
             }
             }
+          },
+          {"type": "text",
+            "from": {"data": "us-tree"},
+            "encode": {
+              "enter": {
+                "text": {"field": "name"},
+                "baseline": {"value": "middle"},
+                "fill": {"value": "#000"},
+                "align": {"value": "center"}
+              },
+              "update":{
+                "x": {"signal": "mapWidth / 2"},
+                "y": {"signal": "(shapeHeight-50)/ 2"},
+      "radius": {"signal": "(datum['r0'] == 0 ? 0 : datum['r0'] + datum['r1']) / 2"},
+      "theta": {"signal": "(datum['a0'] + datum['a1']) / 2"},
+      "angle": {"signal": "datum['r0'] == 0 ? 0 : ((datum['a0'] + datum['a1']) / 2) * 180 / PI + (inrange(((datum['a0'] + datum['a1']) / 2) % (2 * PI), [0, PI]) ? 270 : 90)"}
+ }
+            }
           }
         ]
         },
@@ -757,7 +776,7 @@
           },
 
  "title":{
-      "text": "Shapes in Europe",
+      "text": "Shape distribution in Europe",
       "anchor":"start",
       "orient":"bottom"
     },
@@ -797,9 +816,25 @@
             "zindex": {"value": 1}
           }
         }
+      },
+      {"type": "text",
+      "from": {"data": "eu-tree"},
+      "encode": {
+        "enter": {
+          "text": {"field": "name"},
+          "baseline": {"value": "middle"},
+          "fill": {"value": "#000"},
+          "align": {"value": "center"}
+        },
+        "update":{
+          "x": {"signal": "mapWidth / 2"},
+          "y": {"signal": "(shapeHeight-50)/ 2"},
+          "radius": {"signal": "(datum['r0'] == 0 ? 0 : datum['r0'] + datum['r1']) / 2"},
+          "theta": {"signal": "(datum['a0'] + datum['a1']) / 2"},
+          "angle": {"signal": "datum['r0'] == 0 ? 0 : ((datum['a0'] + datum['a1']) / 2) * 180 / PI + (inrange(((datum['a0'] + datum['a1']) / 2) % (2 * PI), [0, PI]) ? 270 : 90)"}
+        }}}
+      ]
       }
-    ]
-        }
       ]
     }
   ],
