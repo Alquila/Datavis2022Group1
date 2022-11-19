@@ -6,7 +6,7 @@ from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent="geoapiExercises")
 
-data = pd.read_csv("data/smallDataset.csv", low_memory=False, sep=",")
+data = pd.read_csv("data/scrubbed.csv", low_memory=False, sep=",")
 data = data.astype({'city': 'string'})
 # data = pd.read_csv("data/complete.csv", low_memory=False, sep=",", error_bad_lines=False)
 pd.to_numeric(data['latitude'])
@@ -43,15 +43,15 @@ canada_states = pd.Series(canada_states).str.lower()
 # american_countries = pd.Series(american_countries).str.lower()
 
 
-states = data["state"]
-print(states.head())
+# states = data["state"]
+# print(states.head())
 
 ### Split date into two columns: date and time
 def split_datetime(data):
     data_split = data["datetime"].str.split(" ", n=1, expand=True)
     data[["date", "time"]] = data_split
     data.drop("datetime", axis=1, inplace=True)
-    data.drop("Date posted", axis=1, inplace=True)
+    data.drop("date posted", axis=1, inplace=True)
     return data
 
 ### Prints how many rows are missing information per coloum
@@ -65,7 +65,7 @@ def update_country_state(data):
     data['city'] = data['city'].fillna('')
     print("try to change:")
     for x in data.index: 
-        if data.loc[x, "country"] == "fuck" | data.loc[x, "country"]== "Fuck":
+        if (data.loc[x, "country"] == "fuck") | (data.loc[x, "country"]== "Fuck"):
             state = data.loc[x,"state"]
             for stat in pandastates:
                 if state == stat:
@@ -140,9 +140,10 @@ def bylonlatUs(data):
 
 # Removes rows with no longitude or latitude or city
 def dropLatLong(data):
-    todrop = data[((data['longitude']== 0) & (data['latitude'] ==0) & (data['city'] == "fuck"))].index
-    print(todrop)
-    print(data.loc[todrop])
+    data = data[((~(data['longitude']== 0.0)) & (~(data["latitude"] ==0.0)))]
+    # print(todrop)
+    # print(data.loc[todrop])
+    return data
 
 
 # to find indexes of rows with too much missing data
@@ -243,8 +244,6 @@ def badData(data):
 if __name__ == "__main__":
     #    display(data.head(10))
     # print("iii")
-    # update_country_state(data)
-    # update_ca_and_uk(data)
     # dropLatLong(data)
     # findMissingCitiesFromLatLong(data)
     # print(missing_zero_values_table(data))
@@ -252,7 +251,8 @@ if __name__ == "__main__":
     # data = split_datetime(data)
     # print(data)
     # data = data.drop(columns=['stupid1', 'stupid2'])
-    # print(data.head)
+    print(data.info)
+    print(data.dtypes)
     # newData = onlyUsa(data)
     #data = dropComments(data)
 
@@ -262,7 +262,15 @@ if __name__ == "__main__":
     # makeNorthAmericaDataSet(data)
     # badData(data)
     missing(data)
+    data = dropLatLong(data)
+    data = split_datetime(data)
+    update_country_state(data)
+    update_ca_and_uk(data)
     lonlatEu(data)
+    bylonlatUs(data)
+    badData(data)
+    missing(data)
+
     # binLongAndLat(data)
     # writeToNewFile(data)
 

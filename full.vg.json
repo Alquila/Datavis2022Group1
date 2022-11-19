@@ -353,7 +353,7 @@
           "data": [
             {
               "name": "timedata",
-              "source": ["ufo-sightings"],
+              "source": ["usa-sig"],
               "transform": [
                 {"type": "filter", "expr": "datum.date >= -638326800000"},
                 {
