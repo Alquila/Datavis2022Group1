@@ -24,7 +24,7 @@
     },
     {
       "id": 5,
-      "name": "lights",
+      "name": "Lights",
       "parent": 1
     },
     {
@@ -92,7 +92,7 @@
     },
     {
       "id": 17,
-      "name": "pyramid",
+      "name": "Pyramid",
       "parent": 6
     },
     {
@@ -138,7 +138,7 @@
     },
     {
       "id": 25,
-      "name": "otherwise\nDescribed",
+      "name": "Others",
       "parent": 1
     },
     {
