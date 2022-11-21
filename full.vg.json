@@ -23,7 +23,9 @@
     {"name": "shift"},
     {"name": "clicked"},
     {"name": "howto"},
-    {"name": "clicked2"}
+    {"name": "clicked2"},
+    {"name": "shift3"},
+    {"name": "clicked3"}
   ],
 "scales": [
     {
@@ -69,6 +71,22 @@
 
 "data": [
     {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]},
+    {"name": "selected",
+      "on": [
+        {"trigger": "clear", "remove": true},
+        {"trigger": "!shift", "remove": true},
+        {"trigger": "!shift && clicked2", "insert": "clicked2"},
+        {"trigger": "shift && clicked2", "toggle": "clicked2"}
+      ]
+    },
+    {"name": "selectedus",
+      "on": [
+        {"trigger": "clear", "remove": true},
+        {"trigger": "!shift3", "remove": true},
+        {"trigger": "!shift3 && clicked3", "insert": "clicked3"},
+        {"trigger": "shift3 && clicked3", "toggle": "clicked3"}
+      ]
+    },
     {"name": "ufo-sightings",
     "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
     "format": {"type": "csv", "parse": "auto", "delimiter": ","},
@@ -84,12 +102,22 @@
     ]
     },
     {"name": "eudata",
-      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/european.csv",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
       "format": {"type": "csv", "parse": "auto", "delimiter": ","}
     },
+    {"name": "eudatafilteredaftershape",
+    "source": ["eudata"],
+      "transform": [
+        {"type": "filter", "expr": "!length(data('selected')) ? datum : indata('selected','value', datum.shape)"}]
+    },
     {"name": "usdata",
-      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/american.csv",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordUs.csv",
       "format":{"type": "csv", "parse":"auto", "delimiter": ","}
+    },
+    {"name": "usdatafilteredaftershape",
+    "source": ["usdata"],
+      "transform": [
+        {"type": "filter", "expr": "!length(data('selectedus')) ? datum : indata('selectedus','value', datum.shape)"}]
     },
     {"name": "europejson",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/europe.json",
@@ -183,15 +211,6 @@
           "as": ["a0", "r0", "a1", "r1", "depth", "children"]
         }
       ]
-    },
-    {
-      "name": "selected",
-      "on": [
-        {"trigger": "clear", "remove": true},
-        {"trigger": "!shift", "remove": true},
-        {"trigger": "!shift && clicked2", "insert": "clicked2"},
-        {"trigger": "shift && clicked2", "toggle": "clicked2"}
-      ]
     }
   ],
 
@@ -260,7 +279,10 @@
         },
         "update": {
           "x": {"field": "x"},
-          "y": {"field": "y"}
+          "y": {"field": "y"},
+          "opacity": [{"test": "!length(data('selectedus')) || indata('selectedus', 'value', datum.shape)", "value": 1},{"value": 0.4}],
+      "fill": [{"test": " indata('selectedus', 'value', datum.shape)", "value": "red"},{"value": "steelblue"}],
+      "zindex": [{"test": " indata('selectedus', 'value', datum.shape)", "value": 1},{"value": 0}]
         }
       }
     }
@@ -387,6 +409,14 @@
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
             },
+            {"name": "ustime2",
+            "source": ["usdatafilteredaftershape"],
+            "transform": [
+              {"type": "filter", "expr": "datum.date >= -638326800000"},
+              {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
+              {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
+              ]
+            },
             {"name": "eutime",
             "source": ["eudata"],
             "transform": [
@@ -394,6 +424,15 @@
               {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
+            },
+            {"name": "eutime2",
+            "source": ["eudatafilteredaftershape"],
+            "transform": [
+              {"type": "filter", "expr": "datum.date >= -638326800000"},
+              {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
+              {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
+              ]
+
             }
           ],
 
@@ -459,6 +498,14 @@
               "range": [{"signal": "timeHeight"}, 0],
               "nice": true,
               "zero": true
+            },
+            {
+              "name": "y2",
+              "type": "linear",
+              "domain": {"data": "eutime", "field": "__count"},
+              "range": [{"signal": "timeHeight"}, 0],
+              "nice": true,
+              "zero": true
             }
           ],
 
@@ -483,7 +530,7 @@
             "orient": "left",
             "gridScale": "x",
             "grid": true,
-            "tickCount": {"signal": "ceil(height/50)"},
+            "tickCount": {"signal": "ceil(height/100)"},
             "domain": false,
             "labels": false,
             "aria": false,
@@ -506,7 +553,27 @@
             {
               "scale": "y","orient": "left",
               "grid": false,"title": "Sightings",
-              "labelOverlap": true,"tickCount": {"signal": "ceil(height/50)"},
+              "labelOverlap": true,"tickCount": {"signal": "ceil(height/100)"},
+              "zindex": 0
+            },
+            {
+            "scale": "y2",
+            "orient": "right",
+            "gridScale": "x",
+            "grid": false,
+            "tickCount": {"signal": "ceil(height/100)"},
+            "domain": false,
+            "labels": false,
+            "aria": false,
+            "maxExtent": 0,
+            "minExtent": 0,
+            "ticks": false,
+            "zindex": 0
+          },
+            {
+              "scale": "y2","orient": "right",
+              "grid": false,"title": "Eu Sightings",
+              "labelOverlap": true,"tickCount": {"signal": "ceil(height/100)"},
               "zindex": 0
             }
           ],
@@ -520,6 +587,7 @@
           "encode": {
             "update": {
               "stroke": {"value": "red"},
+              "opacity":[{"test": "!length(data('selected'))", "value": 0.1},{"value": 0.1}],
               "tooltip": {
                 "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
               },
@@ -536,9 +604,9 @@
             "update": {
               "size": {"value": 20},
           "fill": {"value": "steelblue"},
-          "fillOpacity": {"value": 0.5},
+          "fillOpacity": {"value": 0.1},
           "stroke": {"value": "black"},
-          "strokeWidth": {"value": 1.5},
+          "strokeWidth": {"value": 0.5},
               "tooltip": {
                 "signal": "\"Total \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
               },
@@ -561,8 +629,9 @@
                 "tooltip": {
                   "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
                 },
+                "opacity":[{"test": "!length(data('selected'))", "value": 1},{"value": 0.4}],
                 "x": {"scale": "x", "field": "year_date"},
-                "y": {"scale": "y", "field": "__count"}
+                "y": {"scale": "y2", "field": "__count"}
               }
             }
             },
@@ -575,20 +644,44 @@
                 "size": {"value": 10},
             "fill": {"value": "steelblue"},
             "fillOpacity": {"value": 0.5},
+            "opacity":[{"test": "!length(data('selected'))", "value": 1},{"value": 0}],
             "stroke": {"value": "black"},
-            "strokeWidth": {"value": 1.5},
+            "strokeWidth": {"value": 1},
                 "tooltip": {
                   "signal": "\"Europe \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
                 },
                 "x": {"scale": "x", "field": "year_date"},
-                "y": {"scale": "y", "field": "__count"},
+                "y": {"scale": "y2", "field": "__count"},
                 "defined": {
                   "signal": "isValid(datum[\"year_date\"]) && isFinite(+datum[\"year_date\"]) && isValid(datum[\"__count\"]) && isFinite(+datum[\"__count\"])"
                 }
               }
             }
             },
-            {"name": "usmarks",
+            {"name": "eudots2",
+            "type": "symbol",
+            "sort": {"field": "datum[\"year_date\"]"},
+            "from": {"data": "eutime2"},
+            "encode": {
+              "update": {
+                "size": {"value": 10},
+            "fill": {"value": "red"},
+            "fillOpacity": {"value": 0.5},
+            "opacity":[{"test": "!length(data('selected'))", "value": 0},{"value": 1}],
+            "stroke": {"value": "red"},
+            "strokeWidth": {"value": 1.5},
+                "tooltip": {
+                  "signal": "\"Europe \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
+                },
+                "x": {"scale": "x", "field": "year_date"},
+                "y": {"scale": "y2", "field": "__count"},
+                "defined": {
+                  "signal": "isValid(datum[\"year_date\"]) && isFinite(+datum[\"year_date\"]) && isValid(datum[\"__count\"]) && isFinite(+datum[\"__count\"])"
+                }
+              }
+            }
+            },
+          {"name": "usmarks",
               "type": "line",
               "style": ["line"],
               "sort": {"field": "datum[\"year_date\"]"},
@@ -596,6 +689,7 @@
               "encode": {
                 "update": {
                   "stroke": {"value": "green"},
+                  "opacity":[{"test": "!length(data('selectedus'))", "value": 1},{"value": 0.4}],
                   "tooltip": {
                     "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
                   },
@@ -603,8 +697,8 @@
                   "y": {"scale": "y", "field": "__count"}
                 }
               }
-              },
-              {"name": "usdots",
+          },
+          {"name": "usdots",
               "type": "symbol",
               "sort": {"field": "datum[\"year_date\"]"},
               "from": {"data": "ustime"},
@@ -613,7 +707,31 @@
                   "size": {"value": 10},
               "fill": {"value": "steelblue"},
               "fillOpacity": {"value": 0.5},
+              "opacity":[{"test": "!length(data('selectedus'))", "value": 1},{"value": 0}],
               "stroke": {"value": "black"},
+              "strokeWidth": {"value": 1},
+                  "tooltip": {
+                    "signal": "\"North America \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
+                  },
+                  "x": {"scale": "x", "field": "year_date"},
+                  "y": {"scale": "y", "field": "__count"},
+                  "defined": {
+                    "signal": "isValid(datum[\"year_date\"]) && isFinite(+datum[\"year_date\"]) && isValid(datum[\"__count\"]) && isFinite(+datum[\"__count\"])"
+                  }
+                }
+              }
+          },
+          {"name": "usdots2",
+              "type": "symbol",
+              "sort": {"field": "datum[\"year_date\"]"},
+              "from": {"data": "ustime2"},
+              "encode": {
+                "update": {
+                  "size": {"value": 10},
+              "fill": {"value": "green"},
+            "fillOpacity": {"value": 0.5},
+            "opacity":[{"test": "!length(data('selectedus'))", "value": 0},{"value": 1}],
+              "stroke": {"value": "green"},
               "strokeWidth": {"value": 1.5},
                   "tooltip": {
                     "signal": "\"North America \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
@@ -625,7 +743,7 @@
                   }
                 }
               }
-              },
+          },
           {
             "name": "brush",
             "type": "rect",
@@ -721,6 +839,41 @@
       }
     ],
 
+    "signals": [
+      {
+      "name": "clear", "value": true,
+      "on": [
+        {
+          "events": "mouseup[!event.item]",
+          "update": "true",
+          "force": true
+        }
+      ]
+    },
+    {
+      "name": "shift3",
+      "push": "outer",
+      "on": [
+        {
+          "events": "@usarc:click",
+          "update": "event.shiftKey",
+          "force":  true
+        }
+      ]
+    },
+      {
+      "name": "clicked3",
+      "push": "outer",
+      "on": [
+        {
+          "events": "@usarc:click",
+          "update": "{value: datum.name}",
+          "force":  true
+        }
+      ]
+    }
+    ],
+
     "title":{
       "text": "Shape distribution in North America",
       "anchor":"start",
@@ -728,7 +881,7 @@
     },
 
     "marks": [
-      {
+      {"name": "usarc",
         "type": "arc",
         "from": {"data": "us-tree"},
         "encode": {
@@ -745,7 +898,8 @@
             "stroke": {"value": "white"},
             "strokeWidth": {"value": 1},
             "zindex": {"value": 0},
-            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"}
+            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"},
+            "opacity": [{"test": "indata('selectedus', 'value', datum.name)", "value": 1},{"value": 0.75}]
           },
           "hover": {
             "stroke": {"value": "red"},
@@ -773,8 +927,8 @@
             }
           }
         ]
-        },
-        {"name": "eu-shape-chart",
+    },
+    {"name": "eu-shape-chart",
           "type": "group",
           "encode": {
             "enter":{
