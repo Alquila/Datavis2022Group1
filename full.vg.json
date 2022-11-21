@@ -10,7 +10,20 @@
     {"name": "mapWidth", "value": 400},
     {"name": "timeHeight", "value": 100},
     {"name": "shapeHeight", "value": 400},
-    {"name": "howto"}
+    {
+      "name": "clear", "value": true,
+      "on": [
+        {
+          "events": "mouseup[!event.item]",
+          "update": "true",
+          "force": true
+        }
+      ]
+    },
+    {"name": "shift"},
+    {"name": "clicked"},
+    {"name": "howto"},
+    {"name": "clicked2"}
   ],
 "scales": [
     {
@@ -32,7 +45,7 @@
       "name": "eu-projection",
       "type": "conicEquidistant",
       "size":{"signal": "[mapWidth,mapHeight]"},
-      "fit": {"signal": "data('europe')"},
+      "fit": {"signal": "data('europejson')"},
       "clipExtent": [[0, 0], [400, 400]],
       "rotate":[50,30,0]
     },
@@ -71,18 +84,18 @@
     ]
     },
     {"name": "eudata",
-      "url": "data/european.csv",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/european.csv",
       "format": {"type": "csv", "parse": "auto", "delimiter": ","}
     },
     {"name": "usdata",
-      "url": "data/american.csv",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/american.csv",
       "format":{"type": "csv", "parse":"auto", "delimiter": ","}
     },
-    {"name": "europe",
+    {"name": "europejson",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/europe.json",
        "format": {"type": "topojson","feature": "continent_Europe_subunits"}
     },
-    {"name": "eu",  "source": ["europe"],
+    {"name": "eugeoshape",  "source": ["europejson"],
       "transform": [{"type": "lookup","from": "spots",
               "key": "country", "values": ["counts"],
               "fields": ["properties['geounit']"],"default": 0}]
@@ -92,15 +105,10 @@
           "format": {"type": "topojson",  
           "feature":"continent_North_America_subunits"},
           "transform": [
-            {
-              "type": "lookup",
-              "from": "spots",
-              "key": "country",
-              "values": ["counts"],
+            {"type": "lookup","from": "spots",
+              "key": "country","values": ["counts"],
               "fields": ["properties['geounit']"],
-              "default": 0
-
-            }
+              "default": 0}
           ]
     },
     {"name": "europa-sig",
@@ -119,21 +127,16 @@
     {"name": "usa-sig",
       "source": ["usdata"],
       "transform": [
-        {
-          "type": "geopoint",
+        {"type": "geopoint",
           "projection": "us-projection",
           "fields": ["longitude", "latitude"]
         },
-        {
-            "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
-          } 
+        {"type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "} 
       ]
       },
     {"name": "eu-shapes",
       "source": ["europa-sig"],
-      "transform": [
-        {"type": "aggregate", "groupby": ["shape"], "as":["shapes"]}
-      ]
+      "transform": [{"type": "aggregate", "groupby": ["shape"], "as":["shapes"]}]
     },
     {"name": "us-shapes",
       "source": ["usa-sig"],
@@ -142,20 +145,14 @@
     { "name": "eu-tree",
         "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/shapeTree.json",
         "transform": [
-          {
-            "type": "lookup",
-            "from": "eu-shapes",
-            "key": "shape",
-            "values": ["shapes"],
+          {"type": "lookup","from": "eu-shapes",
+            "key": "shape","values": ["shapes"],
             "fields":["name"]
           },
-          {
-            "type": "stratify",
-            "key": "id",
+          {"type": "stratify","key": "id",
             "parentKey": "parent"
           },
-          {
-            "type": "partition",
+          {"type": "partition",
             "field": "shapes",
             "sort": {"field": "value"},
             "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) /2"}],
@@ -185,6 +182,15 @@
           "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) / 2"}],
           "as": ["a0", "r0", "a1", "r1", "depth", "children"]
         }
+      ]
+    },
+    {
+      "name": "selected",
+      "on": [
+        {"trigger": "clear", "remove": true},
+        {"trigger": "!shift", "remove": true},
+        {"trigger": "!shift && clicked2", "insert": "clicked2"},
+        {"trigger": "shift && clicked2", "toggle": "clicked2"}
       ]
     }
   ],
@@ -283,7 +289,7 @@
   },
   {
     "type": "shape",
-    "from": {"data": "eu"},
+    "from": {"data": "eugeoshape"},
     "encode": {
       "enter":{
         "strokeWidth": {"value": 0.25},
@@ -312,7 +318,6 @@
   "encode": {
     "enter": {
       "size": {"value": 16},
-      "fill": {"value": "steelblue"},
       "fillOpacity": {"value": 0.8},
       "stroke": {"value": "white"},
       "strokeWidth": {"value": 1.5},
@@ -322,7 +327,10 @@
     },
     "update": {
       "x": {"field": "x"},
-      "y": {"field": "y"}
+      "y": {"field": "y"},
+      "opacity": [{"test": "!length(data('selected')) || indata('selected', 'value', datum.shape)", "value": 1},{"value": 0.4}],
+      "fill": [{"test": " indata('selected', 'value', datum.shape)", "value": "red"},{"value": "steelblue"}],
+      "zindex": [{"test": " indata('selected', 'value', datum.shape)", "value": 1},{"value": 0}]
     }
   }
 }
@@ -353,7 +361,7 @@
           "data": [
             {
               "name": "timedata",
-              "source": ["usa-sig"],
+              "source": ["usdata"],
               "transform": [
                 {"type": "filter", "expr": "datum.date >= -638326800000"},
                 {
@@ -372,7 +380,7 @@
               ]
             },
             {"name": "ustime",
-            "source": ["usa-sig"],
+            "source": ["usdata"],
             "transform": [
               {"type": "filter", "expr": "datum.date >= -638326800000"},
               {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
@@ -380,7 +388,7 @@
               ]
             },
             {"name": "eutime",
-            "source": ["europa-sig"],
+            "source": ["eudata"],
             "transform": [
               {"type": "filter", "expr": "datum.date >= -638326800000"},
               {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
@@ -389,7 +397,7 @@
             }
           ],
 
-          "signals": [
+      "signals": [
             {
           "name": "brush", "value": 0,
           "on": [
@@ -789,9 +797,43 @@
         "range": {"scheme": "tableau20"}
       }
     ],
+
+    "signals": [
+      {
+      "name": "clear", "value": true,
+      "on": [
+        {
+          "events": "mouseup[!event.item]",
+          "update": "true",
+          "force": true
+        }
+      ]
+    },
+    {
+      "name": "shift", "value": false,
+      "on": [
+        {
+          "events": "@euarc:click, @legendLabel:click",
+          "update": "event.shiftKey",
+          "force":  true
+        }
+      ]
+    },
+      {
+      "name": "clicked2",
+      "push": "outer",
+      "on": [
+        {
+          "events": "@euarc:click, @legendLabel:click",
+          "update": "{value: datum.name}",
+          "force":  true
+        }
+      ]
+    }
+    ],
   
     "marks": [
-      {
+      {"name": "euarc",
         "type": "arc",
         "from": {"data": "eu-tree"},
         "encode": {
@@ -808,7 +850,8 @@
             "stroke": {"value": "white"},
             "strokeWidth": {"value": 1},
             "zindex": {"value": 0},
-            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"}
+            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"},
+            "opacity": [{"test": "indata('selected', 'value', datum.name)", "value": 1},{"value": 0.75}]
           },
           "hover": {
             "stroke": {"value": "red"},
