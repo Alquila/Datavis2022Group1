@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "A basic pie chart example.",
-  "width": 1500,
+  "width": 1700,
   "height": 1300,
   "background": "lightgrey",
   "autosize": "pad",
@@ -15,6 +15,21 @@
     {"name": "timewidth", "update": "mapWidth*2"},
     {"name": "shapeHeight", "value": 400},
     {"name": "dobheight", "value": 210},
+    {"name": "thirdheight", "value": 300},
+    {"name": "thirdwidth", "value": 500},
+    {"name": "showbins", "value": true, "bind": {"input": "checkbox", "name": "Show bins "}},
+    { "name": "shape", "value": "all",
+      "bind": {"input": "select", "name":"Shape ", "options": [
+        "cylinder", "circle", "rectangle", "cross", "diamond", "triangle",
+        "unknown", "other", "light", "fireball", "egg", "chevron", "teardrop",
+        "sphere", "disk","oval", "cigar", "formation", "flash", "cone",
+        "changing", "all"
+      ]
+    } },
+    {"name": "maxbins", "value": 70, 
+    "bind": {"input": "range", "min": 5, "max": 100, "step": 5}},
+    {"name": "maxshapesize", "value": 400, 
+    "bind":{"input": "range", "min": 100, "max": 1000}},
     {
       "name": "clear", "value": true,
       "on": [
@@ -135,15 +150,15 @@
       {"type": "filter","expr": "datum.x != null && datum.y != null"}
      ]
     },
-    {"name": "spots", "source" : ["ufo-sightings"],
-    "transform": [
-      {"type": "aggregate","groupby": ["country"],"as": ["counts"]}
-    ]
-    },
     {"name": "eudata",
-      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
-      "format": {"type": "csv", "parse": "auto", "delimiter": ","}
-    },
+    "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
+    "format": {"type": "csv", "parse": "auto", "delimiter": ","}
+  },
+  {"name": "spots", "source" : ["eudata"],
+  "transform": [
+    {"type": "aggregate","groupby": ["country"],"as": ["counts"]}
+  ]
+  },
     {"name": "eudatafilteredaftershape",
     "source": ["eudata"],
       "transform": [
@@ -1085,6 +1100,41 @@
       }
       ]
   
+    },
+    {"name": "another-one",
+      "type": "group",
+      "clip":true, 
+      "foreground": true,
+      "encode": {
+        "enter":{
+          "width": {"signal": "thirdwidth"},
+          "height":{"signal": "thirdheight"},
+          "y": {"offset": {"signal": "dobheight+60"}},
+          "x": {"offset": {"signal": "mapWidth*2+10"}},
+          "fill": {"value": "pink"},
+          "opacity":{"value": 5},
+          "strokeOpacity": {"value": 1},
+          "stroke": {"value": "black"}
+        }
+      }
+    }
+    ,
+    {"name": "and-another-one",
+      "type": "group",
+      "clip":true, 
+      "foreground": true,
+      "encode": {
+        "enter":{
+          "width": {"signal": "thirdwidth"},
+          "height":{"signal": "thirdheight"},
+          "y": {"offset": {"signal": "dobheight+70+thirdheight"}},
+          "x": {"offset": {"signal": "mapWidth*2+10"}},
+          "fill": {"value": "lightpink"},
+          "opacity":{"value": 5},
+          "strokeOpacity": {"value": 1},
+          "stroke": {"value": "black"}
+        }
+      }
     }
   ],
 

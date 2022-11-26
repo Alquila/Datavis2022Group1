@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from geopy.geocoders import Nominatim
+import datetime as dt
 
 geolocator = Nominatim(user_agent="geoapiExercises")
 
@@ -241,6 +242,18 @@ def badData(data):
     badRows = data[~data["country"].isin(european_countries) & ~data["country"].isin(american_countries)]
     badRows.to_csv("data/badData.csv", sep=",", index=False)
 
+def removeUnder1990():
+    data = pd.read_csv("data/coordEu.csv", low_memory=False, sep=",")
+    data['date'] = pd.to_datetime(data['date'])
+    print(data.dtypes)
+    goodRows = data[((data['date'].dt.year >= 1990 ))]
+    goodRows = goodRows[~(goodRows['shape'].isnull())]
+    goodRows.drop("duration (seconds)", axis=1, inplace=True)
+    goodRows.drop("duration (hours/min)", axis=1, inplace=True)
+    missing(goodRows)
+    goodRows.to_csv("data/coordEu.csv", sep=",", index=False)
+
+
 if __name__ == "__main__":
     #    display(data.head(10))
     # print("iii")
@@ -261,15 +274,16 @@ if __name__ == "__main__":
     # makeEuropeanDataSet(data)
     # makeNorthAmericaDataSet(data)
     # badData(data)
-    missing(data)
-    data = dropLatLong(data)
-    data = split_datetime(data)
-    update_country_state(data)
-    update_ca_and_uk(data)
-    lonlatEu(data)
-    bylonlatUs(data)
-    badData(data)
-    missing(data)
+    # missing(data)
+    # data = dropLatLong(data)
+    # data = split_datetime(data)
+    # update_country_state(data)
+    # update_ca_and_uk(data)
+    # lonlatEu(data)
+    # bylonlatUs(data)
+    # badData(data)
+    # missing(data)
+    removeUnder1990()
 
     # binLongAndLat(data)
     # writeToNewFile(data)
