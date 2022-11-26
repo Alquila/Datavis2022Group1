@@ -28,13 +28,11 @@
       },
       {"name": "usdata",
         "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordUs.csv",
-        "format":{"type": "csv", "parse":"auto", "delimiter": ","},
-        "transform": [{"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"}]
+        "format":{"type": "csv", "parse":"auto", "delimiter": ","}
       },
       {"name": "eudata",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
-      "format": {"type": "csv", "parse": "auto", "delimiter": ","},
-      "transform": [{"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"}]
+      "format": {"type": "csv", "parse": "auto", "delimiter": ","}
     },
     {
       "name": "bro2",

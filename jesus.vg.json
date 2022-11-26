@@ -12,7 +12,6 @@
         "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
         "format": {"type": "csv", "parse": "auto", "delimiter": ","},
         "transform": [
-          {"type": "filter", "expr": "datum.date > datetime(1990,0,1)"},
           {"type": "filter", "expr": "datum.shape == 'disk' || datum.shape == 'oval' || datum.shape == 'light'"},
            {
             "field": "date",
