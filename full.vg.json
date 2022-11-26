@@ -1,16 +1,20 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "A basic pie chart example.",
-  "width": 1000,
-  "height": 800,
+  "width": 1500,
+  "height": 1300,
+  "background": "lightgrey",
   "autosize": "pad",
+
+  "config": {"group": {"stroke": "black"}},
 
 "signals": [
     {"name": "mapHeight", "value": 500},
     {"name": "mapWidth", "value": 500},
     {"name": "timeHeight", "value": 100},
+    {"name": "timewidth", "update": "mapWidth*2"},
     {"name": "shapeHeight", "value": 400},
-    {"name": "dobheight", "value": 205},
+    {"name": "dobheight", "value": 210},
     {
       "name": "clear", "value": true,
       "on": [
@@ -26,7 +30,41 @@
     {"name": "howto"},
     {"name": "clicked2"},
     {"name": "shift3"},
-    {"name": "clicked3"}
+    {"name": "clicked3"},
+    {
+          "name": "brush", "value": 0,
+          "on": [
+            {
+              "events": "@ustimeline:mousedown, @eutimeline:mousedown",
+              "update": "[x()-540, x()-540]"
+            },
+            {
+              "events": "[@ustimeline:mousedown, window:mouseup] > window:mousemove!, [@eutimeline:mousedown, window:mouseup] > window:mousemove!",
+              "update": "[brush[0], clamp(x()-540, 0, timewidth)]"
+            },
+            {
+              "events": {"signal": "delta"},
+              "update": "clampRange([anchor[0] + delta, anchor[1] + delta], 0,  timewidth)"
+            }
+          ]
+        },
+        {
+          "name": "anchor", "value": null,
+          "on": [{"events": "@brush:mousedown", "update": "slice(brush)"}]
+        },
+        {
+          "name": "xdown", "value": 0,
+          "on": [{"events": "@brush:mousedown", "update": "x()-540"}]
+        },
+        {
+          "name": "delta", "value": 0,
+          "on": [
+            {
+              "events": "[@brush:mousedown, window:mouseup] > window:mousemove!",
+              "update": "x() - xdown-498"
+            }
+          ]
+        }
   ],
 "scales": [
     {
@@ -103,7 +141,7 @@
     ]
     },
     {"name": "eudata",
-      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/european.csv",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
       "format": {"type": "csv", "parse": "auto", "delimiter": ","}
     },
     {"name": "eudatafilteredaftershape",
@@ -184,7 +222,7 @@
           {"type": "partition",
             "field": "shapes",
             "sort": {"field": "value"},
-            "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) /2"}],
+            "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) /2.5"}],
             "as": ["a0", "r0", "a1", "r1", "depth", "children"]
           }
         ]
@@ -208,21 +246,13 @@
           "type": "partition",
           "field": "shapes",
           "sort": {"field": "value"},
-          "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) / 2"}],
+          "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) / 2.5"}],
           "as": ["a0", "r0", "a1", "r1", "depth", "children"]
         }
       ]
     }
   ],
 
-
-"layout": {
-    "padding": 20,
-    "columns": 2,
-    "align": "each",
-    "bounds":"flush",
-    "center":true
-  },  
 
   "marks": [
     {"name": "usagroup",
@@ -233,7 +263,9 @@
         "enter":{
           "width":{"signal": "mapWidth"},
           "height": {"signal": "mapHeight"},
-          "fill": {"value": "#fadcfc"}
+          "fill": {"value": "#fadcfc"},
+          "x": {"offset": 0},
+          "y": {"offset": 0}
         }
       },
 
@@ -290,88 +322,21 @@
     ]
 
     },
-    {"name": "eu-group",
-      "type": "group",
-      "clip":true, 
-      "foreground": true,
-      "encode": {
-        "enter":{
-          "width":{"signal": "mapWidth"},
-          "height": {"signal": "mapHeight"},
-          "fill": {"value": "#fadc11"}
-        }
-      },
-
-    "marks": [
-        {
-    "type": "shape",
-    "from": {"data": "graticule"},
-    "transform": [
-      { "type": "geoshape", "projection": "eu-projection" }
-    ]
-  },
-  {
-    "type": "shape",
-    "from": {"data": "eugeoshape"},
-    "encode": {
-      "enter":{
-        "strokeWidth": {"value": 0.25},
-          "stroke": {"value": "#888"},
-          "fill": {"value": "pink"},
-          "tooltip": {
-        "signal": "{'Country': datum.properties['geounit'], 'Count': datum.counts}"
-      }
-      },
-      "update": {
-        "strokeWidth": {"value": 0.5},
-        "stroke": {"value": "black"},
-        "fill": {"value": "grey"}
-      },
-      "hover": {"fill": {"value": "pink"}}
-     
-    },
-    "transform": [
-      { "type": "geoshape", "projection": "eu-projection" }
-    ]
-  },
-{
-  "type": "symbol",
-  "from": {"data": "europa-sig"},
-  "clip": true,
-  "encode": {
-    "enter": {
-      "size": {"value": 16},
-      "fillOpacity": {"value": 0.8},
-      "stroke": {"value": "white"},
-      "strokeWidth": {"value": 1.5},
-      "tooltip": {
-        "signal": "{'title': datum.city, 'Shape': datum.shape}"
-      }
-    },
-    "update": {
-      "x": {"field": "x"},
-      "y": {"field": "y"},
-      "opacity": [{"test": "!length(data('selected')) || indata('selected', 'value', datum.shape)", "value": 1},{"value": 0.4}],
-      "fill": [{"test": " indata('selected', 'value', datum.shape)", "value": "red"},{"value": "steelblue"}],
-      "zindex": [{"test": " indata('selected', 'value', datum.shape)", "value": 1},{"value": 0}]
-    }
-  }
-}
-      ]
-
-    },
+    
     {"name": "timeline1",
       "type": "group",
       "encode": {
         "enter":{
-          "width":{"signal": "mapWidth"},
-          "height": {"signal": "timeHeight*2+50"}
+          "x":{"offset": {"signal": "mapWidth+40"}},
+          "y":{"offset": 20},
+         "stroke": {"value": "red"},
+          "strokeOpacity": {"value": 0.5}
         }
       },
       "layout":{
         "columns": 1,
-        "padding": 5,
-        "align": "each",
+        "padding": 10,
+        "align": "none",
         "bounds": "flush"
       },
       "data": [
@@ -379,7 +344,7 @@
               "name": "timedata",
               "source": ["usdata"],
               "transform": [
-                {"type": "filter", "expr": "datum.date >= -473385600000"},
+                {"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"},
                 {
                   "field": "date",
                   "type": "timeunit",
@@ -398,7 +363,7 @@
             {"name": "ustime",
             "source": ["usdata"],
             "transform": [
-              {"type": "filter", "expr": "datum.date >= -473385600000"},
+              {"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"},
               {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
@@ -406,7 +371,7 @@
             {"name": "ustime2",
             "source": ["usdatafilteredaftershape"],
             "transform": [
-              {"type": "filter", "expr": "datum.date >= -473385600000"},
+              {"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"},
               {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
@@ -414,7 +379,7 @@
             {"name": "eutime",
             "source": ["eudata"],
             "transform": [
-              {"type": "filter", "expr": "datum.date >= -473385600000"},
+              {"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"},
               {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
@@ -422,7 +387,7 @@
             {"name": "eutime2",
             "source": ["eudatafilteredaftershape"],
             "transform": [
-              {"type": "filter", "expr": "datum.date >= -473385600000"},
+              {"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"},
               {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
@@ -435,7 +400,7 @@
               "name": "x",
               "type": "time",
               "domain": {"data": "timedata", "field": "year_date"},
-              "range": [0, {"signal": "mapWidth*2"}]
+              "range": [0, {"signal": "timewidth"}]
             },
             {
               "name": "y",
@@ -454,43 +419,8 @@
               "zero": true
             }
           ],
-
-      
       "signals": [
-            {
-          "name": "brush", "value": 0,
-          "on": [
-            {
-              "events": "@ustimeline:mousedown, @eutimeline:mousedown",
-              "update": "[x(), x()]"
-            },
-            {
-              "events": "[@ustimeline:mousedown, window:mouseup] > window:mousemove!, [@eutimeline:mousedown, window:mouseup] > window:mousemove!",
-              "update": "[brush[0], clamp(x(), 0, width)]"
-            },
-            {
-              "events": {"signal": "delta"},
-              "update": "clampRange([anchor[0] + delta, anchor[1] + delta], 0, width)"
-            }
-          ]
-        },
-        {
-          "name": "anchor", "value": null,
-          "on": [{"events": "@brush:mousedown", "update": "slice(brush)"}]
-        },
-        {
-          "name": "xdown", "value": 0,
-          "on": [{"events": "@brush:mousedown", "update": "x()"}]
-        },
-        {
-          "name": "delta", "value": 0,
-          "on": [
-            {
-              "events": "[@brush:mousedown, window:mouseup] > window:mousemove!",
-              "update": "x() - xdown"
-            }
-          ]
-        },
+            
         {
           "name": "howto",
           "push": "outer",
@@ -508,11 +438,10 @@
         "type": "group",
         "encode": {
           "enter":{
-            "width":{"signal": "mapWidth*2"},
+            "width":{"signal": "timewidth"},
             "height": {"signal": "timeHeight"},
             "fill": {"value": "lightgrey"},
-            "opacity": {"value": 0.5},
-            "x":{"offset":10}
+            "opacity": {"value": 0.5}
           }
         },
 
@@ -522,7 +451,7 @@
             "orient": "top",
             "gridScale": "y",
             "grid": true,
-            "tickCount": {"signal": "ceil(width/40)"},
+            "tickCount": {"signal": "ceil(timewidth/40)"},
             "domain": false,
             "labels": false,
             "aria": false,
@@ -540,7 +469,7 @@
               "labelFlush": true,
               "labelOverlap": true,
               "labelFontSize": 10,
-              "tickCount": {"signal": "ceil(width/40)"},
+              "tickCount": {"signal": "ceil(timewidth/40)"},
               "zindex": 0
             },
             {
@@ -548,7 +477,7 @@
             "orient": "right",
             "gridScale": "x",
             "grid": true,
-            "tickCount": {"signal": "ceil(height/100)"},
+            "tickCount": {"signal": "ceil(timeHeight/40)"},
             "domain": false,
             "labels": false,
             "aria": false,
@@ -560,7 +489,7 @@
             {
               "scale": "y2","orient": "right",
               "grid": false,"title": "Eu Sightings",
-              "labelOverlap": true,"tickCount": {"signal": "ceil(height/100)"},
+              "labelOverlap": true,"tickCount": {"signal": "ceil(timeHeight/40)"},
               "zindex": 0
             }
         ],
@@ -630,30 +559,26 @@
             }
             }
         ]
-
-
         },
         {"name": "ustimeline",
           "type": "group",
           "encode": {
           "enter":{
-            "width":{"signal": "mapWidth*2"},
+            "width":{"signal": "timewidth"},
             "height": {"signal": "timeHeight"},
-            "fill": {"value": "lightgrey"},
+            "fill": {"value": "pink"},
             "opacity": {"value": 0.5},
-            "x":{"offset":10},
-            "y":{"offset": {"signal": "timeHeight"}}
+            "stroke": {"value": "red"},
+          "strokeOpacity": {"value": 0.5}
           }
           },        
-
-
          "axes": [
           {
             "scale": "x",
             "orient": "bottom",
             "gridScale": "y",
             "grid": true,
-            "tickCount": {"signal": "ceil(width/40)"},
+            "tickCount": {"signal": "ceil(timewidth/40)"},
             "domain": false,
             "labels": false,
             "aria": false,
@@ -667,7 +592,7 @@
             "orient": "left",
             "gridScale": "x",
             "grid": true,
-            "tickCount": {"signal": "ceil(height/100)"},
+            "tickCount": {"signal": "ceil(timeHeight/40)"},
             "domain": false,
             "labels": false,
             "aria": false,
@@ -684,13 +609,13 @@
               "format": "%Y",
               "labelFlush": true,
               "labelOverlap": true,
-              "tickCount": {"signal": "ceil(width/40)"},
+              "tickCount": {"signal": "ceil(timewidth/40)"},
               "zindex": 0
             },
             {
               "scale": "y","orient": "left",
               "grid": false,"title": "NA Sightings",
-              "labelOverlap": true,"tickCount": {"signal": "ceil(height/100)"},
+              "labelOverlap": true,"tickCount": {"signal": "ceil(timeHeight/40)"},
               "zindex": 0
             }
           ],
@@ -734,8 +659,7 @@
               }
             }
           }
-          },
-          
+          },        
           {"name": "usmarks",
               "type": "line",
               "style": ["line"],
@@ -804,7 +728,8 @@
             "type": "rect",
             "encode": {
               "enter":{
-                "y": {"signal": "-timeHeight-5"},"height": {"signal": "dobheight"},
+                "y": {"signal": "-timeHeight-10"},
+                "height": {"signal": "dobheight"},
               "fill": {"value": "green"},"fillOpacity": {"value": 0.2}
               },
               "update": {
@@ -818,7 +743,7 @@
           "interactive": false,
           "encode": {
             "enter": {
-              "y": {"signal": "-timeHeight-5"},
+              "y": {"signal": "-timeHeight-10"},
               "height": {"signal": "dobheight"},
               "width": {"value": 1},
               "fill": {"value": "yellow"}
@@ -833,7 +758,7 @@
           "interactive": false,
           "encode": {
             "enter": {
-              "y": {"signal": "-timeHeight-5"},
+              "y": {"signal": "-timeHeight-10"},
               "height": {"signal": "dobheight"},
               "width": {"value": 1},
               "fill": {"value": "firebrick"}
@@ -845,44 +770,113 @@
         }
           ]
         }
+
       ]
     },
-    {"name": "placeholder",
+    {"name": "eu-group",
       "type": "group",
-      "description": "placeholder to make space for timeline",
+      "clip":true, 
+      "foreground": true,
       "encode": {
         "enter":{
-          "width":{"signal": "mapWidth/2"},
-          "height": {"signal": "timeHeight+50"}
-
+          "width":{"signal": "mapWidth"},
+          "height": {"signal": "mapHeight"},
+          "fill": {"value": "#fadc11"},
+          "y": {"offset": {"signal": "mapHeight+10"}},
+          "x": {"offset": 0}
         }
+      },
+
+    "marks": [
+        {
+    "type": "shape",
+    "from": {"data": "graticule"},
+    "transform": [
+      { "type": "geoshape", "projection": "eu-projection" }
+    ]
+  },
+  {
+    "type": "shape",
+    "from": {"data": "eugeoshape"},
+    "encode": {
+      "enter":{
+        "strokeWidth": {"value": 0.25},
+          "stroke": {"value": "#888"},
+          "fill": {"value": "pink"},
+          "tooltip": {
+        "signal": "{'Country': datum.properties['geounit'], 'Count': datum.counts}"
       }
+      },
+      "update": {
+        "strokeWidth": {"value": 0.5},
+        "stroke": {"value": "black"},
+        "fill": {"value": "grey"}
+      },
+      "hover": {"fill": {"value": "pink"}}
+     
+    },
+    "transform": [
+      { "type": "geoshape", "projection": "eu-projection" }
+    ]
+  },
+{
+  "type": "symbol",
+  "from": {"data": "europa-sig"},
+  "clip": true,
+  "encode": {
+    "enter": {
+      "size": {"value": 16},
+      "fillOpacity": {"value": 0.8},
+      "stroke": {"value": "white"},
+      "strokeWidth": {"value": 1.5},
+      "tooltip": {
+        "signal": "{'title': datum.city, 'Shape': datum.shape}"
+      }
+    },
+    "update": {
+      "x": {"field": "x"},
+      "y": {"field": "y"},
+      "opacity": [{"test": "!length(data('selected')) || indata('selected', 'value', datum.shape)", "value": 1},{"value": 0.4}],
+      "fill": [{"test": " indata('selected', 'value', datum.shape)", "value": "red"},{"value": "steelblue"}],
+      "zindex": [{"test": " indata('selected', 'value', datum.shape)", "value": 1},{"value": 0}]
+    }
+  }
+}
+      ]
+
     },
     {"name": "shape-charts",
       "type": "group",
       "encode": {
         "enter":{
           "width":{"signal": "mapWidth"},
-          "height": {"signal": "shapeHeight"},
-          "opacity":{"value": 0.5}
+          "height": {"signal": "shapeHeight*2"},
+          "y": {"offset": {"signal": "timeHeight*2+60"}},
+          "x": {"offset": {"signal": "mapWidth+10"}},
+          "opacity":{"value": 5},
+          "stroke": {"value": "black"}
         }
       },
 
       "layout":{
         "padding": 20,
-        "columns": 2,
-        "align": "each",
-    "bounds":"flush",
+        "columns": 1,
+        "align": "none",
+    "bounds":"full",
     "center":false
       },
 
       "marks": [
+
         {"name": "us-shape-chart",
           "type": "group",
           "encode": {
             "enter":{
               "width":{"signal": "mapWidth"},
-              "height": {"signal": "shapeHeight-100"}
+              "height": {"signal": "shapeHeight-100"},
+              "stroke": {"value": "pink"},
+          "strokeOpacity": {"value": 0.5}
+
             }
           },
           "scales": [
@@ -988,7 +982,9 @@
           "encode": {
             "enter":{
               "width":{"signal": "mapWidth"},
-          "height": {"signal": "shapeHeight-100"}
+          "height": {"signal": "shapeHeight-100"},
+              "stroke": {"value": "red"},
+          "strokeOpacity": {"value": 0.5}
             }
           },
 
@@ -1088,6 +1084,7 @@
       ]
       }
       ]
+  
     }
   ],
 

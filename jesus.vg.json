@@ -1,0 +1,168 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "Stock prices of 5 Tech Companies over Time.",
+    "background": "grey",
+    "padding": 5,
+    "width": 500,
+    "height": 500,
+    "style": "cell",
+    "data": [
+      {
+        "name": "source_0",
+        "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
+        "format": {"type": "csv", "parse": "auto", "delimiter": ","},
+        "transform": [
+          {"type": "filter", "expr": "datum.date > datetime(1990,0,1)"},
+          {"type": "filter", "expr": "datum.shape == 'disk' || datum.shape == 'oval' || datum.shape == 'light'"},
+           {
+            "field": "date",
+            "type": "timeunit",
+            "units": ["year"],
+            "as": ["date", "yearmonthdate_date_end"]
+          },
+          {
+            "type": "aggregate",
+            "groupby": ["date", "shape"]
+          }]
+      }
+    ],
+
+    "marks": [
+      {
+        "name": "pathgroup",
+        "type": "group",
+        "from": {"data": "source_0"},
+        "encode": {
+          "update": {
+            "width": {"field": {"group": "width"}},
+            "height": {"field": {"group": "height"}}
+          }
+        },
+        "marks": [
+          {
+            "name": "marks",
+            "type": "symbol",
+            
+            "sort": {"field": "datum[\"date\"]"},
+            "from": {"data": "source_0"},
+            "encode": {
+              "update": {
+                "size": {"value": 20},
+                "stroke": {"scale": "color", "field": "shape"},
+                "x": {"scale": "x", "field": "date"},
+                "y": {"scale": "y", "field": "count"}
+              }
+            }
+          }
+        ]
+      },
+      {
+        "name": "pathgroup2",
+        "type": "group",
+        "from": {
+          "facet": {
+            "name": "faceted_path_main",
+            "data": "source_0",
+            "groupby": ["shape"]
+          }},
+        "encode": {
+          "update": {
+            "width": {"field": {"group": "width"}},
+            "height": {"field": {"group": "height"}}
+          }
+        },
+        "marks": [
+          {
+            "name": "marks",
+            "type": "line",
+            "style": ["line"],
+            "sort": {"field": "datum[\"date\"]"},
+            "from": {"data": "faceted_path_main"},
+            "encode": {
+              "update": {
+                "stroke": {"scale": "color", "field": "shape"},
+                "interpolate": {"value" : "linear"},
+                "strokeDash":{"value": [4,4]},
+                "x": {"scale": "x", "field": "date"},
+                "y": {"scale": "y", "field": "count"}
+                
+              
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "scales": [
+      {
+        "name": "x",
+        "type": "time",
+        "domain": {"data": "source_0", "field": "date"},
+        "range": [0, {"signal": "width"}]
+      },
+      {
+        "name": "y",
+        "type": "linear",
+        "domain": {"data": "source_0", "field": "count"},
+        "range": [{"signal": "height"}, 0],
+        "nice": true,
+        "zero": true
+      },
+      {
+        "name": "color",
+        "type": "ordinal",
+        "domain": {"data": "source_0", "field": "shape"},
+        "range":{"scheme": "tableau20"}
+      }
+    ],
+    "axes": [
+      {
+        "scale": "x",
+        "orient": "bottom",
+        "gridScale": "y",
+        "grid": true,
+        "tickCount": {"signal": "ceil(width/40)"},
+        "domain": false,
+        "labels": false,
+        "aria": false,
+        "maxExtent": 0,
+        "minExtent": 0,
+        "ticks": false,
+        "zindex": 0
+      },
+      {
+        "scale": "y",
+        "orient": "left",
+        "gridScale": "x",
+        "grid": true,
+        "tickCount": {"signal": "ceil(height/80)"},
+        "domain": false,
+        "labels": false,
+        "aria": false,
+        "maxExtent": 0,
+        "minExtent": 0,
+        "ticks": false,
+        "zindex": 0
+      },
+      {
+        "scale": "x",
+        "orient": "bottom",
+        "grid": false,
+        "title": "date",
+        "labelFlush": true,
+        "labelOverlap": true,
+        "tickCount": {"signal": "ceil(width/40)"},
+        "zindex": 0
+      },
+      {
+        "scale": "y",
+        "orient": "left",
+        "grid": false,
+        "title": "shape",
+        "labelOverlap": true,
+        "tickCount": {"signal": "ceil(height/80)"},
+        "zindex": 0
+      }
+    ],
+    "legends": [{"stroke": "color", "symbolType": "stroke", "title": "symbol"}]
+  }

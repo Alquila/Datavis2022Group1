@@ -1,0 +1,99 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "Stock prices of 5 Tech Companies over Time.",
+    "background": "white",
+    "padding": 5,
+    "width": 400,
+    "height": 400,
+    "style": "cell",
+    "data": [
+      {
+        "name": "source_0",
+        "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
+        "format": {"type": "csv", "parse": "auto", "delimiter": ","},
+        "transform": [{"type": "filter", "expr": "datum.date > datetime(1990,0,1)"},
+           {
+            "field": "date",
+            "type": "timeunit",
+            "units": ["year"],
+            "as": ["date", "yearmonthdate_date_end"]
+          },
+          {
+            "type": "aggregate",
+            "groupby": ["date","shape"]
+          },{
+          "type" : "stack", 
+          "groupby": ["date"],
+          "sort": {"field": "shape"},
+          "field": "count", "offset": "zero"}
+          ]
+      }
+    ],
+    
+  
+    "marks": [
+      {
+        "type": "group",
+        "from": {
+          "facet": {
+            "name": "series",
+            "data": "source_0",
+            "groupby": "shape"
+          }
+        },
+        "marks": [
+          {
+            "type": "area",
+            "from": {"data": "series"},
+  
+              "sort": {"field": "datum[\"date\"]"},
+            "encode": {
+              "enter": {
+                "interpolate": {"value": "monotone"},
+                "x": {"scale": "x", "field": "date"},
+                "y": {"scale": "y", "field": "y0"},
+                "y2": {"scale": "y", "field": "y1"},
+                "fill": {"scale": "color", "field": "shape"}
+              },
+              "update": {
+                "fillOpacity": {"value": 0.7}
+              },
+              "hover": {
+                "fillOpacity": {"value": 1}
+              }
+            }
+          }
+        ]
+      }
+    ],
+  
+    "scales": [
+      {
+        "name": "x",
+        "type": "time",
+        "range": "width",
+        "domain": {"data": "source_0", "field": "date"}
+      },
+      {
+        "name": "y",
+        "type": "linear",
+        "range": "height",
+        "nice": true, "zero": true,
+        "domain": {"data": "source_0", "field": "y1"}
+      },
+      {
+        "name": "color",
+        "type": "ordinal",
+        "range": {"scheme": "tableau20"},
+        "domain": {"data": "source_0", "field": "shape"}
+      }
+    ],
+  
+    "axes": [
+      {"orient": "bottom", "scale": "x", "zindex": 1},
+      {"orient": "left", "scale": "y", "zindex": 1}
+    ],
+  
+  
+    "legends": [{"stroke": "color", "symbolType": "stroke", "title": "symbol"}]
+  }

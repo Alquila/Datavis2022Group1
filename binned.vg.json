@@ -1,256 +1,263 @@
 {
-    "$schema": "https://vega.github.io/schema/vega/v5.json",
-    "width": 500,
-    "height": 500,
-    "autosize": "pad",
-  
-    "signals": [
-      {"name": "mapHeight", "value": 500},
-      {"name": "mapWidth", "value": 500},
-      {"name": "timeHeight", "value": 100},
-      {"name": "shapeHeight", "value": 400},
-      {"name": "dobheight", "value": 205},
-      { "name": "shape", "value": "all",
-        "bind": {"input": "select", "name":"Shape ", "options": [
-          "cylinder", "circle", "rectangle", "cross", "diamond", "triangle",
-          "unknown", "other", "light", "fireball", "egg", "chevron", "teardrop",
-          "sphere", "disk","oval", "cigar", "formation", "flash", "cone",
-          "changing", "all"
-        ]
-      } }
-    ],
-  
-    "projections": [
-      {
-        "name": "us-projection",
-        "type": "mercator",
-        "size":{"signal": "[mapWidth,mapHeight]"},
-        "fit": {"signal": "data('north-america')"},
-        "clipExtent": [[0, 0], [500, 500]]
-      }
-    ],
-  
-    "data": [
-      {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]},
-      {"name": "usdata",
-        "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/american.csv",
-        "format":{"type": "csv", "parse":"auto", "delimiter": ","}
-      },
-      {"name": "usdatafilteredaftershape",
-      "source": ["usdata"]
-      },
-      {"name": "north-america",
-       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/north-america.json",
-            "format": {"type": "topojson",  
-            "feature":"continent_North_America_subunits"},
-            "transform": []
-      },
-      {"name": "usa-sig",
-        "source": ["usdata"],
-        "transform": [
-          {"type": "geopoint",
-            "projection": "us-projection",
-            "fields": ["longitude", "latitude"]
-          }
-        ]
-      },
-      {"name": "trybin",
-      "source": ["usa-sig"],
-      "transform": [
-        {"type": "extent", "field": "x", "signal": "xsig"},
-        {"type": "extent", "field": "y", "signal": "ysig"},
-        {"type": "bin", "field": "x", "extent":{"signal": "xsig"}, "as": [
-          "xbin0", "xbin1"], "maxbins": 80},
-        {"type": "bin", "field": "y", "extent":{"signal": "ysig"}, "as": [
-          "ybin0", "ybin1"], "maxbins": 80},
-        {"type": "joinaggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1"]}
-      ]
-      },
-      {"name": "ee",
-      "source": ["trybin"],
-      "transform": [
-        {"type": "joinaggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1"],"fields":["x", "y"], "ops":["average", "average"]}
-      ]
-      },
-      {"name": "aaa",
-      "source": ["ee"],
-      "transform": [
-        {"type": "aggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1", "average_x", "average_y", "shape"]},
-         {
-            "type": "formula", 
-            "expr": "if(shape=='all' || datum.shape==shape,1,0)", "as": "cond_shape"
-        },
-        {
-            "type": "filter", "expr": "datum.cond_shape == 1"
-          }
-      ]
-      },
-      {"name": "er",
-      "source": ["usa-sig"],
-      "transform": [
-        {
-          "type": "kde2d",
-          "x": "x",
-          "y": "y",
-          "size": [{"signal": "width"}, {"signal": "height"}],
-          "as": "grid"
-        },
-        {
-          "type": "isocontour",
-          "field": "grid",
-          "levels": 10
-        }
-      ]
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 500,
+  "height": 500,
+  "autosize": "pad",
 
-      }
-    ],
-  
-     "scales": [
-      {
-        "name": "size",
-        "type": "linear",
-        "zero": true,
-        "domain": {"data": "aaa", "field": "count"},
-        "range": [0,200]
-      },
-      {"name": "opacit",
-      "type": "linear",
-      "domain":{"data": "aaa", "field": "count"},
-      "range":[0.5,0.9]
-      },
-      {
-        "name": "color",
-        "type": "linear",
-        "domain": {"data": "aaa", "field": "count"},
-        "range": {"scheme": "inferno"}},
-      {
-        "name": "color2",
-        "type": "quantize",
-        "domain": [0,100],
-        "range": {"scheme": "inferno", "count": 6}}
-    ],
-  
-      "legends": [
-      {
-        "size": "size",
-        "title": "Count",
-        "fill": "color",
-        "format": "s",
-        "symbolFillColor": "#4682b4",
-        "symbolStrokeColor": "transparent",
-        "symbolType": "circle"
-      },
-      {
-  
-        "fill": "color",
-        "orient": "bottom",
-        "offset": 5,
-        "type": "gradient",
-        "gradientLength": 300,
-        "gradientThickness": 12,
-  
-        "direction": "horizontal"
-      }
-    ],
-  
-    "marks": [
-      {
-        "type": "shape",
-        "from": {"data": "graticule"},
-        "transform": [{ "type": "geoshape", "projection": "us-projection" }]},
-      {
-        "type": "shape",
-        "from": {"data": "north-america"},
-        "encode": {
-          "enter":{
-            "strokeWidth": {"value": 0.25},
-            "stroke": {"value": "#888"}, "fill": {"value": "pink"},
-            "tooltip": {"signal": "{'Country': datum.properties['geounit'], 'Count' : datum.counts}"}
-          },
-        "update": {
-          "strokeWidth": {"value": 0.5},
-          "stroke": {"value": "black"},
-          "fill": {"value": "lightgrey"}
-        },
-        "hover": {"fill": {"value": "pink"}}
-       
-        },
-        "transform": [
-          { "type": "geoshape", "projection": "us-projection" }
-        ]
-      },
-      {
-        "type": "symbol",
-        "from": {"data": "usa-sig"},
-        "clip": true,
-        "encode": {
-          "enter": {
-            "size": {"value": 16},
-            "fill": {"value": "steelblue"},
-            "fillOpacity": {"value": 0.8},
-            "stroke": {"value": "white"},
-            "strokeWidth": {"value": 1},
-            "opacity":{"value": 0.5},
-            "tooltip": {
-              "signal": "{'title': datum.city, 'Shape': datum.shape}"
-            }
-          },
-          "update": {
-            "x": {"field": "x"},
-            "y": {"field": "y"},
-        "fill": [{"value": "steelblue"}],
-        "zindex": [{"value": 1}]
-          }
-        }
-      },
-      {
-        "type": "symbol",
-        "from": {"data": "aaa"},
-        "encode": {
-          "update":{
-            "x":{"field": "average_x"},
-            "y": {"field": "average_y"},
-            "size": {"scale": "size", "field": "count" },
-            "shape": {"value": "circle"},
-            "fill":{"scale": "color", "field": "count"},
-            "opacity": {"value": 0.5},
-            "tooltip": {"signal": "{'ee': datum.average_x, 'y': datum.average_y, 'Count': datum.count, 'Shape': datum.shape}"}
-          }
-        }
-      },
-      {
-        "type": "shape",
-        "from": {"data": "er"},
-        "transform": [
-        {
-          "type": "geoshape",
-          "field": "datum.contour",
-          "projection": "us-projection"
+  "signals": [
+    {"name": "mapHeight", "value": 500},
+    {"name": "mapWidth", "value": 500},
+    {"name": "timeHeight", "value": 100},
+    {"name": "shapeHeight", "value": 400},
+    {"name": "dobheight", "value": 205},
+    {"name": "showbins", "value": true, "bind": {"input": "checkbox", "name": "Show bins "}},
+    { "name": "shape", "value": "all",
+      "bind": {"input": "select", "name":"Shape ", "options": [
+        "cylinder", "circle", "rectangle", "cross", "diamond", "triangle",
+        "unknown", "other", "light", "fireball", "egg", "chevron", "teardrop",
+        "sphere", "disk","oval", "cigar", "formation", "flash", "cone",
+        "changing", "all"
+      ]
+    } },
+    {"name": "maxbins", "value": 70, 
+    "bind": {"input": "range", "min": 5, "max": 100, "step": 5}},
+    {"name": "maxshapesize", "value": 400, 
+    "bind":{"input": "range", "min": 100, "max": 1000}}
+  ],
+
+  "projections": [
+    {
+      "name": "us-projection",
+      "type": "mercator",
+      "size":{"signal": "[mapWidth,mapHeight]"},
+      "fit": {"signal": "data('north-america')"},
+      "clipExtent": [[0, 0], [500, 500]]
+    }
+  ],
+
+  "data": [
+    {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]},
+    {"name": "usdata",
+      "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/american.csv",
+      "format":{"type": "csv", "parse":"auto", "delimiter": ","}
+    },
+    {"name": "usdatafilteredaftershape",
+    "source": ["usdata"]
+    },
+    {"name": "north-america",
+     "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/north-america.json",
+          "format": {"type": "topojson",  
+          "feature":"continent_North_America_subunits"},
+          "transform": []
+    },
+    {"name": "usa-sig",
+      "source": ["usdata"],
+      "transform": [
+        {"type": "geopoint",
+          "projection": "us-projection",
+          "fields": ["longitude", "latitude"]
         }
       ]
-      },
+    },
+    {"name": "trybin",
+    "source": ["usa-sig"],
+    "transform": [
+      {"type": "formula", "expr": "if(showbins,1,0)", "as": "ss"},
+      {"type": "filter", "expr": "datum.ss == 1"},
+      {"type": "extent", "field": "x", "signal": "xsig"},
+      {"type": "extent", "field": "y", "signal": "ysig"},
+      {"type": "bin", "field": "x", "extent":{"signal": "xsig"}, "as": [
+        "xbin0", "xbin1"], "maxbins": {"signal": "maxbins"}},
+      {"type": "bin", "field": "y", "extent":{"signal": "ysig"}, "as": [
+        "ybin0", "ybin1"], "maxbins": {"signal": "maxbins"}},
+      {"type": "joinaggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1"]}
+    ]
+    },
+    {"name": "ee",
+    "source": ["trybin"],
+    "transform": [
+      {"type": "joinaggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1"],"fields":["x", "y"], "ops":["average", "average"]}
+    ]
+    },
+    {"name": "aaa",
+    "source": ["ee"],
+    "transform": [
+      {"type": "aggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1", "average_x", "average_y", "shape"]},
        {
-      "type": "image",
-      "from": {"data": "er"},
-      "encode": {
-        "update": {
-          "x": {"value": 0},
-          "y": {"value": 0},
-          "width": {"signal": "width"},
-          "height": {"signal": "height"},
-          "aspect": {"value": false}
+          "type": "formula", 
+          "expr": "if(shape=='all' || datum.shape==shape,1,0)", "as": "cond_shape"
+      },
+      {
+          "type": "filter", "expr": "datum.cond_shape == 1"
         }
+    ]
+    },
+    {"name": "er",
+    "source": ["aaa"],
+    "transform": [
+      {
+        "type": "kde2d",
+        "x": "x",
+        "y": "y",
+        "size": [{"signal": "width"}, {"signal": "height"}],
+        "as": "grid"
+      },
+      {
+        "type": "isocontour",
+        "field": "grid",
+        "levels": 10
+      }
+    ]
+
+    }
+  ],
+
+   "scales": [
+    {
+      "name": "size",
+      "type": "linear",
+      "zero": true,
+      "domain": {"data": "aaa", "field": "count"},
+      "range": [0,{"signal": "maxshapesize"}]
+    },
+    {"name": "opacit",
+    "type": "linear",
+    "domain":{"data": "aaa", "field": "count"},
+    "range":[0.5,0.9]
+    },
+    {
+      "name": "color",
+      "type": "linear",
+      "domain": {"data": "aaa", "field": "count"},
+      "range": {"scheme": "inferno"}},
+    {
+      "name": "color2",
+      "type": "quantize",
+      "domain": [0,200],
+      "range": {"scheme": "inferno", "count": 6}}
+  ],
+
+    "legends": [
+    {
+      "size": "size",
+      "title": "Count",
+      "fill": "color",
+      "format": "s",
+      "symbolFillColor": "#4682b4",
+      "symbolStrokeColor": "transparent",
+      "symbolType": "circle"
+    },
+    {
+
+      "fill": "color",
+      "orient": "bottom",
+      "offset": 5,
+      "type": "gradient",
+      "gradientLength": 300,
+      "gradientThickness": 12,
+
+      "direction": "horizontal"
+    }
+  ],
+
+  "marks": [
+    {
+      "type": "shape",
+      "from": {"data": "graticule"},
+      "transform": [{ "type": "geoshape", "projection": "us-projection" }]},
+    {
+      "type": "shape",
+      "from": {"data": "north-america"},
+      "encode": {
+        "enter":{
+          "strokeWidth": {"value": 0.25},
+          "stroke": {"value": "#888"}, "fill": {"value": "pink"},
+          "tooltip": {"signal": "{'Country': datum.properties['geounit'], 'Count' : datum.counts}"}
+        },
+      "update": {
+        "strokeWidth": {"value": 0.5},
+        "stroke": {"value": "black"},
+        "fill": {"value": "lightgrey"}
+      },
+      "hover": {"fill": {"value": "pink"}}
+     
       },
       "transform": [
-        {
-          "type": "heatmap",
-          "field": "datum.grid",
-         "resolve": "shared",
-         "opacity": 0,
-          "color": {"expr": "scale('color', datum.count)"}
-        }
+        { "type": "geoshape", "projection": "us-projection" }
       ]
-    }
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "usa-sig"},
+      "clip": true,
+      "encode": {
+        "enter": {
+          "size": {"value": 16},
+          "fill": {"value": "steelblue"},
+          "fillOpacity": {"value": 0.8},
+          "stroke": {"value": "white"},
+          "strokeWidth": {"value": 1},
+          "opacity":{"value": 0.5},
+          "tooltip": {
+            "signal": "{'title': datum.city, 'Shape': datum.shape}"
+          }
+        },
+        "update": {
+          "x": {"field": "x"},
+          "y": {"field": "y"},
+      "fill": [{"value": "steelblue"}],
+      "zindex": [{"value": 1}]
+        }
+      }
+    },
+    {
+      "type": "symbol",
+      "from": {"data": "aaa"},
+      "encode": {
+        "update":{
+          "x":{"field": "average_x"},
+          "y": {"field": "average_y"},
+          "size": {"scale": "size", "field": "count" },
+          "shape": {"value": "circle"},
+          "fill":{"scale": "color", "field": "count"},
+          "opacity": {"value": 0.5},
+          "tooltip": {"signal": "{'ee': datum.average_x, 'y': datum.average_y, 'Count': datum.count, 'Shape': datum.shape}"}
+        }
+      }
+    },
+    {
+      "type": "shape",
+      "from": {"data": "er"},
+      "transform": [
+      {
+        "type": "geoshape",
+        "field": "datum.contour",
+        "projection": "us-projection"
+      }
     ]
-  
+    },
+     {
+    "type": "image",
+    "from": {"data": "er"},
+    "encode": {
+      "update": {
+        "x": {"value": 0},
+        "y": {"value": 0},
+        "width": {"signal": "width"},
+        "height": {"signal": "height"},
+        "aspect": {"value": false}
+      }
+    },
+    "transform": [
+      {
+        "type": "heatmap",
+        "field": "datum.grid",
+       "resolve": "shared",
+       "opacity": 0,
+        "color": {"expr": "scale('color', datum.count)"}
+      }
+    ]
   }
+  ]
+
+}
