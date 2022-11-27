@@ -93,6 +93,12 @@
   "type": "band",
   "domain": ["one, two"],
   "range": "width"
+},
+{
+  "name": "color",
+  "type": "ordinal",
+  "domain": ["circle", "triangle", "disk", "sphere", "oval", "fireball", "light", "rectangle", "egg", "barrel", "cigar","cylinder","cone","teardrop","diamonds","cross","chevron","formation","unknown","other","changing" ],
+  "range": {"scheme": "category20b"}
 }
   ],
 
@@ -900,12 +906,7 @@
             }
           },
           "scales": [
-      {
-        "name": "color",
-        "type": "ordinal",
-        "domain": {"data": "us-tree", "field": "depth"},
-        "range": {"scheme": "tableau20"}
-      }
+      
     ],
 
     "signals": [
@@ -957,7 +958,7 @@
           "enter": {
             "x": {"signal": "mapWidth / 2"},
             "y": {"signal": "(shapeHeight-50)/ 2"},
-            "fill": {"scale": "color", "field": "depth"}
+            "fill": [{"test": "datum.shapes == null", "value": "steelblue"},{"scale": "color", "field": "name"}]
           },
           "update": {
             "startAngle": {"field": "a0"},
@@ -1181,10 +1182,10 @@
           "zero": true
         },
         {
-          "name": "color",
+          "name": "color2",
           "type": "ordinal",
           "domain": {"data": "usbars", "field": "shape"},
-          "range":{"scheme": "tableau20"}
+          "range":{"scheme": "category20b"}
         }
       ],
       "axes": [
