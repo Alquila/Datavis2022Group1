@@ -97,7 +97,7 @@
 {
   "name": "color",
   "type": "ordinal",
-  "domain": ["circle", "triangle", "disk", "sphere", "oval", "fireball", "light", "rectangle", "egg", "barrel", "cigar","cylinder","cone","teardrop","diamonds","cross","chevron","formation","unknown","other","changing" ],
+  "domain": ["circle", "triangle", "disk", "sphere", "oval", "fireball", "light", "rectangle", "egg", "barrel", "cigar","cylinder","cone","teardrop","diamonds","cross","chevron","formation","unknown","other","changing", "flash" ],
   "range": {"scheme": "category20b"}
 }
   ],
@@ -901,8 +901,7 @@
               "width":{"signal": "mapWidth"},
               "height": {"signal": "shapeHeight-100"},
               "stroke": {"value": "pink"},
-          "strokeOpacity": {"value": 0.5}
-
+              "strokeOpacity": {"value": 0.5}
             }
           },
           "scales": [
@@ -965,7 +964,7 @@
             "endAngle": {"field": "a1"},
             "innerRadius": {"field": "r0"},
             "outerRadius": {"field": "r1"},
-            "stroke": {"value": "white"},
+            "stroke": [{"test": "indata('selectedus', 'value', datum.name)", "value": "black"},{"value": "white"}],
             "strokeWidth": {"value": 1},
             "zindex": {"value": 0},
             "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"},
@@ -1117,8 +1116,8 @@
           "height":{"signal": "thirdheight"},
           "y": {"offset": {"signal": "dobheight+60"}},
           "x": {"offset": {"signal": "mapWidth*2+10"}},
-          "fill": {"value": "pink"},
-          "opacity":{"value": 5},
+          "fill": {"value": "white"},
+          "opacity":{"value": 0.3},
           "strokeOpacity": {"value": 1},
           "stroke": {"value": "black"}
         }
