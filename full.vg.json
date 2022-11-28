@@ -18,6 +18,7 @@
     {"name": "thirdheight", "value": 350},
     {"name": "thirdwidth", "value": 600},
     {"name": "showbins", "value": true, "bind": {"input": "checkbox", "name": "Show bins "}},
+    {"name": "showdots", "value": true, "bind": {"input": "checkbox", "name": "Show spots "}},
     { "name": "shape", "value": "all",
       "bind": {"input": "select", "name":"Shape ", "options": [
         "cylinder", "circle", "rectangle", "cross", "diamond", "triangle",
@@ -28,7 +29,7 @@
     } },
     {"name": "maxbins", "value": 70, 
     "bind": {"input": "range", "min": 5, "max": 100, "step": 5}},
-    {"name": "maxshapesize", "value": 400, 
+    {"name": "maxshapesize", "value": 500, 
     "bind":{"input": "range", "min": 100, "max": 1000}},
     {
       "name": "clear", "value": true,
@@ -105,7 +106,29 @@
   "type": "ordinal",
   "domain": ["circle", "triangle", "disk", "sphere", "oval", "fireball", "light", "rectangle", "egg", "cigar","cylinder","cone","teardrop","diamonds","cross","chevron","formation","unknown","other","changing", "flash" ],
   "range": {"scheme": "category20"}
-}
+},
+{
+  "name": "size",
+  "type": "linear",
+  "zero": true,
+  "domain": {"data": "aaa", "field": "count"},
+  "range": [5,{"signal": "maxshapesize"}]
+},
+{"name": "opacit",
+"type": "linear",
+"domain":{"data": "aaa", "field": "count"},
+"range":[0.5,0.9]
+},
+{
+  "name": "bincolor",
+  "type": "linear",
+  "domain": {"data": "aaa", "field": "count"},
+  "range": {"scheme": "inferno"}},
+{
+  "name": "bincolor2",
+  "type": "quantize",
+  "domain": [0,200],
+  "range": {"scheme": "inferno", "count": 6}}
   ],
 
   "projections": [
@@ -180,7 +203,7 @@
     {"name": "usdata",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/american.csv",
       "format":{"type": "csv", "parse":"auto", "delimiter": ","},
-      "transform": [ {"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"}]
+      "transform": [{"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"}]
       
     },
     {"name": "usdatafilteredaftershape",
@@ -286,7 +309,53 @@
           "as": ["a0", "r0", "a1", "r1", "depth", "children"]
         }
       ]
-    }
+    },
+    {"name": "trybin",
+    "source": ["usa-sig"],
+    "transform": [
+      {"type": "filter", "expr": "!length(data('selectedus')) ? datum : indata('selectedus','value', datum.shape)"},
+      {"type": "formula", "expr": "if(showbins,1,0)", "as": "ss"},
+      {"type": "filter", "expr": "datum.ss == 1"},
+      {"type": "extent", "field": "x", "signal": "xsig"},
+      {"type": "extent", "field": "y", "signal": "ysig"},
+      {"type": "bin", "field": "x", "extent":{"signal": "xsig"}, "as": [
+        "xbin0", "xbin1"], "maxbins": {"signal": "maxbins"}},
+      {"type": "bin", "field": "y", "extent":{"signal": "ysig"}, "as": [
+        "ybin0", "ybin1"], "maxbins": {"signal": "maxbins"}},
+      {"type": "joinaggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1"]}
+    ]},
+    {"name": "ee",
+    "source": ["trybin"],
+    "transform": [
+      {"type": "joinaggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1","shape"],"fields":["x", "y"], "ops":["average", "average"]}
+    ]},
+    {"name": "aaa",
+    "source": ["ee"],
+    "transform": [{"type": "aggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1", "average_x", "average_y", "shape"]}]
+    },
+    {"name": "trybineu",
+    "source": ["europa-sig"],
+    "transform": [
+      {"type": "filter", "expr": "!length(data('selected')) ? datum : indata('selected','value', datum.shape)"},
+      {"type": "formula", "expr": "if(showbins,1,0)", "as": "ss"},
+      {"type": "filter", "expr": "datum.ss == 1"},
+      {"type": "extent", "field": "x", "signal": "xsigeu"},
+      {"type": "extent", "field": "y", "signal": "ysigeu"},
+      {"type": "bin", "field": "x", "extent":{"signal": "xsigeu"}, "as": [
+        "xbin0", "xbin1"], "maxbins": {"signal": "maxbins"}},
+      {"type": "bin", "field": "y", "extent":{"signal": "ysigeu"}, "as": [
+        "ybin0", "ybin1"], "maxbins": {"signal": "maxbins"}},
+      {"type": "joinaggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1"]}
+    ]},
+    {"name": "eeu",
+    "source": ["trybineu"],
+    "transform": [
+      {"type": "joinaggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1","shape"],"fields":["x", "y"], "ops":["average", "average"]}
+    ]},
+    {"name": "aaau",
+    "source": ["eeu"],
+    "transform": [{"type": "aggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1", "average_x", "average_y", "shape"]}]}
+  
   ],
 
 
@@ -305,6 +374,40 @@
         }
       },
 
+      "data": [
+        {
+          "name": "remove",
+          "source": ["usa-sig"],
+          "transform": [
+            {"type": "formula", "expr": "if(showdots,1,0)", "as": "ss"},
+            {"type": "filter", "expr": "datum.ss == 1"}
+          ]
+        }
+      ],
+
+      "legends": [
+        {
+          "size": "size",
+          "title": "Count",
+          "fill": "bincolor",
+          "format": "s",
+          "symbolFillColor": "#4682b4",
+          "symbolStrokeColor": "transparent",
+          "symbolType": "circle"
+        },
+        {
+    
+          "fill": "bincolor",
+          "orient": "bottom",
+          "offset": 5,
+          "type": "gradient",
+          "gradientLength": 300,
+          "gradientThickness": 12,
+    
+          "direction": "horizontal"
+        }
+      ],
+
     "marks": [
     {
       "type": "shape",
@@ -322,7 +425,7 @@
       "update": {
         "strokeWidth": {"value": 0.5},
         "stroke": {"value": "black"},
-        "fill": {"value": "grey"}
+        "fill": {"value": "lightgrey"}
       },
       "hover": {"fill": {"value": "pink"}}
      
@@ -331,9 +434,9 @@
         { "type": "geoshape", "projection": "us-projection" }
       ]
     },
-    {
+    {"name": "normal",
       "type": "symbol",
-      "from": {"data": "usa-sig"},
+      "from": {"data": "remove"},
       "clip": true,
       "encode": {
         "enter": {
@@ -349,9 +452,25 @@
         "update": {
           "x": {"field": "x"},
           "y": {"field": "y"},
-          "opacity": [{"test": "!length(data('selectedus')) || indata('selectedus', 'value', datum.shape)", "value": 1},{"value": 0.4}],
-      "fill": [{"test": " indata('selectedus', 'value', datum.shape)", "value": "red"},{"value": "steelblue"}],
+          "opacity": [{"test": "!length(data('selectedus')) || indata('selectedus', 'value', datum.shape)", "value": 1},{"value": 0.3}],
+      "fill": [{"test": " indata('selectedus', 'value', datum.shape)", "scale": "color", "field": "shape"},{"value": "steelblue"}],
       "zindex": [{"test": " indata('selectedus', 'value', datum.shape)", "value": 1},{"value": 0}]
+        }
+      }
+    },
+    {"name": "binsus",
+    "type": "symbol",
+      "from": {"data": "aaa"},
+      "encode": {
+        "update":{
+          "x":{"field": "average_x"},
+          "y": {"field": "average_y"},
+          "size": {"scale": "size", "field": "count" },
+          "shape": {"value": "circle"},
+          "fill":{"scale": "color", "field": "shape"},
+          "opacity": {"value": 0.4},
+          "zindex": {"value": 1},
+          "tooltip": {"signal": "{'ee': datum.average_x, 'y': datum.average_y, 'Count': datum.count, 'Shape': datum.shape}"}
         }
       }
     }
@@ -818,6 +937,17 @@
         }
       },
 
+      "data": [
+        {
+          "name": "remove",
+          "source": ["europa-sig"],
+          "transform": [
+            {"type": "formula", "expr": "if(showdots,1,0)", "as": "ss"},
+            {"type": "filter", "expr": "datum.ss == 1"}
+          ]
+        }
+      ],
+
     "marks": [
         {
     "type": "shape",
@@ -841,7 +971,7 @@
       "update": {
         "strokeWidth": {"value": 0.5},
         "stroke": {"value": "black"},
-        "fill": {"value": "grey"}
+        "fill": {"value": "lightgrey"}
       },
       "hover": {"fill": {"value": "pink"}}
      
@@ -850,9 +980,9 @@
       { "type": "geoshape", "projection": "eu-projection" }
     ]
   },
-{
+{"name": "normals",
   "type": "symbol",
-  "from": {"data": "europa-sig"},
+  "from": {"data": "remove"},
   "clip": true,
   "encode": {
     "enter": {
@@ -872,7 +1002,23 @@
       "zindex": [{"test": " indata('selected', 'value', datum.shape)", "value": 1},{"value": 0}]
     }
   }
-}
+},
+{"name": "binseu",
+    "type": "symbol",
+      "from": {"data": "aaau"},
+      "encode": {
+        "update":{
+          "x":{"field": "average_x"},
+          "y": {"field": "average_y"},
+          "size": {"scale": "size", "field": "count" },
+          "shape": {"value": "circle"},
+          "fill":{"scale": "color", "field": "shape"},
+          "opacity": {"value": 0.6},
+          "zindex": {"value": 1},
+          "tooltip": {"signal": "{'ee': datum.average_x, 'y': datum.average_y, 'Count': datum.count, 'Shape': datum.shape}"}
+        }
+      }
+    }
       ]
 
     },
@@ -1058,14 +1204,14 @@
           "enter": {
             "x": {"signal": "mapWidth / 2"},
             "y": {"signal": "(shapeHeight)/ 2"},
-            "fill": {"scale": "color", "field": "name"}
+            "fill": [{"test": "datum.shapes == null", "value": "steelblue"},{"scale": "color", "field": "name"}]
           },
           "update": {
             "startAngle": {"field": "a0"},
             "endAngle": {"field": "a1"},
             "innerRadius": {"field": "r0"},
             "outerRadius": {"field": "r1"},
-            "stroke": {"value": "white"},
+            "stroke": [{"test": "indata('selected', 'value', datum.name)", "value": "black"},{"value": "white"}],
             "strokeWidth": {"value": 1},
             "zindex": {"value": 0},
             "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"},
@@ -1116,8 +1262,7 @@
       },
 
       "marks": [
-        {
-          "name": "pathgroup2",
+        {"name": "pathgroup2",
           "type": "group",
           "from": {
             "facet": {
@@ -1144,7 +1289,7 @@
                   "stroke": [{"scale": "color", "field": "shape"}],
                   "opacity": {"value":0.3},
                   "interpolate": {"value" : "linear"},
-                  "strokeDash":{"value": [4,4]},
+                  "strokeDash":{"value": [4,2]},
                   "x": {"scale": "x", "field": "year_date"},
                   "y": {"scale": "y", "field": "count"}                
                 }
@@ -1167,36 +1312,31 @@
                 "update": {
                   "stroke": {"scale": "color", "field": "shape"},
                   "interpolate": {"value" : "linear"},
-                  "strokeDash":{"value": [4,4]},
+                  "strokeDash":{"value": [4,2]},
                   "x": {"scale": "x", "field": "year_date"},
-                  "y": {"scale": "y", "field": "count"}                
+                  "y": {"scale": "y", "field": "count"},               
+                  "tooltip": {"signal": "datum.shape"}
+                },
+                "hover":{
+                  "strokeDash":{"value": [1,0]}
                 }
               }
-            }
-            ]
-            }
-          ]
-        }
-        
-      ],
+      }]}]}],
 
       "scales": [
-        {
-          "name": "x",
+        {"name": "x",
           "type": "time",
           "domain": {"data": "usbars", "field": "year_date"},
           "range": [0, {"signal": "thirdwidth"}]
         },
-        {
-          "name": "y",
+        {"name": "y",
           "type": "linear",
           "domain": {"data": "usbars", "field": "count"},
           "range": [{"signal": "thirdheight"}, 0],
           "nice": true,
           "zero": true
         },
-        {
-          "name": "color2",
+        {"name": "color2",
           "type": "ordinal",
           "domain": {"data": "usbars", "field": "shape"},
           "range":{"scheme": "category20b"}
@@ -1326,8 +1466,13 @@
                   "interpolate": {"value" : "linear"},
                   "strokeDash":{"value": [4,4]},
                   "x": {"scale": "x", "field": "year_date"},
-                  "y": {"scale": "y", "field": "count"}                
-                }
+                  "y": {"scale": "y", "field": "count"},               
+                  "tooltip": {"signal": "datum.shape"}
+                },
+                "hover":{
+                  "strokeDash":{"value": [1,0]}
+                }                
+                
               }
             }
             ]
