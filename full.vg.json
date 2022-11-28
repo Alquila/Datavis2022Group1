@@ -15,7 +15,7 @@
     {"name": "timewidth", "update": "mapWidth*2"},
     {"name": "shapeHeight", "value": 400},
     {"name": "dobheight", "value": 210},
-    {"name": "thirdheight", "value": 400},
+    {"name": "thirdheight", "value": 350},
     {"name": "thirdwidth", "value": 600},
     {"name": "showbins", "value": true, "bind": {"input": "checkbox", "name": "Show bins "}},
     { "name": "shape", "value": "all",
@@ -62,24 +62,24 @@
               "update": "clampRange([anchor[0] + delta, anchor[1] + delta], 0,  timewidth)"
             }
           ]
-        },
+    },
+    {
+      "name": "anchor", "value": null,
+      "on": [{"events": "@brush:mousedown", "update": "slice(brush)"}]
+    },
+    {
+      "name": "xdown", "value": 0,
+      "on": [{"events": "@brush:mousedown", "update": "x()-540"}]
+    },
+    {
+      "name": "delta", "value": 0,
+      "on": [
         {
-          "name": "anchor", "value": null,
-          "on": [{"events": "@brush:mousedown", "update": "slice(brush)"}]
-        },
-        {
-          "name": "xdown", "value": 0,
-          "on": [{"events": "@brush:mousedown", "update": "x()-540"}]
-        },
-        {
-          "name": "delta", "value": 0,
-          "on": [
-            {
-              "events": "[@brush:mousedown, window:mouseup] > window:mousemove!",
-              "update": "x() - xdown-498"
-            }
-          ]
+          "events": "[@brush:mousedown, window:mouseup] > window:mousemove!",
+          "update": "x() - xdown-498"
         }
+      ]
+    }
   ],
 "scales": [
     {
@@ -97,8 +97,14 @@
 {
   "name": "color",
   "type": "ordinal",
-  "domain": ["circle", "triangle", "disk", "sphere", "oval", "fireball", "light", "rectangle", "egg", "barrel", "cigar","cylinder","cone","teardrop","diamonds","cross","chevron","formation","unknown","other","changing", "flash" ],
+  "domain": ["circle", "triangle", "disk", "sphere", "oval", "fireball", "light", "rectangle", "egg","cigar","cylinder","cone","teardrop","diamonds","cross","chevron","formation","unknown","other","changing", "flash" ],
   "range": {"scheme": "category20b"}
+},
+{
+  "name": "coloreu",
+  "type": "ordinal",
+  "domain": ["circle", "triangle", "disk", "sphere", "oval", "fireball", "light", "rectangle", "egg", "cigar","cylinder","cone","teardrop","diamonds","cross","chevron","formation","unknown","other","changing", "flash" ],
+  "range": {"scheme": "category20"}
 }
   ],
 
@@ -168,7 +174,8 @@
     {"name": "eudatafilteredaftershape",
     "source": ["eudata"],
       "transform": [
-        {"type": "filter", "expr": "!length(data('selected')) ? datum : indata('selected','value', datum.shape)"}]
+        {"type": "filter", "expr": "!length(data('selected')) ? datum : indata('selected','value', datum.shape)"},
+        {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"], "signal": "eee"}]
     },
     {"name": "usdata",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/american.csv",
@@ -180,7 +187,14 @@
     "source": ["usdata"],
       "transform": [
         {"type": "filter", "expr": "!length(data('selectedus')) ? datum : indata('selectedus','value', datum.shape)"},
-        {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"], "signal": "eee"}]
+        {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"], "signal": "euu"}]
+    },
+    {"name": "usbars",
+        "source": ["usdatafilteredaftershape"],
+        "transform": [{"type": "aggregate","groupby": ["year_date", "shape"] }]},
+    {"name": "eubars",
+     "source": ["eudatafilteredaftershape"],
+      "transform": [{"type": "aggregate","groupby": ["year_date", "shape"]}]
     },
     {"name": "europejson",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/europe.json",
@@ -210,9 +224,7 @@
         "projection": "eu-projection",
         "fields": ["longitude", "latitude"]
       },
-      {
-          "type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "
-        } 
+      {"type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "} 
     ]
     },
     {"name": "usa-sig",
@@ -274,13 +286,6 @@
           "as": ["a0", "r0", "a1", "r1", "depth", "children"]
         }
       ]
-    },
-    {"name": "usbars",
-        "source": ["usdatafilteredaftershape"],
-        "transform": [{"type": "aggregate","groupby": ["year_date", "shape"] }]},
-    {"name": "usbars2",
-     "source": ["usdatafilteredaftershape"],
-      "transform": [{"type": "aggregate","groupby": ["year_date", "shape"]}]
     }
   ],
 
@@ -877,7 +882,7 @@
         "enter":{
           "width":{"signal": "mapWidth"},
           "height": {"signal": "shapeHeight*2"},
-          "y": {"offset": {"signal": "timeHeight*2+60"}},
+          "y": {"offset": {"signal": "dobheight+60"}},
           "x": {"offset": {"signal": "mapWidth+10"}},
           "opacity":{"value": 5},
           "stroke": {"value": "black"}
@@ -885,7 +890,7 @@
       },
 
       "layout":{
-        "padding": 20,
+        "padding": 30,
         "columns": 1,
         "align": "none",
     "bounds":"full",
@@ -904,10 +909,7 @@
               "strokeOpacity": {"value": 0.5}
             }
           },
-          "scales": [
-      
-    ],
-
+          
     "signals": [
       {
       "name": "clear", "value": true,
@@ -1014,15 +1016,6 @@
       "orient":"bottom"
     },
           
-          "scales": [
-      {
-        "name": "color",
-        "type": "ordinal",
-        "domain": {"data": "eu-tree", "field": "depth"},
-        "range": {"scheme": "tableau20"}
-      }
-    ],
-
     "signals": [
       {
       "name": "clear", "value": true,
@@ -1038,7 +1031,7 @@
       "name": "shift", "value": false,
       "on": [
         {
-          "events": "@euarc:click, @legendLabel:click",
+          "events": "@euarc:click", 
           "update": "event.shiftKey",
           "force":  true
         }
@@ -1049,7 +1042,7 @@
       "push": "outer",
       "on": [
         {
-          "events": "@euarc:click, @legendLabel:click",
+          "events": "@euarc:click",
           "update": "{value: datum.name}",
           "force":  true
         }
@@ -1064,8 +1057,8 @@
         "encode": {
           "enter": {
             "x": {"signal": "mapWidth / 2"},
-            "y": {"signal": "(shapeHeight-50)/ 2"},
-            "fill": {"scale": "color", "field": "depth"}
+            "y": {"signal": "(shapeHeight)/ 2"},
+            "fill": {"scale": "color", "field": "name"}
           },
           "update": {
             "startAngle": {"field": "a0"},
@@ -1096,7 +1089,7 @@
         },
         "update":{
           "x": {"signal": "mapWidth / 2"},
-          "y": {"signal": "(shapeHeight-50)/ 2"},
+          "y": {"signal": "(shapeHeight)/ 2"},
           "radius": {"signal": "(datum['r0'] == 0 ? 0 : datum['r0'] + datum['r1']) / 2"},
           "theta": {"signal": "(datum['a0'] + datum['a1']) / 2"},
           "angle": {"signal": "datum['r0'] == 0 ? 0 : ((datum['a0'] + datum['a1']) / 2) * 180 / PI + (inrange(((datum['a0'] + datum['a1']) / 2) % (2 * PI), [0, PI]) ? 270 : 90)"}
@@ -1117,15 +1110,10 @@
           "y": {"offset": {"signal": "dobheight+60"}},
           "x": {"offset": {"signal": "mapWidth*2+10"}},
           "fill": {"value": "white"},
-          "opacity":{"value": 0.3},
           "strokeOpacity": {"value": 1},
           "stroke": {"value": "black"}
         }
       },
-
-      "data": [
-        
-      ],
 
       "marks": [
         {
@@ -1140,7 +1128,8 @@
           "encode": {
             "update": {
               "width": {"signal": "thirdwidth"},
-          "height":{"signal": "thirdheight"}
+          "height":{"signal": "thirdheight"},
+                "clip": {"value": true}
             }
           },
           "marks": [
@@ -1152,6 +1141,30 @@
               "from": {"data": "faceted_path_main"},
               "encode": {
                 "update": {
+                  "stroke": [{"scale": "color", "field": "shape"}],
+                  "opacity": {"value":0.3},
+                  "interpolate": {"value" : "linear"},
+                  "strokeDash":{"value": [4,4]},
+                  "x": {"scale": "x", "field": "year_date"},
+                  "y": {"scale": "y", "field": "count"}                
+                }
+              }
+            },
+            {"type": "group",
+            "data": [{
+              "name": "uuu", "source": ["faceted_path_main"],
+              "transform": [{"type": "filter", "expr": "howto ? year(datum[\"year_date\"]) > year(howto[0]) && year(datum.year_date) <= year(howto[1]) : datum "}]
+            }],
+
+            "marks": [
+              {
+              "name": "selery",
+              "type": "line",
+              "style": ["line"],
+              "sort": {"field": "datum[\"year_date\"]"},
+              "from": {"data": "uuu"},
+              "encode": {
+                "update": {
                   "stroke": {"scale": "color", "field": "shape"},
                   "interpolate": {"value" : "linear"},
                   "strokeDash":{"value": [4,4]},
@@ -1159,6 +1172,8 @@
                   "y": {"scale": "y", "field": "count"}                
                 }
               }
+            }
+            ]
             }
           ]
         }
@@ -1249,94 +1264,158 @@
         "enter":{
           "width": {"signal": "thirdwidth"},
           "height":{"signal": "thirdheight"},
-          "y": {"offset": {"signal": "dobheight+80+thirdheight"}},
+          "y": {"offset": {"signal": "dobheight+100+thirdheight"}},
           "x": {"offset": {"signal": "mapWidth*2+10"}},
-          "fill": {"value": "lightpink"},
+          "fill": {"value": "white"},
           "opacity":{"value": 5},
           "strokeOpacity": {"value": 1},
           "stroke": {"value": "black"}
         }
       },
 
-      "scales": [
-        {
-          "name": "xscale",
-          "type": "band",
-          "domain": {"data": "usbars2", "field": "year_date"},
-          "range": [0,{"signal": "thirdwidth"}],
-          "padding": 0.2
-        },
-        {
-          "name": "yscale",
-          "type": "linear",
-          "domain": {"data": "usbars2", "field": "count"},
-          "range": [{"signal": "thirdheight"},0],
-          "round": true,
-          "zero": true,
-          "nice": true
-        },
-        {
-          "name": "color",
-          "type": "ordinal",
-          "domain": {"data": "usbars2", "field": "shape"},
-          "range": {"scheme": "category20"}
-        }
-      ],
-    
-      "axes": [
-        {"orient": "bottom", "scale": "xscale", "tickSize": 0, "labelPadding": 4, "zindex": 1, "formatType": "time", "format": {"year": ""}},
-        {"orient": "left", "scale": "yscale"}
-      ],
-    
       "marks": [
         {
+          "name": "pathgroup2",
           "type": "group",
-    
           "from": {
             "facet": {
-              "data": "usbars2",
-              "name": "facet",
-              "groupby": "year_date"
-            }
-          },
-    
+              "name": "faceted_path_main",
+              "data": "eubars",
+              "groupby": ["shape"]
+            }},
           "encode": {
             "update": {
-              "x": {"scale": "xscale", "field": "year_date"}
+              "width": {"signal": "thirdwidth"},
+          "height":{"signal": "thirdheight"}
             }
           },
-    
-          "signals": [
-            {"name": "width", "update": "bandwidth('xscale')"}
-          ],
-    
-          "scales": [
-            {
-              "name": "pos",
-              "type": "band",
-              "range": "width",
-              "domain": {"data": "facet", "field": "shape"}
-            }
-          ],
-    
           "marks": [
             {
-              "name": "bars",
-              "from": {"data": "facet"},
-              "type": "rect",
+              "name": "marks",
+              "type": "line",
+              "style": ["line"],
+              "sort": {"field": "datum[\"year_date\"]"},
+              "from": {"data": "faceted_path_main"},
               "encode": {
                 "update": {
-                  "x": {"scale": "pos", "field": "shape"},
-                  "width": {"scale": "pos", "band": 1.5},
-                  "y": {"scale": "yscale", "field": "count"},
-                  "y2": {"scale": "yscale", "value": 0},
-                  "fill": {"scale": "color", "field": "shape"}
+                  "stroke": {"scale": "color", "field": "shape"},
+                  "interpolate": {"value" : "linear"},
+                  "strokeDash":{"value": [4,2]},
+                  "opacity":{"value": 0.3},
+                  "x": {"scale": "x", "field": "year_date"},
+                  "y": {"scale": "y", "field": "count"}                
+                }
+              }
+            },
+            {"type": "group",
+            "data": [{
+              "name": "uuu3", "source": ["faceted_path_main"],
+              "transform": [{"type": "filter", "expr": "howto ? year(datum[\"year_date\"]) > year(howto[0]) && year(datum.year_date) <= year(howto[1]) : datum "}]
+            }],
+
+            "marks": [
+              {
+              "name": "selery2",
+              "type": "line",
+              "style": ["line"],
+              "sort": {"field": "datum[\"year_date\"]"},
+              "from": {"data": "uuu3"},
+              "encode": {
+                "update": {
+                  "stroke": {"scale": "color", "field": "shape"},
+                  "interpolate": {"value" : "linear"},
+                  "strokeDash":{"value": [4,4]},
+                  "x": {"scale": "x", "field": "year_date"},
+                  "y": {"scale": "y", "field": "count"}                
                 }
               }
             }
+            ]
+            }
           ]
         }
-      ]
+        
+      ],
+
+      "title":{
+        "text": "Shapes over time in Europa",
+        "anchor": "start",
+        "encode":{
+          "enter": {
+            "x": {"offset": 35},
+            "y": {"offset": 25}
+          }
+        }
+      },
+
+      "scales": [
+        {
+          "name": "x",
+          "type": "time",
+          "domain": {"data": "eubars", "field": "year_date"},
+          "range": [0, {"signal": "thirdwidth"}]
+        },
+        {
+          "name": "y",
+          "type": "linear",
+          "domain": {"data": "eubars", "field": "count"},
+          "range": [{"signal": "thirdheight"}, 0],
+          "nice": true,
+          "zero": true
+        }
+      ],
+      "axes": [
+        {
+          "scale": "x",
+          "orient": "bottom",
+          "gridScale": "y",
+          "grid": true,
+          "tickCount": {"signal": "ceil(thirdwidth/40)"},
+          "domain": false,
+          "labels": false,
+          "aria": false,
+          "maxExtent": 0,
+          "minExtent": 0,
+          "ticks": false,
+          "zindex": 0
+        },
+        {
+          "scale": "y",
+          "orient": "left",
+          "gridScale": "x",
+          "grid": true,
+          "tickCount": {"signal": "ceil(thirdheight/80)"},
+          "domain": false,
+          "labels": false,
+          "aria": false,
+          "maxExtent": 0,
+          "minExtent": 0,
+          "ticks": false,
+          "zindex": 0
+        },
+        {
+          "scale": "x",
+          "orient": "bottom",
+          "grid": false,
+          "title": "Year",
+          "labelFlush": true,
+          "labelOverlap": true,
+          "tickCount": {"signal": "ceil(thirdwidth/40)"},
+          "zindex": 0
+        },
+        {
+          "scale": "y",
+          "orient": "left",
+          "grid": false,
+          "title": "Number of sigthings",
+          "labelOverlap": true,
+          "tickCount": {"signal": "ceil(thirdheight/80)"},
+          "zindex": 0
+        }
+      ],
+
+      "legends": [{"stroke": "color", "symbolType": "stroke", "title": "Shape"}]
+      
     }
   ],
 
