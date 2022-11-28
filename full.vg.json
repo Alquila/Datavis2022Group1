@@ -97,7 +97,7 @@
 {
   "name": "color",
   "type": "ordinal",
-  "domain": ["circle", "triangle", "disk", "sphere", "oval", "fireball", "light", "rectangle", "egg","cigar","cylinder","cone","teardrop","diamonds","cross","chevron","formation","unknown","other","changing", "flash" ],
+  "domain": ["circle", "disk", "sphere", "oval","triangle","teardrop", "cigar","cylinder","cone","diamonds","rectangle", "light","flash","fireball", "cross","chevron","formation","unknown","other","changing",  "egg" ],
   "range": {"scheme": "category20b"}
 },
 {
