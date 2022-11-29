@@ -76,7 +76,13 @@
           "update": "x() - xdown-498"
         }
       ]
-    }
+    },
+    {"name": "hover_tuple_eu"},
+    {"name": "clear_hover_eu"},
+    {"name": "hover_modify_eu"},
+    {"name": "hover_tuple_us"},
+    {"name": "clear_hover_us"},
+    {"name": "hover_modify_us"}
   ],
 "scales": [
 {
@@ -159,6 +165,14 @@
         {"trigger": "shift && clicked2", "toggle": "clicked2"}
       ]
     },
+    {"name": "hover_store_eu",
+    "on": [
+      {"trigger": "clear_hover_eu", "remove": true}
+    ]},
+    {"name": "hover_store_us", 
+    "on": [
+      {"trigger": "clear_hover_us", "remove": true}
+    ]},
     {"name": "selectedus",
       "on": [
         {"trigger": "clear", "remove": true},
@@ -453,7 +467,7 @@
           "shape": {"value": "circle"},
           "fill":{"scale": "color", "field": "shape"},
           "opacity": {"scale": "opacit", "field": "count"},
-          "zindex": {"value": 1},
+          "zindex": [{"test": "indata('hover_store_us', 'value', datum.shape)","value": 2},{"value": 1}],
           "tooltip": {"signal": "{'x': datum.average_x, 'y': datum.average_y, 'Count': datum.count, 'Shape': datum.shape}"}
         }
       }
@@ -967,7 +981,9 @@
           "shape": {"value": "circle"},
           "fill":{"scale": "color", "field": "shape"},
           "opacity": {"value": 0.6},
-          "zindex": {"value": 1},
+          "zindex": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value": 2},{"value": 1}],
+          "strokeWidth": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value": 0.5},{"value": 0}],
+          "stroke": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value":"red"},{"value": "white"}],
           "tooltip": {"signal": "{'ee': datum.average_x, 'y': datum.average_y, 'Count': datum.count, 'Shape': datum.shape}"}
         }
       }
@@ -1028,6 +1044,34 @@
         {"events": "@usarc:click, @ustext:click",
           "update": "{value: datum.name}",
           "force":  true}]
+    },
+    {
+      "name": "hover_tuple_us",
+      "push": "outer",
+      "on": [
+        {
+          "events": "@usarc:mouseover",
+          "update": "{value: datum.name}",
+          "force": true
+        }
+      ]
+    },
+    {
+      "name": "clear_hover_us",
+      "push": "outer",
+      "on": [
+        {"events": "@usarc:mouseout", "update": "true", "force": true}
+      ]
+    },
+    {
+      "name": "hover_modify_us",
+      "push": "outer",
+      "on": [
+        {
+          "events": {"signal": "hover_tuple_us"},
+          "update": "modify(\"hover_store_us\", indata('hover_store_us', 'value', hover_tuple_us['value'] ) ? null : hover_tuple_us)"
+        }
+      ]
     }
     ],
 
@@ -1130,6 +1174,34 @@
           "events": "@euarc:click, @eutext:click",
           "update": "{value: datum.name}",
           "force":  true
+        }
+      ]
+    },
+    {
+      "name": "hover_tuple_eu",
+      "push": "outer",
+      "on": [
+        {
+          "events": "@euarc:mouseover, @eutext:mouseover",
+          "update": "{value: datum.name}",
+          "force": true
+        }
+      ]
+    },
+    {
+      "name": "clear_hover_eu",
+      "push": "outer",
+      "on": [
+        {"events": "@euarc:mouseout, @eutext:mouseout", "update": "true", "force": true}
+      ]
+    },
+    {
+      "name": "hover_modify_eu",
+      "push": "outer",
+      "on": [
+        {
+          "events": {"signal": "hover_tuple_eu"},
+          "update": "modify(\"hover_store_eu\", indata('hover_store_eu', 'value', hover_tuple_eu['value'] ) ? null : hover_tuple_eu)"
         }
       ]
     }
@@ -1251,7 +1323,8 @@
                 "update": {
                   "stroke": {"scale": "color", "field": "shape"},
                   "interpolate": {"value" : "linear"},
-                  "strokeDash":{"value": [2,2]},
+                  "strokeDash": [{"test": "indata('hover_store_us', 'value', datum.shape)","value":[1,0]},{"value": [2,2]}],
+                  "strokeWidth": [{"test": "indata('hover_store_us', 'value', datum.shape)","value":2},{"value": 1}],
                   "x": {"scale": "x", "field": "year_date"},
                   "y": {"scale": "y", "field": "count"},               
                   "tooltip": {"signal": "{'Shape': datum.shape, 'Count': datum.count}"}
@@ -1379,7 +1452,7 @@
                 "update": {
                   "stroke": {"scale": "color", "field": "shape"},
                   "interpolate": {"value" : "linear"},
-                  "strokeDash":{"value": [4,2]},
+                  "strokeDash":{"value": [2,2]},
                   "opacity":{"value": 0.3},
                   "x": {"scale": "x", "field": "year_date"},
                   "y": {"scale": "y", "field": "count"}                
@@ -1403,7 +1476,8 @@
                 "update": {
                   "stroke": {"scale": "color", "field": "shape"},
                   "interpolate": {"value" : "linear"},
-                  "strokeDash":{"value": [4,4]},
+                  "strokeDash": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value":[1,0]},{"value": [2,2]}],
+                  "strokeWidth": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value":2},{"value": 1}],
                   "x": {"scale": "x", "field": "year_date"},
                   "y": {"scale": "y", "field": "count"},               
                   "tooltip": {"signal": "datum.shape"}
