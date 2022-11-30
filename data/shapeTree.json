@@ -52,7 +52,7 @@
       "name": "rectangle",
       "parent": 2,
       "size": 1297,
-      "color": "#EE6DFD"
+      "color": "#7B59BA"
     },
     {
       "id": 10,
@@ -164,14 +164,14 @@
       "name": "cigar",
       "parent": 7,
       "size": 2057,
-      "color": "#956CE0"
+      "color": "#DB69CC"
     },
     {
       "id": 26,
       "name": "cylinder",
       "parent": 7,
       "size": 1283,
-      "color": "#7B59BA"
+      "color": "#EE6DFD"
     },
     {
       "id": 27,
