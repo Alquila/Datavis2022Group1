@@ -9,15 +9,11 @@
     {
       "name": "timeunit", "value": ["month", "date"],
       "bind": {"input": "select", "options": [
-        ["year"], ["month"], ["date"], ["day"], ["year", "month"], ["hours"], ["month", "date"], ["dayofyear"]
-      ]}
+        ["year"], ["month"], ["date"], ["day"], ["year", "month"], ["hours"], ["month", "date"]]}
     },
     {"name": "oneheight", "value": 300},
     {"name": "twoheight", "value": 100},
-    {"name": "threeheight", "value": 200},
-     {
-      "name": "detailDomain"
-    }
+    {"name": "threeheight", "value": 200}
   ],
 
   "data": [
@@ -35,7 +31,7 @@
       "transform": [
       {
         "type": "timeunit",
-        "field": "date",
+        "field": "datetime",
         "units": {"signal": "timeunit"},
         "signal": "tbin"
       },
@@ -54,7 +50,7 @@
       "transform": [
       {
         "type": "timeunit",
-        "field": "timedate",
+        "field": "datetime",
         "units": {"signal": "timeunit"},
         "signal": "tbineu"
       },
