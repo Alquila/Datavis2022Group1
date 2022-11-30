@@ -56,9 +56,9 @@ def split_datetime(data):
     return data
 
 def put_back_datetime():
-    df = pd.read_csv("data/coordEu.csv", low_memory=False, sep=",")
+    df = pd.read_csv("data/american.csv", low_memory=False, sep=",")
     df['datetime'] = df[['date', 'time']].apply(lambda x: ' '.join(x), axis=1)
-    df.to_csv("data/coordEu.csv", sep=",", index=False)
+    df.to_csv("data/american.csv", sep=",", index=False)
 
 
 ### Prints how many rows are missing information per coloum
