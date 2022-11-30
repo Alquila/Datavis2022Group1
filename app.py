@@ -55,6 +55,12 @@ def split_datetime(data):
     data.drop("date posted", axis=1, inplace=True)
     return data
 
+def put_back_datetime():
+    df = pd.read_csv("data/coordEu.csv", low_memory=False, sep=",")
+    df['datetime'] = df[['date', 'time']].apply(lambda x: ' '.join(x), axis=1)
+    df.to_csv("data/coordEu.csv", sep=",", index=False)
+
+
 ### Prints how many rows are missing information per coloum
 def missing(dff):
     print (round((dff.isnull().sum() * 100/ len(dff)),2).sort_values(ascending=False))
@@ -283,7 +289,9 @@ if __name__ == "__main__":
     # bylonlatUs(data)
     # badData(data)
     # missing(data)
-    removeUnder1990()
+    # removeUnder1990()
+    put_back_datetime()
+
 
     # binLongAndLat(data)
     # writeToNewFile(data)
