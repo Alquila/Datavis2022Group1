@@ -108,35 +108,35 @@
       "name": "egg",
       "parent": 5,
       "size": 759,
-      "color": "#5165BD"
+      "color": "#574DE8"
     },
     {
       "id": 18,
       "name": "oval",
       "parent": 5,
       "size": 3733,
-      "color": "#36437D"
+      "color": "#506FF2"
     },
     {
       "id": 19,
       "name": "disk",
       "parent": 5,
       "size": 5213,
-      "color": "#1A213D"
+      "color": "#5490DB"
     },
     {
       "id": 20,
       "name": "sphere",
       "parent": 5,
       "size": 5387,
-      "color": "#6357E6"
+      "color": "#50C3F2"
     },
     {
       "id": 21,
       "name": "circle",
       "parent": 5,
       "size": 7608,
-      "color": "#9860FE"
+      "color": "#1AE4EB"
     },
     {
       "id": 22,
