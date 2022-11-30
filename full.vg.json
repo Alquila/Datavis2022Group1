@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "A basic pie chart example.",
-  "width": 1800,
+  "width": 2300,
   "height": 1100,
   "background": "lightgrey",
   "autosize": "pad",
@@ -15,6 +15,8 @@
     {"name": "dobheight", "value": 190},
     {"name": "thirdheight", "value": 320},
     {"name": "thirdwidth", "value": 600},
+    {"name": "fourwidth", "value": 600},
+    {"name": "fourheight", "value": 300},
     {"name": "showbins", "value": true, "bind": {"input": "checkbox", "name": "Show bins "}},
     {"name": "showdots", "value": true, "bind": {"input": "checkbox", "name": "Show spots "}},
     {"name": "maxbins", "value": 70, 
@@ -50,6 +52,8 @@
     {"name": "clicked2"},
     {"name": "shift3"},
     {"name": "clicked3"},
+    {"name": "clicked_time_eu"},
+    {"name": "clicked_time_us"},
     {
           "name": "brush", "value": 0,
           "on": [
@@ -83,6 +87,11 @@
           "update": "x() - xdown-498"
         }
       ]
+    },
+    {
+      "name": "timeunit", "value": ["month", "date"],
+      "bind": {"input": "select", "name": "Time unit ", "options": [
+        ["year"], ["month"], ["date"], ["day"], ["year", "month"], ["hours"], ["month", "date"]]}
     },
     {"name": "hover_tuple_eu"},
     {"name": "clear_hover_eu"},
@@ -172,6 +181,10 @@
         {"trigger": "shift && clicked2", "toggle": "clicked2"}
       ]
     },
+    {"name": "time_store_eu",
+    "on":[{"trigger": "clicked_time_eu","toggle": "clicked_time_eu"},
+          {"trigger": "timeunit", "remove": true}]
+    },
     {"name": "hover_store_eu",
     "on": [
       {"trigger": "clear_hover_eu", "remove": true}
@@ -201,28 +214,30 @@
     "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordEu.csv",
     "format": {"type": "csv", "parse": "auto", "delimiter": ","}
   },
-  {"name": "spots", "source" : ["eudata"],
+  {"name": "eudatafilteredaftershape",
+    "source": ["eudata"],
+      "transform": [
+        {"type": "filter", "expr": "!length(data('selected')) ? datum : indata('selected','value', datum.shape)"},
+        {"field": "date","type": "timeunit","units": {"signal": "timeunit"},"as": ["year_date", "year_date_end"], "signal": "eee"}]
+  },
+  {"name": "spots", "source" : ["eudatafilteredaftershape"],
   "transform": [
     {"type": "aggregate","groupby": ["country"],"as": ["counts"]}
   ]
   },
-    {"name": "eudatafilteredaftershape",
-    "source": ["eudata"],
-      "transform": [
-        {"type": "filter", "expr": "!length(data('selected')) ? datum : indata('selected','value', datum.shape)"},
-        {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"], "signal": "eee"}]
-    },
     {"name": "usdata",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/american.csv",
       "format":{"type": "csv", "parse":"auto", "delimiter": ","},
       "transform": [{"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"}]
-      
     },
     {"name": "usdatafilteredaftershape",
     "source": ["usdata"],
       "transform": [
         {"type": "filter", "expr": "!length(data('selectedus')) ? datum : indata('selectedus','value', datum.shape)"},
         {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"], "signal": "euu"}]
+    },
+    {"name": "usspots", "source": ["usdatafilteredaftershape"],
+    "transform": [{"type": "aggregate","groupby":["country"], "as":["counts"]}]
     },
     {"name": "usbars",
         "source": ["usdatafilteredaftershape"],
@@ -245,7 +260,7 @@
           "format": {"type": "topojson",  
           "feature":"continent_North_America_subunits"},
           "transform": [
-            {"type": "lookup","from": "spots",
+            {"type": "lookup","from": "usspots",
               "key": "country","values": ["counts"],
               "fields": ["properties['geounit']"],
               "default": 0}
@@ -367,7 +382,23 @@
     {"name": "aaau",
     "source": ["eeu"],
     "transform": [{"type": "aggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1", "average_x", "average_y", "shape"]}]}
-  
+    ,{"name": "alltime_eu",
+    "source": ["eudata"],
+    "transform": [
+      {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_eu"},
+      {"type": "aggregate", "groupby": ["unit0"],"ops": ["count"],"fields": [null],"as": ["count"]}
+    ]},{"name": "alltime_us",
+    "source": ["usdata"],
+    "transform": [
+      {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_us"},
+      {"type": "aggregate", "groupby": ["unit0"],"ops": ["count"],"fields": [null],"as": ["count"]}
+    ]},{"name": "eufilteredafterdate", "source": ["eudatafilteredaftershape"],
+    "transform": [
+      
+      {"type":"filter", "expr": "!length(data('time_store_eu')) ? datum : (indata('time_store_eu','value',timeFormat(datum.year_date, timeUnitSpecifier(tbin_eu.units))))"}]
+
+    }
+
   ],
 
 
@@ -425,13 +456,13 @@
       "encode": {
         "enter":{
           "strokeWidth": {"value": 0.25},
-          "stroke": {"value": "#888"}, "fill": {"value": "white"},
-          "tooltip": {"signal": "{'Country': datum.properties['geounit'], 'Count' : datum.counts}"}
+          "stroke": {"value": "#888"}, "fill": {"value": "white"}
         },
-      "update": {
-        "strokeWidth": {"value": 0.5},
-        "stroke": {"value": "black"},
-        "fill": {"value": "lightgrey"}
+        "update": {
+          "strokeWidth": {"value": 0.5},
+          "stroke": {"value": "black"},
+          "fill": {"value": "lightgrey"}
+          ,"tooltip": {"signal": "{'Country': datum.properties['geounit'], 'Count' : datum.counts}"}
       },
       "hover": {"fill": {"value": "pink"}}
      
@@ -586,7 +617,7 @@
             {"name": "eutime2",
             "source": ["eudatafilteredaftershape"],
             "transform": [
-              {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
+              {"field": "date","type": "timeunit","units":{"signal": "timeunit"},"as": ["year_date", "year_date_end"]},
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
 
@@ -1017,15 +1048,13 @@
       "enter":{
         "strokeWidth": {"value": 0.25},
           "stroke": {"value": "#888"},
-          "fill": {"value": "pink"},
-          "tooltip": {
-        "signal": "{'Country': datum.properties['geounit'], 'Count': datum.counts}"
-      }
-      },
-      "update": {
-        "strokeWidth": {"value": 0.5},
-        "stroke": {"value": "black"},
-        "fill": {"value": "lightgrey"}
+          "fill": {"value": "pink"}
+        },
+        "update": {
+          "strokeWidth": {"value": 0.5},
+          "stroke": {"value": "black"},
+          "fill": {"value": "lightgrey"}
+          ,"tooltip": {"signal": "{'Country': datum.properties['geounit'], 'Count': datum.counts}"}
       },
       "hover": {"fill": {"value": "pink"}}
      
@@ -1543,7 +1572,7 @@
       ],
 
       "legends": [{"stroke": "color",
-          "fillColor": "white","labelFontSize": 12,"symbolType": "stroke", "title": "Shape"}]
+          "fillColor": "white","labelFontSize": 12,"symbolType": "stroke", "title": "Shape","offset": 5}]
       
     }
     ,
@@ -1714,8 +1743,98 @@
       ],
 
       "legends": [{"stroke": "color",
-          "fillColor": "white","labelFontSize": 12,"symbolType": "stroke", "title": "Shape"}]
+          "fillColor": "white","labelFontSize": 12,"symbolType": "stroke", "title": "Shape", "offset": 5}]
       
+    },
+    {"name": "us_time_bars",
+      "type": "group",
+      "encode": {
+        "enter":{
+          "fill": {"value": "white"},
+          "width": {"signal": "fourwidth"},
+          "height": {"signal": "fourheight"},
+          "x": {"offset": {"signal": "mapWidth+130+thirdwidth+mapWidth"}},
+          "y":{"offset": {"signal": "dobheight+60"}}
+        }
+      }
+
+
+
+    },
+    {"name": "eu_time_bars",
+      "type": "group",
+      "encode": {
+        "enter":{
+          "fill": {"value": "white"},
+          "width": {"signal": "fourwidth"},
+          "height": {"signal": "fourheight"},
+          "x": {"offset": {"signal": "mapWidth+130+thirdwidth+mapWidth"}},
+          "y":{"offset": {"signal": "dobheight+fourheight+100"}}
+
+        }
+      },
+
+      "scales": [
+        {
+          "name": "xscale",
+          "type": "band",
+          "range": [0,{"signal": "fourwidth"}],
+          "padding": 0.1,
+          "round": false,
+          "domain": {"signal": "timeSequence(tbin_eu.unit, tbin_eu.start, tbin_eu.stop)"}
+        },
+        {
+          "name": "yscale",
+          "type": "linear",
+          "range": [{"signal": "fourheight"},0],
+          "domain": {"data": "alltime_eu", "field": "count"},
+          "zero": true,
+          "nice": true
+        }
+      ],
+
+      "axes": [
+        { "orient": "bottom", "scale": "xscale",
+          "formatType": "time", "format": {"signal": "timeUnitSpecifier(tbin_eu.units, {hours: '%H'})"}, "labelAngle": 90, "labelAlign":"left", "labelOffset": 6, "labelFontSize": 10,"labelOverlap":"greedy" },
+        { "orient": "left", "scale": "yscale", "tickCount": 7,"title": "Number of Sigtings" }
+      ],
+
+      "signals": [
+        {
+      "name": "clicked_time_eu",
+      "push": "outer",
+      "on": [
+        {
+          "events": "@eu_time_bars:click",
+          "update": "{value: timeFormat(datum.unit0, timeUnitSpecifier(tbin_eu.units))}",
+          "force":  true
+        }
+      ]
+      }
+      ],
+
+      "marks": [
+        {"name": "eu_time_bars",
+          "type": "rect",
+          "from": {"data": "alltime_eu"},
+          "encode": {
+            "update": {
+              "x": {"scale": "xscale", "field": "unit0"},
+              "width": {"scale": "xscale", "band": 1},
+              "y": {"scale": "yscale", "field": "count"},
+              "y2": {"scale": "yscale", "value": 0},
+              "fill": [{"test": "indata('time_store_eu','value', timeFormat(datum.unit0, timeUnitSpecifier(tbin_eu.units)))", "value": "red"},{"value": "#267a34"}],
+              "tooltip": {"signal": "{timeunit: timeFormat(datum.unit0, timeUnitSpecifier(tbin_eu.units)), count: format(datum.count, ',') }"}
+              
+            },
+            "hover": {
+              "fill": {"value": "firebrick"}
+            }
+          }
+        }
+      ]
+      
+
     }
   ],
 
