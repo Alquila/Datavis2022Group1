@@ -1091,7 +1091,7 @@
           "enter": {
             "x": {"signal": "mapWidth / 2"},
             "y": {"signal": "(shapeHeight-50)/ 2"},
-            "fill": [{"test": "datum.shapes == null", "value": "#5f7ad4"},{"scale": "color", "field": "name"}]
+            "fill": {"signal": "datum.color"}
           },
           "update": {
             "startAngle": {"field": "a0"},

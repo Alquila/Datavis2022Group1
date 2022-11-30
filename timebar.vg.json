@@ -71,6 +71,25 @@
         "as": ["count"]
       }
     ]
+    },
+    {
+      "name": "eutimes",
+      "source": ["eudata"],
+      "transform": [
+        {"type": "timeunit",
+        "field": "time",
+        "units": ["hours"],
+        "signal": "tbinhours"
+        },
+        {
+          "type": "aggregate",
+          "groupby": ["unit0"],
+          "ops": ["count"],
+          "fields": [null],
+          "as": ["count"]
+        }
+      ]
+
     }
   ],
 
@@ -201,6 +220,62 @@
       }
     }
   ]
+  },
+  {"name": "eutimebar",
+  "type": "group",
+  "encode": {
+    "enter":{
+      "y": {"scale": "layout", "value": "three", "offset": 0},
+      "width":{"signal": "width"},
+      "height": {"signal": "threeheight"}
+    }
+  },
+
+"scales": [
+  {
+    "name": "xscale",
+    "type": "band",
+    "range": "width",
+    "padding": 0.1,
+    "round": true,
+    "domain": {"signal": "timeSequence(tbinhours.unit, tbinhours.start, tbinhours.stop)"}
+  },
+  {
+    "name": "yscale",
+    "type": "linear",
+    "range": [{"signal": "threeheight"},0],
+    "domain": {"data": "eutimes", "field": "count"},
+    "zero": true,
+    "nice": true
+  }
+],
+
+"axes": [
+  { "orient": "bottom", "scale": "xscale",
+    "formatType": "time", "format": {"signal": "timeUnitSpecifier(tbinhours.unit, {hours: '%H'})"}, "labelAngle": 90, "labelAlign":"left", "labelOffset": 6, "labelFontSize": 10,"labelOverlap":"greedy" },
+  { "orient": "left", "scale": "yscale", "tickCount": 7,"title": "EU" }
+],
+
+"marks": [
+  {
+    "type": "rect",
+    "from": {"data": "eutimes"},
+    "encode": {
+      "update": {
+        "x": {"scale": "xscale", "field": "unit0"},
+        "width": {"scale": "xscale", "band": 1},
+        "y": {"scale": "yscale", "field": "count"},
+        "y2": {"scale": "yscale", "value": 0},
+        "fill": {"value": "steelblue"},
+        "tooltip": {"signal": "{timeunit: timeFormat(datum.unit0, timeUnitSpecifier(tbinhours.units)), count: format(datum.count, ',') }"}
+      },
+      "hover": {
+        "fill": {"value": "firebrick"}
+      }
+    }
+  }
+]
+
   }
 ],
 
