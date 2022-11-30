@@ -1217,7 +1217,7 @@
           "enter": {
             "x": {"signal": "mapWidth / 2"},
             "y": {"signal": "(shapeHeight)/ 2"},
-            "fill": [{"test": "datum.shapes == null", "value": "#267a34"},{"scale": "color", "field": "name"}]
+            "fill": {"signal": "datum.color"}
           },
           "update": {
             "startAngle": {"field": "a0"},
@@ -1299,7 +1299,7 @@
           "encode": {
             "update": {
               "width": {"signal": "thirdwidth"},
-          "height":{"signal": "thirdheight"},
+              "height":{"signal": "thirdheight"},
                 "clip": {"value": true}
             }
           },
