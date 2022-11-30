@@ -129,14 +129,14 @@
       "name": "sphere",
       "parent": 5,
       "size": 5387,
-      "color": "#546DE8"
+      "color": "#48A3E8"
     },
     {
       "id": 21,
       "name": "circle",
       "parent": 5,
       "size": 7608,
-      "color": "#5047FF"
+      "color": "#3B80FF"
     },
     {
       "id": 22,
