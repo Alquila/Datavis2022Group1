@@ -39,20 +39,20 @@
       "id": 7,
       "name": "barrel",
       "parent": 2,
-      "color": "#A779FA"
+      "color": "#F29BC9"
     },
     {
       "id": 8,
       "name": "objects",
       "parent": 2,
-      "color": "#B262E3"
+      "color": "#EB809F"
     },
     {
       "id": 9,
       "name": "rectangle",
       "parent": 2,
       "size": 1297,
-      "color": "#7B59BA"
+      "color": "#E8A495"
     },
     {
       "id": 10,
@@ -108,35 +108,35 @@
       "name": "egg",
       "parent": 5,
       "size": 759,
-      "color": "#5165BD"
+      "color": "#38E6EB"
     },
     {
       "id": 18,
       "name": "oval",
       "parent": 5,
       "size": 3733,
-      "color": "#36437D"
+      "color": "#5CE1FF"
     },
     {
       "id": 19,
       "name": "disk",
       "parent": 5,
       "size": 5213,
-      "color": "#1A213D"
+      "color": "#68A3FF"
     },
     {
       "id": 20,
       "name": "sphere",
       "parent": 5,
       "size": 5387,
-      "color": "#6357E6"
+      "color": "#216EFF"
     },
     {
       "id": 21,
       "name": "circle",
       "parent": 5,
       "size": 7608,
-      "color": "#9860FE"
+      "color": "#2A44E8"
     },
     {
       "id": 22,
@@ -164,14 +164,14 @@
       "name": "cigar",
       "parent": 7,
       "size": 2057,
-      "color": "#DB69CC"
+      "color": "#B37295"
     },
     {
       "id": 26,
       "name": "cylinder",
       "parent": 7,
       "size": 1283,
-      "color": "#EE6DFD"
+      "color": "#D98BB4"
     },
     {
       "id": 27,
@@ -185,13 +185,13 @@
       "name": "cross",
       "parent": 8,
       "size": 233,
-      "color": "#8046A3"
+      "color": "#D1718C"
     },
     {
       "id": 29,
       "name": "chevron",
       "parent": 8,
       "size": 952,
-      "color": "#928CAD"
+      "color": "#AB5C73"
     }
   ]

@@ -296,3 +296,8 @@ if __name__ == "__main__":
     # column = data['longitude'] 
     # count = column[column == 0].count()
     #print('Count of zeros in longitude : ', count )
+
+
+
+#["circle",  "sphere",   "triangle", "teardrop", "cigar",    "cylinder", "cone",    "diamonds","rectangle",   "light",  "flash",    "fireball", "cross",    "chevron",  "formation",  "unknown",  "changing", "other",    "disk",     "oval",    "egg" ],
+#["#2A44E8", "#216EFF",  "#3028A6",  "#1E1866",  "#B37295",  "#D98BB4",  "#3B31CC", "#9D57C9", "#E8A495",    "#E06B0B", "#7A3A06", "#BA5909",  "#D1718C",  "#AB5C73",  "#04C441",    "#3FC404",  "#04BA71",  "#7CBA04",  "#68A3FF",  "#5CE1FF", "#38E6EB"]
