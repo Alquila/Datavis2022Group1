@@ -393,7 +393,7 @@
       "legends": [
         {
           "size": "size",
-          "title": "Count",
+          "title": {"signal": "showbins ? 'Count': ''"},
           "fillColor": "white",
           "format": "s",
           "symbolFillColor": "#4682b4",
@@ -468,6 +468,8 @@
           "fill":{"scale": "color", "field": "shape"},
           "opacity": {"scale": "opacit", "field": "count"},
           "zindex": [{"test": "indata('hover_store_us', 'value', datum.shape)","value": 2},{"value": 1}],
+          "strokeWidth": [{"test": "indata('hover_store_us', 'value', datum.shape)","value": 0.5},{"value": 0}],
+          "stroke": [{"test": "indata('hover_store_us', 'value', datum.shape)","value":"red"},{"value": "white"}],
           "tooltip": {"signal": "{'x': datum.average_x, 'y': datum.average_y, 'Count': datum.count, 'Shape': datum.shape}"}
         }
       }
@@ -688,10 +690,10 @@
             "encode": {
               "update": {
                 "size": {"value": 10},
-            "fill": {"value": "red"},
+            "fill": {"value": "#267a34"},
             "fillOpacity": {"value": 0.5},
             "opacity":[{"test": "!length(data('selected'))", "value": 0},{"value": 1}],
-            "stroke": {"value": "red"},
+            "stroke": {"value": "#267a34"},
             "strokeWidth": {"value": 1.5},
                 "tooltip": {
                   "signal": "\"Europe \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
@@ -811,10 +813,10 @@
               "encode": {
                 "update": {
                   "size": {"value": 10},
-              "fill": {"value": "green"},
+              "fill": {"value": "#5f7ad4"},
             "fillOpacity": {"value": 0.5},
             "opacity":[{"test": "!length(data('selectedus'))", "value": 0},{"value": 1}],
-              "stroke": {"value": "green"},
+              "stroke": {"value": "#5f7ad4"},
               "strokeWidth": {"value": 1.5},
                   "tooltip": {
                     "signal": "\"North America \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
@@ -904,7 +906,7 @@
       "legends": [
         {
           "size": "sizeeu",
-          "title": "Count",
+          "title": {"signal": "showbins ? 'Count' : ''"},
           "format": "s",
           "fillColor": "white",
           "symbolFillColor": "#4682b4",
@@ -1030,7 +1032,7 @@
           "force": true}]
       },
       {
-      "name": "shift3",
+      "name": "shift",
       "push": "outer",
       "on": [{
           "events": "@usarc:click",
@@ -1273,6 +1275,16 @@
         }
       },
 
+      "title":{
+        "text": "Shapes over time in North America",
+        "anchor": "start",
+        "encode":{
+          "enter": {
+            "x": {"offset": 40},
+            "y": {"offset": 25}
+          }
+        }
+      },
      
 
       "marks": [
@@ -1397,7 +1409,7 @@
           "scale": "y",
           "orient": "left",
           "grid": false,
-          "title": "shape",
+          "title": "Number of sigthings",
           "labelOverlap": true,
           "tickCount": {"signal": "ceil(thirdheight/80)"},
           "zindex": 0
@@ -1496,7 +1508,7 @@
       ],
 
       "title":{
-        "text": "Shapes over time in Europa",
+        "text": "Shapes over time in Europe",
         "anchor": "start",
         "encode":{
           "enter": {
