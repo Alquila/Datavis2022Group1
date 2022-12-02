@@ -17,7 +17,7 @@
     {"name": "thirdwidth", "value": 600},
     {"name": "fourwidth", "value": 600},
     {"name": "fourheight", "value": 300},
-    {"name": "showbins", "value": true, "bind": {"input": "checkbox", "name": "Show bins "}},
+    {"name": "showbins", "value": false, "bind": {"input": "checkbox", "name": "Show bins "}},
     {"name": "showdots", "value": true, "bind": {"input": "checkbox", "name": "Show spots "}},
     {"name": "maxbins", "value": 70, 
     "bind": {"input": "range", "min": 5, "max": 100, "step": 5}},
@@ -201,6 +201,11 @@
         {"trigger": "shift3 && clicked3", "toggle": "clicked3"}
       ]
     },
+    {
+      "name": "time_store_us","on":[
+        {"trigger": "clicked_time_us","toggle": "clicked_time_us"},
+        {"trigger": "timeunit", "remove": true}]
+    },
     {"name": "ufo-sightings",
     "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/smallDataset.csv",
     "format": {"type": "csv", "parse": "auto", "delimiter": ","},
@@ -218,7 +223,7 @@
     "source": ["eudata"],
       "transform": [
         {"type": "filter", "expr": "!length(data('selected')) ? datum : indata('selected','value', datum.shape)"},
-        {"field": "date","type": "timeunit","units": {"signal": "timeunit"},"as": ["year_date", "year_date_end"], "signal": "eee"}]
+        {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"], "signal": "eee"}]
   },
   {"name": "spots", "source" : ["eudatafilteredaftershape"],
   "transform": [
@@ -408,14 +413,14 @@
     "transform": [
       {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_eu"},
       {"type": "aggregate", "groupby": ["unit0"],"ops": ["count"],"fields": [null],"as": ["count"]}
-    ]},{"name": "alltime_us",
-    "source": ["usdata"],
+    ]},
+    {"name": "alltime_us", "source": ["usdata"],
     "transform": [
       {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_us"},
       {"type": "aggregate", "groupby": ["unit0"],"ops": ["count"],"fields": [null],"as": ["count"]}
-    ]},{"name": "eufilteredafterdate", "source": ["eudatafilteredaftershape"],
-    "transform": [
-      
+    ]},
+    {"name": "eufilteredafterdate", "source": ["eudatafilteredaftershape"],
+    "transform": [  
       {"type":"filter", "expr": "!length(data('time_store_eu')) ? datum : (indata('time_store_eu','value',timeFormat(datum.datetime, timeUnitSpecifier(tbin_eu.units))))"}]
 
     }
@@ -444,7 +449,8 @@
           "source": ["usa-sig"],
           "transform": [
             {"type": "formula", "expr": "if(showdots,1,0)", "as": "ss"},
-            {"type": "filter", "expr": "datum.ss == 1"}
+            {"type": "filter", "expr": "datum.ss == 1"},
+            {"type":"filter", "expr": "!length(data('time_store_us')) ? datum : (indata('time_store_us','value',timeFormat(datum.datetime, timeUnitSpecifier(tbin_us.units))))"}
           ]
         }
       ],
@@ -1792,9 +1798,70 @@
           "x": {"offset": {"signal": "mapWidth+130+thirdwidth+mapWidth"}},
           "y":{"offset": {"signal": "dobheight+60"}}
         }
+      },
+
+      "scales": [
+        {
+          "name": "xscale",
+          "type": "band",
+          "range": [0,{"signal": "fourwidth"}],
+          "padding": 0.1,
+          "round": false,
+          "domain": {"signal": "timeSequence(tbin_us.unit, tbin_us.start, tbin_us.stop)"}
+        },
+        {
+          "name": "yscale",
+          "type": "linear",
+          "range": [{"signal": "fourheight"},0],
+          "domain": {"data": "alltime_us", "field": "count"},
+          "zero": true,
+          "nice": true
+        }
+      ],
+
+
+      "axes": [
+        { "orient": "bottom", "scale": "xscale",
+          "formatType": "time", "format": {"signal": "timeUnitSpecifier(tbin_us.units, {hours: '%H'})"}, "labelAngle": 90, "labelAlign":"left", "labelOffset": 6, "labelFontSize": 10,"labelOverlap":"greedy" },
+        { "orient": "left", "scale": "yscale", "tickCount": 7,"title": "Number of Sigtings" }
+      ],
+    
+    "signals": [
+        {
+      "name": "clicked_time_us",
+      "push": "outer",
+      "on": [
+        {
+          "events": "@us_time_bars:click",
+          "update": "{value: timeFormat(datum.unit0, timeUnitSpecifier(tbin_us.units))}",
+          "force":  true
+        }
+      ]
       }
+      ],
 
 
+      "marks": [
+        {"name": "us_time_bars",
+          "type": "rect",
+          "from": {"data": "alltime_us"},
+          "encode": {
+            "update": {
+              "x": {"scale": "xscale", "field": "unit0"},
+              "width": {"scale": "xscale", "band": 1},
+              "y": {"scale": "yscale", "field": "count"},
+              "y2": {"scale": "yscale", "value": 0},
+              "fill": [{"test": "indata('time_store_us','value', timeFormat(datum.unit0, timeUnitSpecifier(tbin_us.units)))", "value": "red"},{"value": "#267a34"}],
+              "tooltip": {"signal": "{timeunit: timeFormat(datum.unit0, timeUnitSpecifier(tbin_us.units)), count: format(datum.count, ',') }"}
+              
+            },
+            "hover": {
+              "fill": {"value": "firebrick"}
+            }
+          }
+        }
+      ]
+      
 
     },
     {"name": "eu_time_bars",
