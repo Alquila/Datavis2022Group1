@@ -310,6 +310,16 @@
             "sort": {"field": "value"},
             "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) /2.5"}],
             "as": ["a0", "r0", "a1", "r1", "depth", "children"]
+          },
+          { "type":"joinaggregate",
+            "fields": ["shapes"],
+            "ops": ["sum"],
+            "as": ["TotalSum"]
+            },
+            {
+              "type": "formula",
+              "expr": "format(datum.shapes/datum.TotalSum, '0%')",
+              "as": "percent"
           }
         ]
       },
@@ -334,7 +344,17 @@
           "sort": {"field": "value"},
           "size": [{"signal": "2 * PI"}, {"signal": "(shapeHeight) / 2.5"}],
           "as": ["a0", "r0", "a1", "r1", "depth", "children"]
-        }
+        },
+          { "type":"joinaggregate",
+            "fields": ["shapes"],
+            "ops": ["sum"],
+            "as": ["TotalSum"]
+            },
+            {
+              "type": "formula",
+              "expr": "format(datum.shapes/datum.TotalSum, '0%')",
+              "as": "percent"
+          }
       ]
     },
     {"name": "trybin",
@@ -381,8 +401,9 @@
     ]},
     {"name": "aaau",
     "source": ["eeu"],
-    "transform": [{"type": "aggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1", "average_x", "average_y", "shape"]}]}
-    ,{"name": "alltime_eu",
+    "transform": [{"type": "aggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1", "average_x", "average_y", "shape"]}]
+    },
+    {"name": "alltime_eu",
     "source": ["eudata"],
     "transform": [
       {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_eu"},
@@ -395,7 +416,7 @@
     ]},{"name": "eufilteredafterdate", "source": ["eudatafilteredaftershape"],
     "transform": [
       
-      {"type":"filter", "expr": "!length(data('time_store_eu')) ? datum : (indata('time_store_eu','value',timeFormat(datum.year_date, timeUnitSpecifier(tbin_eu.units))))"}]
+      {"type":"filter", "expr": "!length(data('time_store_eu')) ? datum : (indata('time_store_eu','value',timeFormat(datum.datetime, timeUnitSpecifier(tbin_eu.units))))"}]
 
     }
 
@@ -617,7 +638,7 @@
             {"name": "eutime2",
             "source": ["eudatafilteredaftershape"],
             "transform": [
-              {"field": "date","type": "timeunit","units":{"signal": "timeunit"},"as": ["year_date", "year_date_end"]},
+              {"field": "date","type": "timeunit","units": ["year"],"as": ["year_date", "year_date_end"]},
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
 
@@ -801,7 +822,22 @@
                 }
               }
 
-          }
+          },
+          {"name": "usarea",
+              "type": "area",
+              "sort": {"field": "datum[\"year_date\"]"},
+              "from": {"data": "ustime2"},
+              "encode": {
+                "update":{
+                  "x": {"scale": "x", "field": "year_date"},
+                  "y": {"scale": "y", "field": "__count"},
+                  "y2":{"scale": "y", "value": 0},
+                  "opacity":[{"test": "!length(data('selectedus'))", "value": 0},{"value": 1}],
+                  "fillOpacity": {"value": 0.5},           
+                  "fill": {"value": "#5f7ad4"}
+                }
+              }
+            }
           ]
         },
         {"name": "eutimeline",
@@ -1014,7 +1050,8 @@
           "source": ["europa-sig"],
           "transform": [
             {"type": "formula", "expr": "if(showdots,1,0)", "as": "ss"},
-            {"type": "filter", "expr": "datum.ss == 1"}
+            {"type": "filter", "expr": "datum.ss == 1"},
+            {"type":"filter", "expr": "!length(data('time_store_eu')) ? datum : (indata('time_store_eu','value',timeFormat(datum.datetime, timeUnitSpecifier(tbin_eu.units))))"}
           ]
         }
       ],
@@ -1082,7 +1119,7 @@
       "y": {"field": "y"},
       "opacity": [{"test": "!length(data('selected')) || indata('selected', 'value', datum.shape)", "value": 1},{"value": 0.3}],
       "fill": [{"test": " !length(data('selected')) || indata('selected', 'value', datum.shape)",  "scale": "color", "field": "shape"},{"value": "grey"}],
-      "zindex": [{"signal": "indata('selectedus', 'value', datum.shape) ?  (indata('hover_store_eu', 'value', datum.shape) ? 3 : 2) : 1"}],
+      "zindex": [{"signal": "indata('selected', 'value', datum.shape) ?  (indata('hover_store_eu', 'value', datum.shape) ? 3 : 2) : 1"}],
       "strokeWidth": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value": 0.4},{"value": 1}],
       "stroke": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value":"red"},{"value": "white"}]
     }
@@ -1164,8 +1201,8 @@
         "padding": 20,
         "columns": 1,
         "align": "none",
-    "bounds":"full",
-    "center":false
+        "bounds":"full",
+        "center":false
       },
 
       "marks": [
@@ -1251,7 +1288,7 @@
             "stroke": [{"test": "indata('selectedus', 'value', datum.name)", "value": "black"},{"value": "white"}],
             "strokeWidth": {"value": 1},
             "zindex": {"value": 0},
-            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"},
+            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings, ' + datum.percent : '')"},
             "opacity": [{"test": "indata('selectedus', 'value', datum.name)", "value": 1},{"value": 0.75}]
           },
           "hover": {
@@ -1379,7 +1416,7 @@
             "stroke": [{"test": "indata('selected', 'value', datum.name)", "value": "black"},{"value": "white"}],
             "strokeWidth": {"value": 1},
             "zindex": {"value": 0},
-            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings' : '')"},
+            "tooltip": {"signal": "datum.name + (datum.shapes ? ', ' + datum.shapes + ' sightings, ' + datum.percent : '')"},
             "opacity": [{"test": "indata('selected', 'value', datum.name)", "value": 1},{"value": 0.75}]
           },
           "hover": {
@@ -1574,8 +1611,7 @@
       "legends": [{"stroke": "color",
           "fillColor": "white","labelFontSize": 12,"symbolType": "stroke", "title": "Shape","offset": 5}]
       
-    }
-    ,
+    },
     {"name": "and-another-one",
       "type": "group",
       "clip":true, 
