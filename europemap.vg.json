@@ -247,57 +247,6 @@
 }
       ]
 
-    },
-    {
-      "type": "group",
-      "name": "group3",
-      "description": "Map of stuff",
-      "encode": {
-        "enter":{
-          "width":{"signal": "mapWidth"},
-          "height": {"signal": "timeHeight"},
-          "fill": {"value": "lightblue"}
-        }
-      }
-    },
-    {
-      "type": "group",
-      "name": "pink",
-      "description": "Map of stuff",
-      "encode": {
-        "enter":{
-          "width":{"signal": "mapWidth"},
-          "height": {"signal": "timeHeight"},
-          "fill": {"value": "pink"}
-        }
-      },
-      "marks": [
-        {
-          "type": "group",
-          "name": "efs",
-          "encode": {
-          "enter":{
-            "y":{"signal": "timeHeight/2"},
-           "x":{"signal": "mapWidth/2"},
-           "width":{"signal": "mapWidth/2"},
-           "height": {"signal": "timeHeight"},
-           "fill": {"value": "red"}
-        }
-      }
-        }
-      ]
-    },
-    {
-      "type": "group",
-      "name": "mapgroup5",
-      "description": "Map of stuff",
-      "encode": {
-        "enter":{
-          "width":{"signal": "mapWidth"},
-          "height": {"signal": "shapeHeight"},
-          "fill": {"value": "green"}
-        }
-      }
     }
   ]
 
