@@ -104,8 +104,8 @@
 {
   "name": "color",
   "type": "ordinal",
-  "domain": ["circle",  "sphere",   "triangle", "teardrop", "cigar",    "cylinder", "cone",    "diamonds","rectangle",   "light",  "flash",    "fireball", "cross",    "chevron",  "formation",  "unknown",  "changing", "other",    "disk",     "oval",    "egg" ],
-  "range":["#2A44E8", "#216EFF",  "#3028A6",  "#1E1866",  "#B37295",  "#D98BB4",  "#3B31CC", "#9D57C9", "#E8A495",    "#E06B0B", "#7A3A06", "#BA5909",  "#D1718C",  "#AB5C73",  "#04C441",    "#3FC404",  "#04BA71",  "#7CBA04",  "#68A3FF",  "#5CE1FF", "#38E6EB"]
+  "domain": ["circle",  "sphere",    "disk",    "oval",    "egg" ,   "triangle", "teardrop","cone", "cigar",    "cylinder",  "chevron", "cross",  "diamonds","rectangle",   "light",     "fireball", "flash",       "unknown", "other",  "formation",  "changing"],
+  "range":["#2A44E8", "#216EFF",  "#68A3FF", "#5CE1FF", "#38E6EB",  "#3028A6",  "#1E1866", "#3B31CC", "#B37295",  "#D98BB4",  "#AB5C73","#D1718C",   "#9D57C9", "#E8A495",    "#E06B0B", "#BA5909", "#7A3A06",     "#3FC404",  "#7CBA04",  "#04C441",   "#04BA71"]
 },
 {
   "name": "size",
@@ -135,7 +135,8 @@
       "size":{"signal": "[mapWidth,mapHeight]"},
       "fit": {"signal": "data('europejson')"},
       "clipExtent": [[0, 0], [500, 500]],
-      "rotate":[50,30,0]
+      "parallels": [10,50],
+      "rotate":[-20,0,0]
     },
     {
       "name": "us-projection",
@@ -143,7 +144,8 @@
       "size":{"signal": "[mapWidth,mapHeight]"},
       "fit": {"signal": "data('north-america')"},
       "clipExtent": [[0, 0], [500, 500]],
-      "rotate":[80,0,0]
+      "parallels":[15,45],
+      "rotate":[90,0,0]
     },
     {
       "name": "projection",
@@ -208,7 +210,7 @@
     {"name": "usdata",
       "url": "https://raw.githubusercontent.com/Alquila/Datavis2022Group1/main/data/coordUs.csv",
       "format":{"type": "csv", "parse":"auto", "delimiter": ","},
-      "transform": [{"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"},{"type": "sample", "size": 15000}]
+      "transform": [{"type": "filter", "expr": "datum.date >= datetime(1990,0,1)"},{"type": "sample", "size": 30000}]
     },
     {"name": "usdatafilteredaftershape",
     "source": ["usdata"],
@@ -1787,7 +1789,7 @@
               "width": {"scale": "xscale", "band": 1},
               "y": {"scale": "yscale", "field": "count"},
               "y2": {"scale": "yscale", "value": 0},
-              "fill": [{"test": "indata('time_store_us','value', timeFormat(datum.unit0, timeUnitSpecifier(tbin_us.units)))", "value": "red"},{"value": "#267a34"}],
+              "fill": [{"test": "indata('time_store_us','value', timeFormat(datum.unit0, timeUnitSpecifier(tbin_us.units)))", "value": "red"},{"value": "#5f7ad4"}],
               "tooltip": {"signal": "{timeunit: timeFormat(datum.unit0, timeUnitSpecifier(tbin_us.units)), count: format(datum.count, ',') }"}
               
             },
