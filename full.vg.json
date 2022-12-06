@@ -248,6 +248,17 @@
               "default": 0}
           ]
     },
+    {"name": "alltime_us", "source": ["usdata"],
+    "transform": [
+      {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_us"},
+      {"type": "aggregate", "groupby": ["unit0"],"ops": ["count"],"fields": [null],"as": ["count"]}
+    ]},
+    {"name": "alltime_eu",
+      "source": ["eudata"],
+      "transform": [
+        {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_eu"},
+        {"type": "aggregate", "groupby": ["unit0"],"ops": ["count"],"fields": [null],"as": ["count"]}
+      ]},
     {"name": "europa-sig",
     "source": ["eudata"],
     "transform": [
@@ -256,7 +267,8 @@
         "projection": "eu-projection",
         "fields": ["longitude", "latitude"]
       },
-      {"type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "} 
+      {"type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "}, 
+      {"type": "filter", "expr":"!length(data('time_store_eu')) ? datum : (indata('time_store_eu','value',timeFormat(datum.datetime, timeUnitSpecifier(tbin_eu.units))))"}
     ]
     },
     {"name": "usa-sig",
@@ -266,9 +278,11 @@
           "projection": "us-projection",
           "fields": ["longitude", "latitude"]
         },
-        {"type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "} 
+        {"type": "filter", "expr": "howto ? datum.date > howto[0] && datum.date <= howto[1] : datum "},
+        {"type": "filter", "expr":"!length(data('time_store_us')) ? datum : (indata('time_store_us','value',timeFormat(datum.datetime, timeUnitSpecifier(tbin_us.units))))"}
       ]
       },
+      
     {"name": "eu-shapes",
       "source": ["europa-sig"],
       "transform": [{"type": "aggregate", "groupby": ["shape"], "as":["shapes"]}]
@@ -385,17 +399,6 @@
     "source": ["eeu"],
     "transform": [{"type": "aggregate", "groupby":["xbin0", "xbin1", "ybin0", "ybin1", "average_x", "average_y", "shape"]}]
     },
-    {"name": "alltime_eu",
-    "source": ["eudata"],
-    "transform": [
-      {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_eu"},
-      {"type": "aggregate", "groupby": ["unit0"],"ops": ["count"],"fields": [null],"as": ["count"]}
-    ]},
-    {"name": "alltime_us", "source": ["usdata"],
-    "transform": [
-      {"type": "timeunit","field": "datetime","units": {"signal": "timeunit"},"signal": "tbin_us"},
-      {"type": "aggregate", "groupby": ["unit0"],"ops": ["count"],"fields": [null],"as": ["count"]}
-    ]},
     {"name": "eufilteredafterdate", "source": ["eudatafilteredaftershape"],
     "transform": [  
       {"type":"filter", "expr": "!length(data('time_store_eu')) ? datum : (indata('time_store_eu','value',timeFormat(datum.datetime, timeUnitSpecifier(tbin_eu.units))))"}]
