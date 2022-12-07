@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "description": "A basic pie chart example.",
-  "width": 2320,
+  "width": 2300,
   "height": 1100,
   "background": "lightgrey",
   "autosize": "pad",
@@ -19,12 +19,12 @@
     {"name": "fourheight", "value": 300},
     {"name": "showbins", "value": false, "bind": {"input": "checkbox", "name": "Show bins "}},
     {"name": "showdots", "value": true, "bind": {"input": "checkbox", "name": "Show spots "}},
-    {"name": "maxbins", "value": 70, 
-    "bind": {"input": "range", "min": 5, "max": 100, "step": 5}},
+    {"name": "maxbins", "value": 100, 
+    "bind": {"input": "range", "min": 5, "max": 170, "step": 5}},
     {"name": "maxshapesize", "value": 500, 
     "bind":{"input": "range", "min": 100, "max": 1000}},
-    {"name": "maxbinseu", "value": 70, 
-    "bind": {"input": "range", "min": 5, "max": 100, "step": 5},
+    {"name": "maxbinseu", "value": 100, 
+    "bind": {"input": "range", "min": 5, "max": 170, "step": 5},
     "on": [
       {"events": {"signal": "usesame"}, "update": "usesame ? maxbins : maxbinseu"},
       {"events": {"signal": "maxbins"}, "update": "usesame ? maxbins : maxbinseu"}
@@ -159,6 +159,12 @@
 
 "data": [
     {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]},
+    {
+      "name": "source_0",
+      "values": [
+        {"img": "https://cdn-icons-png.flaticon.com/512/3306/3306571.png"}
+      ]
+    },
     {"name": "selected",
       "on": [
         {"trigger": "clear", "remove": true},
@@ -471,7 +477,7 @@
           "fill": {"value": "lightgrey"}
           ,"tooltip": {"signal": "{'Country': datum.properties['geounit'], 'Count' : datum.counts}"}
       },
-      "hover": {"fill": {"value": "pink"}}
+      "hover": {"fill": {"value": "darkgrey"}}
      
       },
       "transform": [
@@ -487,8 +493,6 @@
           "size": {"value": 16},
           "fill": {"value": "steelblue"},
           "fillOpacity": {"value": 0.8},
-          "stroke": {"value": "white"},
-          "strokeWidth": {"value": 1.5},
           "tooltip": {
             "signal": "{'title': datum.city, 'Shape': datum.shape}"
           }
@@ -499,7 +503,7 @@
           "opacity": [{"test": "!length(data('selectedus')) || indata('selectedus', 'value', datum.shape) || indata('hover_store_us', 'value', datum.shape)", "value": 1},{"value": 0.3}],
           "fill": [{"test": "!length(data('selectedus')) || indata('selectedus', 'value', datum.shape) || indata('hover_store_us', 'value', datum.shape)", "scale": "color", "field": "shape"},{"value": "grey"}],
           "zindex": [{"signal": "indata('selectedus', 'value', datum.shape) ?  (indata('hover_store_us', 'value', datum.shape) ? 3 : 2) : 1"}],
-          "strokeWidth": [{"test": "indata('hover_store_us', 'value', datum.shape)","value": 0.5},{"value": 1}],
+          "strokeWidth": [{"test": "indata('hover_store_us', 'value', datum.shape)","value": 0.5},{"value": 0.7}],
           "stroke": [{"test": "indata('hover_store_us', 'value', datum.shape)","value":"red"},{"value": "white"}]
           
         }
@@ -570,7 +574,7 @@
       "type": "group",
       "encode": {
         "enter":{
-          "x":{"offset": {"signal": "mapWidth+80"}},
+          "x":{"offset": {"signal": "mapWidth+95"}},
           "y":{"offset": 20}
         }
       },
@@ -593,6 +597,14 @@
             "transform": [
               {"type": "aggregate","groupby": ["year_date"],"ops": ["count"],"fields": [null],"as": ["__count"]}
               ]
+            },
+            {"name": "ustime3",
+            "source": ["usdatafilteredaftershape"],
+            "transform": [
+              {"type": "aggregate","groupby": ["year_date", "shape"]},
+              {"type": "stack", "groupby":["year_date"], "sort": {"field": "shape"}, "field": "count"}
+              ]
+
             },
             {"name": "eutime",
             "source": ["eudata"],
@@ -633,6 +645,12 @@
               "range": [{"signal": "timeHeight"}, 0],
               "nice": true,
               "zero": true
+            },
+            {"name": "y3",
+            "type": "linear",
+            "range": [{"signal": "timeHeight"}, 0],
+            "nice": true, "zero": true,
+            "domain": {"data": "ustime3", "field": "y1"}
             }
           ],
       "signals": [
@@ -856,7 +874,7 @@
             "from": {"data": "eutime"},
             "encode": {
               "update": {
-                "stroke": {"value": "#267a34"},
+                "stroke": {"value": "#fc8128"},
                 "tooltip": {
                   "signal": "\"date (year): \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; count: \" + (format(datum[\"__count\"], \"\"))"
                 },
@@ -897,9 +915,9 @@
               "update": {
                 "size": {"value": 10},
                 "fillOpacity": {"value": 0.5},
-                "fill": {"value": "#267a34"},
+                "fill": {"value": "#fc8128"},
                 "opacity":[{"test": "!length(data('selected'))", "value": 0},{"value": 1}],
-                "stroke": {"value": "#267a34"},
+                "stroke": {"value": "#fc8128"},
                 "strokeWidth": {"value": 1.5},
                 "tooltip": {
                   "signal": "\"Europe \" + (timeFormat(datum[\"year_date\"], '%Y')) + \"; sightings: \" + (format(datum[\"__count\"], \"\"))"
@@ -923,7 +941,7 @@
                   "y2":{"scale": "y2", "value": 0},
                   "opacity":[{"test": "!length(data('selected'))", "value": 0},{"value": 1}],
                   "fillOpacity": {"value": 0.5},           
-                  "fill": {"value": "#267a34"}
+                  "fill": {"value": "#fc8128"}
                 }
               }
             },
@@ -934,7 +952,7 @@
                 "enter":{
                   "y": {"signal": "-timeHeight-10"},
                   "height": {"signal": "dobheight"},
-                "fill": {"value": "green"},"fillOpacity": {"value": 0.2}
+                "fill": {"value": "pink"},"fillOpacity": {"value": 0.2}
                 },
                 "update": {
                   "x": {"signal": "brush[0]"},
@@ -950,7 +968,7 @@
                 "y": {"signal": "-timeHeight-10"},
                 "height": {"signal": "dobheight"},
                 "width": {"value": 1},
-                "fill": {"value": "yellow"}
+                "fill": {"value": "grey"}
               },
               "update": {
                 "x": {"signal": "brush[0]"}
@@ -965,7 +983,7 @@
                 "y": {"signal": "-timeHeight-10"},
                 "height": {"signal": "dobheight"},
                 "width": {"value": 1},
-                "fill": {"value": "firebrick"}
+                "fill": {"value": "darkgrey"}
               },
               "update": {
                 "x": {"signal": "brush[1]"}
@@ -1032,7 +1050,6 @@
     "encode": {
       "enter":{
         "strokeWidth": {"value": 0.25},
-          "stroke": {"value": "#888"},
           "fill": {"value": "pink"}
         },
         "update": {
@@ -1041,7 +1058,7 @@
           "fill": {"value": "lightgrey"}
           ,"tooltip": {"signal": "{'Country': datum.properties['geounit'], 'Count': datum.counts}"}
       },
-      "hover": {"fill": {"value": "pink"}}
+      "hover": {"fill": {"value": "darkgrey"}}
      
     },
     "transform": [
@@ -1068,7 +1085,7 @@
       "opacity": [{"test": "!length(data('selected')) || indata('selected', 'value', datum.shape)", "value": 1},{"value": 0.3}],
       "fill": [{"test": " !length(data('selected')) || indata('selected', 'value', datum.shape)",  "scale": "color", "field": "shape"},{"value": "grey"}],
       "zindex": [{"signal": "indata('selected', 'value', datum.shape) ?  (indata('hover_store_eu', 'value', datum.shape) ? 3 : 2) : 1"}],
-      "strokeWidth": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value": 0.4},{"value": 1}],
+      "strokeWidth": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value": 0.4},{"value": 0.7}],
       "stroke": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value":"red"},{"value": "white"}]
     }
   }
@@ -1867,7 +1884,7 @@
               "width": {"scale": "xscale", "band": 1},
               "y": {"scale": "yscale", "field": "count"},
               "y2": {"scale": "yscale", "value": 0},
-              "fill": [{"test": "indata('time_store_eu','value', timeFormat(datum.unit0, timeUnitSpecifier(tbin_eu.units)))", "value": "red"},{"value": "#267a34"}],
+              "fill": [{"test": "indata('time_store_eu','value', timeFormat(datum.unit0, timeUnitSpecifier(tbin_eu.units)))", "value": "red"},{"value": "#fc8128"}],
               "tooltip": {"signal": "{timeunit: timeFormat(datum.unit0, timeUnitSpecifier(tbin_eu.units)), count: format(datum.count, ',') }"}
               
             },
@@ -1879,6 +1896,23 @@
       ]
       
 
+    },
+    {
+      "name": "image",
+      "type": "image",
+      "style": ["image"],
+      "from": {"data": "source_0"},
+      "encode": {
+        "update": {
+          "x": {"value": 1900},
+          "width": {"value": 100},
+          "y": {"value": 120},
+          "height": {"value": 100},
+          "url": {
+            "signal": "isValid(datum[\"img\"]) ? datum[\"img\"] : \"\"+datum[\"img\"]"
+          }
+        }
+      }
     }
   ],
 

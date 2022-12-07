@@ -25,7 +25,7 @@
           "type" : "stack", 
           "groupby": ["date"],
           "sort": {"field": "shape"},
-          "field": "count", "offset": "center"}
+          "field": "count", "offset": "zero"}
           ]
       }
     ],
