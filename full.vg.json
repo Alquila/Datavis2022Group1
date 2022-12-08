@@ -89,7 +89,7 @@
       ]
     },
     {
-      "name": "timeunit", "value": ["month", "date"],
+      "name": "timeunit", "value": ["hours"],
       "bind": {"input": "select", "name": "Time unit in bar chart ", "options": [
         ["year"], ["month"], ["date"], ["day"], ["year", "month"], ["hours"], ["month", "date"]]}
     },
