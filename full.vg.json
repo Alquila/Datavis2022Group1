@@ -20,22 +20,22 @@
     {"name": "showbins", "value": true, "bind": {"input": "checkbox", "name": "Show bins "}},
     {"name": "showdots", "value": false, "bind": {"input": "checkbox", "name": "Show spots "}},
     {"name": "maxbins", "value": 100, 
-    "bind": {"input": "range", "min": 5, "max": 200, "step": 5}},
+    "bind": {"input": "range", "min": 5, "max": 200, "step": 5, "name": "Number of NA bins "}},
     {"name": "maxshapesize", "value": 500, 
-    "bind":{"input": "range", "min": 100, "max": 1000}},
+    "bind":{"input": "range", "min": 100, "max": 1000, "name": "Size scale of NA bin marks "}},
     {"name": "maxbinseu", "value": 100, 
-    "bind": {"input": "range", "min": 5, "max": 200, "step": 5},
+    "bind": {"input": "range", "min": 5, "max": 200, "step": 5, "name": "Number of EU bins "},
     "on": [
       {"events": {"signal": "usesame"}, "update": "usesame ? maxbins : maxbinseu"},
       {"events": {"signal": "maxbins"}, "update": "usesame ? maxbins : maxbinseu"}
     ]},
     {"name": "maxshapesizeeu", "value": 500, 
-    "bind":{"input": "range", "min": 100, "max": 1000},
+    "bind":{"input": "range", "min": 100, "max": 1000, "name": "Size scale of EU bin marks"},
     "on": [
       {"events": {"signal": "usesame"}, "update": "usesame ? maxshapesize : maxshapesizeeu"},
       {"events": {"signal": "maxshapesize"}, "update": "usesame ? maxshapesize : maxshapesizeeu"}
     ]},
-    {"name": "usesame", "value": false, "bind":{"input": "checkbox", "name": "Lock sizes"}},
+    {"name": "usesame", "value": false, "bind":{"input": "checkbox", "name": "Lock bins to each other "}},
     {
       "name": "clear", "value": true,
       "on": [
@@ -90,7 +90,7 @@
     },
     {
       "name": "timeunit", "value": ["month", "date"],
-      "bind": {"input": "select", "name": "Time unit ", "options": [
+      "bind": {"input": "select", "name": "Time unit in bar chart ", "options": [
         ["year"], ["month"], ["date"], ["day"], ["year", "month"], ["hours"], ["month", "date"]]}
     },
     {"name": "hover_tuple_eu"},
@@ -124,7 +124,12 @@
 {"name": "opacit",
 "type": "linear",
 "domain":{"data": "aaa", "field": "count"},
-"range":[0.7,0.4]
+"range":[0.7,0.2]
+},
+{"name": "opaciteu",
+"type": "linear",
+"domain":{"data": "aaau", "field": "count"},
+"range":[0.7,0.2]
 }
 ],
 
@@ -431,8 +436,7 @@
           "source": ["usa-sig"],
           "transform": [
             {"type": "formula", "expr": "if(showdots,1,0)", "as": "ss"},
-            {"type": "filter", "expr": "datum.ss == 1"},
-            {"type":"filter", "expr": "!length(data('time_store_us')) ? datum : (indata('time_store_us','value',timeFormat(datum.datetime, timeUnitSpecifier(tbin_us.units))))"}
+            {"type": "filter", "expr": "datum.ss == 1"}
           ]
         }
       ],
@@ -1124,7 +1128,7 @@
           "size": {"scale": "sizeeu", "field": "count" },
           "shape": {"value": "circle"},
           "fill":{"scale": "color", "field": "shape"},
-          "opacity": {"value": 0.6},
+          "opacity": {"scale": "opaciteu", "field": "count"},
           "zindex": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value": 2},{"value": 1}],
           "strokeWidth": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value": 0.5},{"value": 0}],
           "stroke": [{"test": "indata('hover_store_eu', 'value', datum.shape)","value":"red"},{"value": "white"}],
