@@ -17,14 +17,14 @@
     {"name": "thirdwidth", "value": 550},
     {"name": "fourwidth", "value": 600},
     {"name": "fourheight", "value": 300},
-    {"name": "showbins", "value": false, "bind": {"input": "checkbox", "name": "Show bins "}},
-    {"name": "showdots", "value": true, "bind": {"input": "checkbox", "name": "Show spots "}},
+    {"name": "showbins", "value": true, "bind": {"input": "checkbox", "name": "Show bins "}},
+    {"name": "showdots", "value": false, "bind": {"input": "checkbox", "name": "Show spots "}},
     {"name": "maxbins", "value": 100, 
-    "bind": {"input": "range", "min": 5, "max": 170, "step": 5}},
+    "bind": {"input": "range", "min": 5, "max": 200, "step": 5}},
     {"name": "maxshapesize", "value": 500, 
     "bind":{"input": "range", "min": 100, "max": 1000}},
     {"name": "maxbinseu", "value": 100, 
-    "bind": {"input": "range", "min": 5, "max": 170, "step": 5},
+    "bind": {"input": "range", "min": 5, "max": 200, "step": 5},
     "on": [
       {"events": {"signal": "usesame"}, "update": "usesame ? maxbins : maxbinseu"},
       {"events": {"signal": "maxbins"}, "update": "usesame ? maxbins : maxbinseu"}
@@ -159,12 +159,8 @@
 
 "data": [
     {"name": "graticule","transform": [{ "type": "graticule", "step": [10, 10]}]},
-    {
-      "name": "source_0",
-      "values": [
-        {"img": "https://cdn-icons-png.flaticon.com/512/3306/3306571.png"}
-      ]
-    },
+    {"name": "source_0","values": [{"img": "https://cdn-icons-png.flaticon.com/512/620/620768.png"}]},
+    {"name": "image2","values": []},
     {"name": "selected",
       "on": [
         {"trigger": "clear", "remove": true},
@@ -652,7 +648,7 @@
             "nice": true, "zero": true,
             "domain": {"data": "ustime3", "field": "y1"}
             }
-          ],
+       ],
       "signals": [
             
         {
@@ -665,7 +661,7 @@
             }
           ]
         }
-          ],
+       ],
 
       "marks": [
         {"name": "ustimeline",
@@ -724,6 +720,20 @@
               "zindex": 0
             }
           ],
+
+          "title": {
+            "text": "Total number of sightings in North America",
+            "font": "arial",
+            "anchor": "start",
+            "fontSize": 10,
+            "fontStyle": "normal",
+            "encode":{
+              "enter": {
+                "x": {"offset": 50},
+                "y": {"offset": 50}
+              }
+            }   
+          },
 
           "marks": [        
           {"name": "usmarks",
@@ -814,6 +824,20 @@
             "height": {"signal": "timeHeight"},
             "fill": {"value": "white"}
           }
+        },
+
+        "title": {
+          "text": "Total number of sightings in Europe",
+          "font": "arial",
+          "anchor": "start",
+          "fontSize": 10,
+          "fontStyle": "normal",
+          "encode":{
+            "enter": {
+              "x": {"offset": 40},
+              "y": {"offset": 115}
+            }
+          }   
         },
 
         "axes": [
@@ -1777,6 +1801,19 @@
         }
       ],
 
+      "title": {
+        "text": {"signal": "'Number of Sightings by ' + timeunit + ' in North America'"},
+        "font": "arial",
+        "anchor": "start",
+        "fontSize": 10,
+        "fontStyle": "normal",
+        "encode":{
+          "enter": {
+            "x": {"offset": 40},
+            "y": {"offset": 25}
+          }
+        }   
+      },
 
       "axes": [
         { "orient": "bottom", "scale": "xscale",
@@ -1854,6 +1891,20 @@
         }
       ],
 
+      "title": {
+        "text": {"signal": "'Number of Sightings by ' + timeunit + ' in Europe'"},
+        "font": "arial",
+        "anchor": "start",
+        "fontSize": 10,
+        "fontStyle": "normal",
+        "encode":{
+          "enter": {
+            "x": {"offset": 40},
+            "y": {"offset": 25}
+          }
+        }   
+      },
+
       "axes": [
         { "orient": "bottom", "scale": "xscale", "title": {"signal": "timeunit"}, 
           "formatType": "time", "format": {"signal": "timeUnitSpecifier(tbin_eu.units, {hours: '%H'})"}, "labelAngle": 90, "labelAlign":"left", "labelOffset": 6, "labelFontSize": 10,"labelOverlap":"greedy" },
@@ -1905,9 +1956,9 @@
       "encode": {
         "update": {
           "x": {"value": 1900},
-          "width": {"value": 100},
-          "y": {"value": 120},
-          "height": {"value": 100},
+          "width": {"value": 90},
+          "y": {"value": 0},
+          "height": {"value": 90},
           "url": {
             "signal": "isValid(datum[\"img\"]) ? datum[\"img\"] : \"\"+datum[\"img\"]"
           }
@@ -1922,7 +1973,7 @@
 "fontSize": 30,
 "fontStyle": "normal",
 "dx": 800,
-"dy": 140,
+"dy": 200,
 "encode":{"title":{"enter": {"fill": {"value": "purple"}}}}
 }
 
