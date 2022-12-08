@@ -7,13 +7,13 @@
     },
     {
       "id": 2,
-      "name": "Geometry",
+      "name": "Geometrical",
       "parent": 1,
       "color": "#5D47AD"
     },
     {
       "id": 3,
-      "name": "Lights",
+      "name": "Glare",
       "parent": 1,
       "color": "#FA780C"
     },
@@ -37,159 +37,159 @@
     },
     {
       "id": 7,
-      "name": "barrel",
+      "name": "Barrel",
       "parent": 2,
       "color": "#F29BC9"
     },
     {
       "id": 8,
-      "name": "objects",
+      "name": "Objects",
       "parent": 2,
       "color": "#EB809F"
     },
     {
       "id": 9,
-      "name": "rectangle",
+      "name": "Rectangle",
       "parent": 2,
       "size": 1297,
       "color": "#E8A495"
     },
     {
       "id": 10,
-      "name": "light",
+      "name": "Light",
       "parent": 3,
       "size": 16565,
       "color": "#E06B0B"
     },
     {
       "id": 11,
-      "name": "fireball",
+      "name": "Fireball",
       "parent": 3,
       "size": 6208,
       "color": "#BA5909"
     },
     {
       "id": 12,
-      "name": "flash",
+      "name": "Flash",
       "parent": 3,
       "size": 1328,
       "color": "#7A3A06"
     },
     {
       "id": 13,
-      "name": "changing",
+      "name": "Changing",
       "parent": 4,
       "size": 1962,
       "color": "#04BA71"
     },
     {
       "id": 14,
-      "name": "formation",
+      "name": "Formation",
       "parent": 4,
       "size": 2457,
       "color": "#04C441"
     },
     {
       "id": 15,
-      "name": "unknown",
+      "name": "Unknown",
       "parent": 4,
       "size": 5584,
       "color": "#3FC404"
     },
     {
       "id": 16,
-      "name": "other",
+      "name": "Other",
       "parent": 4,
       "size": 5649,
       "color": "#7CBA04"
     },
     {
       "id": 17,
-      "name": "egg",
+      "name": "Egg",
       "parent": 5,
       "size": 759,
       "color": "#38E6EB"
     },
     {
       "id": 18,
-      "name": "oval",
+      "name": "Oval",
       "parent": 5,
       "size": 3733,
       "color": "#5CE1FF"
     },
     {
       "id": 19,
-      "name": "disk",
+      "name": "Disk",
       "parent": 5,
       "size": 5213,
       "color": "#68A3FF"
     },
     {
       "id": 20,
-      "name": "sphere",
+      "name": "Sphere",
       "parent": 5,
       "size": 5387,
       "color": "#216EFF"
     },
     {
       "id": 21,
-      "name": "circle",
+      "name": "Circle",
       "parent": 5,
       "size": 7608,
       "color": "#2A44E8"
     },
     {
       "id": 22,
-      "name": "cone",
+      "name": "Cone",
       "parent": 6,
       "size": 316,
       "color": "#3B31CC"
     },
     {
       "id": 23,
-      "name": "triangle",
+      "name": "Triangle",
       "parent": 6,
       "size": 7865,
       "color": "#3028A6"
     },
     {
       "id": 24,
-      "name": "teardrop",
+      "name": "Teardrop",
       "parent": 6,
       "size": 750,
       "color": "#1E1866"
     },
     {
       "id": 25,
-      "name": "cigar",
+      "name": "Cigar",
       "parent": 7,
       "size": 2057,
       "color": "#B37295"
     },
     {
       "id": 26,
-      "name": "cylinder",
+      "name": "Cylinder",
       "parent": 7,
       "size": 1283,
       "color": "#D98BB4"
     },
     {
       "id": 27,
-      "name": "diamonds",
+      "name": "Diamonds",
       "parent": 8,
       "size": 1178,
       "color": "#9D57C9"
     },
     {
       "id": 28,
-      "name": "cross",
+      "name": "Cross",
       "parent": 8,
       "size": 233,
       "color": "#D1718C"
     },
     {
       "id": 29,
-      "name": "chevron",
+      "name": "Chevron",
       "parent": 8,
       "size": 952,
       "color": "#AB5C73"
