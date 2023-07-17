@@ -1,10 +1,9 @@
 # Datavis2022Group1
 
-hey, what up? sku' det vær' en hotdog?
 
 # TODO:
 
-- date is some times XX-XX-XXXX and XX/XX/XXXX, fucking bullshit
+- date is some times XX-XX-XXXX and XX/XX/XXXX
 
 # Notes on Vega
 
